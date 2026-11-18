@@ -1,0 +1,8 @@
+# dane wspólnej bazy (hosting PHP) – nigdy do repozytorium
+server/data/state.json
+# pliki robocze
+dev/.check.js
+*.xlsx
+*.json.bak
+FitGap_dane_*.json
+.DS_Store

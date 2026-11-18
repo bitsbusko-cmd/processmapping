@@ -1,0 +1,2402 @@
+{
+ "v": 1,
+ "defaults": {
+  "n": "Migracja CC: Symfonia → AX 2012",
+  "srcCo": "CC",
+  "srcSys": "Symfonia",
+  "tgtCo": "CP",
+  "tgtSys": "Axapta (AX 2012)"
+ },
+ "fit": [
+  {
+   "k": "F",
+   "n": "Fit",
+   "l": "Pełne dopasowanie",
+   "d": "Szablon AX używany w CP obsługuje wymaganie bez zmian – CC może pracować tak jak CP."
+  },
+  {
+   "k": "P",
+   "n": "Częściowe",
+   "l": "Dopasowanie częściowe",
+   "d": "Wymaganie da się spełnić po konfiguracji AX, uzupełnieniu danych albo po drobnej zmianie sposobu pracy."
+  },
+  {
+   "k": "G",
+   "n": "Luka",
+   "l": "Luka (gap)",
+   "d": "Szablon AX z CP nie obsługuje wymagania – potrzebna zmiana procesu w CC, rozwój AX, integracja albo obejście."
+  },
+  {
+   "k": "N",
+   "n": "N/D",
+   "l": "Nie dotyczy",
+   "d": "Wymaganie nie występuje w CC."
+  },
+  {
+   "k": "O",
+   "n": "Do wyjaśnienia",
+   "l": "Do wyjaśnienia",
+   "d": "Brak pełnej odpowiedzi – pytanie otwarte do wyjaśnienia po wywiadzie."
+  }
+ ],
+ "res": [
+  {
+   "k": "cfg",
+   "n": "Konfiguracja AX",
+   "d": "Parametryzacja, dane podstawowe, profile księgowania, wymiary – bez zmian w kodzie."
+  },
+  {
+   "k": "proc",
+   "n": "Zmiana procesu w CC",
+   "d": "CC przyjmuje sposób pracy stosowany w CP."
+  },
+  {
+   "k": "dev",
+   "n": "Rozwój AX",
+   "d": "Modyfikacja lub rozszerzenie AX (kod X++), nowa funkcja."
+  },
+  {
+   "k": "rep",
+   "n": "Raport lub wydruk",
+   "d": "Nowy raport, wydruk lub zestawienie (AX, Power BI)."
+  },
+  {
+   "k": "int",
+   "n": "Integracja",
+   "d": "Nowy albo zmieniony interfejs z innym systemem (np. ARA MES, bank, KSeF)."
+  },
+  {
+   "k": "mig",
+   "n": "Migracja danych",
+   "d": "Przeniesienie, konwersja lub uporządkowanie danych."
+  },
+  {
+   "k": "wa",
+   "n": "Obejście poza ERP",
+   "d": "Rozwiązanie poza AX: praca ręczna, Excel, inne narzędzie."
+  }
+ ],
+ "critRes": [
+  "dev",
+  "int",
+  "wa"
+ ],
+ "pri": [
+  {
+   "k": "M",
+   "n": "Must",
+   "d": "Niezbędne – wymóg prawny albo krytyczne dla działania CC"
+  },
+  {
+   "k": "S",
+   "n": "Should",
+   "d": "Ważne – istotne dla efektywności, ale możliwe obejście"
+  },
+  {
+   "k": "C",
+   "n": "Could",
+   "d": "Pożądane – usprawnienie, które można odłożyć"
+  }
+ ],
+ "priW": {
+  "M": 3,
+  "S": 2,
+  "C": 1
+ },
+ "fitW": {
+  "F": 1,
+  "P": 0.5,
+  "G": 0
+ },
+ "eff": [
+  {
+   "k": "S",
+   "n": "S",
+   "d": "do 5 osobodni",
+   "md": 3
+  },
+  {
+   "k": "M",
+   "n": "M",
+   "d": "5–15 osobodni",
+   "md": 10
+  },
+  {
+   "k": "L",
+   "n": "L",
+   "d": "15–40 osobodni",
+   "md": 25
+  },
+  {
+   "k": "XL",
+   "n": "XL",
+   "d": "powyżej 40 osobodni",
+   "md": 50
+  }
+ ],
+ "imp": [
+  {
+   "v": 1,
+   "n": "niska",
+   "d": "Drobna zmiana sposobu pracy, bez zmian ról"
+  },
+  {
+   "v": 2,
+   "n": "średnia",
+   "d": "Nowe kroki, dokumenty lub role; potrzebne szkolenie"
+  },
+  {
+   "v": 3,
+   "n": "wysoka",
+   "d": "Zmiana organizacji pracy, odpowiedzialności lub zasad"
+  }
+ ],
+ "dec": [
+  {
+   "k": "P",
+   "n": "proponowane"
+  },
+  {
+   "k": "A",
+   "n": "zaakceptowane"
+  },
+  {
+   "k": "R",
+   "n": "odrzucone"
+  }
+ ],
+ "phase": [
+  "przed uruchomieniem",
+  "przy uruchomieniu",
+  "po uruchomieniu"
+ ],
+ "harm": [
+  {
+   "k": "Y",
+   "n": "Wspólny standard z CP",
+   "s": "wspólny standard"
+  },
+  {
+   "k": "P",
+   "n": "Częściowo wspólny",
+   "s": "częściowo"
+  },
+  {
+   "k": "N",
+   "n": "Specyfika CC",
+   "s": "specyfika CC"
+  }
+ ],
+ "freq": [
+  "codziennie",
+  "kilka razy w tygodniu",
+  "tygodniowo",
+  "miesięcznie",
+  "kwartalnie",
+  "rocznie",
+  "ad hoc"
+ ],
+ "coTypes": [
+  "CC",
+  "CP",
+  "FSSC",
+  "Digital & IT",
+  "Partner zewnętrzny",
+  "Grupa"
+ ],
+ "roles": [
+  "Sponsor",
+  "Lider analizy",
+  "Prowadzący wywiad",
+  "Właściciel systemu",
+  "Key user / ekspert procesu",
+  "Konsultant"
+ ],
+ "teams": [
+  {
+   "n": "Zespół analizy",
+   "d": "prowadzę analizę i wywiady"
+  },
+  {
+   "n": "Ekspert CC",
+   "d": "Symfonia i procesy CC"
+  },
+  {
+   "n": "Ekspert CP",
+   "d": "AX 2012 i procesy CP"
+  },
+  {
+   "n": "FSSC",
+   "d": "centrum usług księgowych"
+  }
+ ],
+ "toolsCC": [
+  "Symfonia Finanse i Księgowość",
+  "Symfonia Handel",
+  "Symfonia Środki Trwałe",
+  "Symfonia Kadry i Płace",
+  "ARA MES (AB Industry)",
+  "KSeF",
+  "Bankowość elektroniczna",
+  "Excel",
+  "Poczta e-mail",
+  "Power BI"
+ ],
+ "toolsCP": [
+  "AX – Księga główna",
+  "AX – Rozrachunki z odbiorcami",
+  "AX – Rozrachunki z dostawcami",
+  "AX – Zarządzanie gotówką i bankami",
+  "AX – Środki trwałe",
+  "AX – Zaopatrzenie",
+  "AX – Sprzedaż i marketing",
+  "AX – Zarządzanie zapasami",
+  "AX – Zarządzanie magazynem",
+  "AX – Transport",
+  "AX – Produkcja",
+  "AX – Planowanie główne",
+  "AX – Budżetowanie",
+  "KSeF",
+  "WEBCON",
+  "Power BI",
+  "Excel"
+ ],
+ "riskP": [
+  {
+   "v": 1,
+   "n": "mało prawdopodobne",
+   "d": "Wystąpi tylko w wyjątkowych okolicznościach."
+  },
+  {
+   "v": 2,
+   "n": "możliwe",
+   "d": "Może wystąpić w trakcie projektu."
+  },
+  {
+   "v": 3,
+   "n": "prawdopodobne",
+   "d": "Raczej wystąpi, jeśli nic nie zrobimy."
+  },
+  {
+   "v": 4,
+   "n": "bardzo prawdopodobne",
+   "d": "Wystąpi niemal na pewno."
+  }
+ ],
+ "riskI": [
+  {
+   "v": 1,
+   "n": "niski",
+   "d": "Niewielkie opóźnienie lub koszt, bez wpływu na działanie CC."
+  },
+  {
+   "v": 2,
+   "n": "średni",
+   "d": "Zauważalne opóźnienie lub koszt; możliwe obejście."
+  },
+  {
+   "v": 3,
+   "n": "wysoki",
+   "d": "Istotne opóźnienie, koszt lub zakłócenie działania CC."
+  },
+  {
+   "v": 4,
+   "n": "bardzo wysoki",
+   "d": "Zagraża wykonalności migracji lub ciągłości działania CC."
+  }
+ ],
+ "riskLv": [
+  {
+   "n": "niskie",
+   "max": 3
+  },
+  {
+   "n": "średnie",
+   "max": 6
+  },
+  {
+   "n": "wysokie",
+   "max": 9
+  },
+  {
+   "n": "krytyczne",
+   "max": 16
+  }
+ ],
+ "treat": [
+  "ograniczenie",
+  "akceptacja",
+  "przeniesienie",
+  "unikanie"
+ ],
+ "riskCats": [
+  {
+   "k": "func",
+   "n": "Funkcjonalne – luki w AX"
+  },
+  {
+   "k": "tech",
+   "n": "Techniczne – platforma AX 2012"
+  },
+  {
+   "k": "data",
+   "n": "Dane i migracja"
+  },
+  {
+   "k": "int",
+   "n": "Integracje"
+  },
+  {
+   "k": "law",
+   "n": "Zgodność z przepisami (VAT, JPK, KSeF)"
+  },
+  {
+   "k": "org",
+   "n": "Organizacja i zmiana"
+  },
+  {
+   "k": "plan",
+   "n": "Harmonogram i zasoby"
+  },
+  {
+   "k": "cost",
+   "n": "Koszty i licencje"
+  },
+  {
+   "k": "cut",
+   "n": "Uruchomienie i ciągłość działania"
+  }
+ ],
+ "sysRisks": [
+  {
+   "k": "ax-eos",
+   "cat": "tech",
+   "pr": 3,
+   "im": 3,
+   "t": "Platforma AX 2012 bez wsparcia producenta",
+   "ds": "Microsoft zakończył wsparcie AX 2012 R3: podstawowe 12.10.2021, rozszerzone 10.01.2023. Nie ma już poprawek producenta, także bezpieczeństwa i regulacyjnych. Przeniesienie CC zwiększa zależność od tej platformy, a zmiany prawne (KSeF, JPK) zależą od partnera.",
+   "ac": "Potwierdzić plany grupy dla AX 2012 (utrzymanie, migracja do Dynamics 365) i warunki wsparcia partnera dla polskiej lokalizacji."
+  },
+  {
+   "k": "mes",
+   "cat": "int",
+   "pr": 3,
+   "im": 3,
+   "t": "Integracja AX z ARA MES",
+   "ds": "Produkcja CC opiera się na integracji Symfonii z ARA MES (AB Industry). Po migracji potrzebny jest nowy interfejs AX ↔ MES albo przeniesienie funkcji MES do AX.",
+   "ac": "Zdecydować o docelowej architekturze produkcji i zamówić u dostawców wycenę interfejsu."
+  },
+  {
+   "k": "md",
+   "cat": "data",
+   "pr": 3,
+   "im": 2,
+   "t": "Jakość i harmonizacja danych podstawowych",
+   "ds": "Różne indeksy, kontrahenci i plan kont w CC i CP. Bez uporządkowania danych migracja przeniesie błędy i duplikaty do AX.",
+   "ac": "Wyznaczyć właścicieli danych i rozpocząć czyszczenie danych przed migracją."
+  },
+  {
+   "k": "cutover",
+   "cat": "plan",
+   "pr": 2,
+   "im": 3,
+   "t": "Termin uruchomienia a zamknięcie roku",
+   "ds": "Uruchomienie w trakcie roku obrotowego wymaga przeniesienia obrotów i komplikuje sprawozdawczość. Zbiega się też z zamknięciami w FSSC.",
+   "ac": "Zaplanować uruchomienie na początek roku obrotowego lub po zamknięciu kwartału; zapewnić wsparcie FSSC."
+  },
+  {
+   "k": "ksef",
+   "cat": "law",
+   "pr": 2,
+   "im": 4,
+   "t": "KSeF i JPK dla CC jako nowego podmiotu w AX",
+   "ds": "CC wymaga konfiguracji KSeF, JPK i rejestrów VAT w AX dla swojego NIP. Błędy grożą wstrzymaniem fakturowania lub sankcjami.",
+   "ac": "Uzgodnić z integratorem zakres i testy KSeF oraz JPK dla CC przed uruchomieniem."
+  },
+  {
+   "k": "people",
+   "cat": "org",
+   "pr": 3,
+   "im": 2,
+   "t": "Zależność od kluczowych osób i obciążenie zespołów",
+   "ds": "Wiedza o Symfonii i procesach CC jest w rękach kilku osób, które jednocześnie prowadzą bieżącą pracę.",
+   "ac": "Zapewnić zastępstwa i czas key userów na projekt; udokumentować procesy AS-IS."
+  },
+  {
+   "k": "custom",
+   "cat": "func",
+   "pr": 2,
+   "im": 2,
+   "t": "Modyfikacje AX zwiększające dług technologiczny",
+   "ds": "Każda modyfikacja AX wprowadzona dla CC utrudnia utrzymanie i przyszłą zmianę platformy.",
+   "ac": "Ograniczyć rozwój AX do wymagań Must; preferować zmianę procesu w CC."
+  }
+ ],
+ "benCats": [
+  {
+   "k": "cost",
+   "n": "Koszty IT"
+  },
+  {
+   "k": "eff",
+   "n": "Efektywność procesów"
+  },
+  {
+   "k": "ctrl",
+   "n": "Kontrola i zgodność"
+  },
+  {
+   "k": "data",
+   "n": "Dane i raportowanie"
+  },
+  {
+   "k": "syn",
+   "n": "Synergie CP–CC"
+  },
+  {
+   "k": "scale",
+   "n": "Skalowalność i rozwój"
+  }
+ ],
+ "benefits": [
+  {
+   "k": "b01",
+   "cat": "syn",
+   "n": "Jedna platforma ERP i wspólny szablon procesów CP i CC",
+   "d": "Jedna konfiguracja, jedna dokumentacja procesów, wspólne zmiany prawne i usprawnienia."
+  },
+  {
+   "k": "b02",
+   "cat": "cost",
+   "n": "Wygaszenie Symfonii – oszczędność licencji i utrzymania",
+   "d": "Roczne koszty licencji, utrzymania, infrastruktury i wsparcia Symfonii."
+  },
+  {
+   "k": "b03",
+   "cat": "eff",
+   "n": "Efektywność FSSC: jeden system i jednolite procedury",
+   "d": "Zespół FSSC pracuje w jednym systemie dla obu spółek – krótsze zamknięcie, łatwiejsze zastępstwa."
+  },
+  {
+   "k": "b04",
+   "cat": "syn",
+   "n": "Automatyzacja rozliczeń wewnątrzgrupowych CC–CP",
+   "d": "Mniej ręcznych uzgodnień i różnic przy transakcjach między spółkami."
+  },
+  {
+   "k": "b05",
+   "cat": "data",
+   "n": "Wspólne dane podstawowe i łączna ekspozycja kredytowa",
+   "d": "Wspólni klienci i dostawcy w jednej kartotece, łączny limit i ryzyko kredytowe."
+  },
+  {
+   "k": "b06",
+   "cat": "ctrl",
+   "n": "Jednolita obsługa wymogów prawnych (KSeF, JPK, VAT)",
+   "d": "Jedno rozwiązanie do utrzymania i testowania przy zmianach przepisów."
+  },
+  {
+   "k": "b07",
+   "cat": "data",
+   "n": "Spójne raportowanie zarządcze i grupowe z jednego źródła",
+   "d": "Te same definicje i wymiary w obu spółkach, mniej pracy w Excelu."
+  },
+  {
+   "k": "b08",
+   "cat": "ctrl",
+   "n": "Lepsza kontrola procesu zakupowego",
+   "d": "Zamówienia, dopasowanie faktur, ścieżki akceptacji i rozdział obowiązków jak w CP."
+  },
+  {
+   "k": "b09",
+   "cat": "cost",
+   "n": "Mniej integracji i niższy koszt ich utrzymania",
+   "d": "Wspólne interfejsy z bankami, KSeF i systemami grupy."
+  },
+  {
+   "k": "b10",
+   "cat": "eff",
+   "n": "Wspólne zespoły wsparcia i kompetencje",
+   "d": "Key userzy i IT obsługują jeden system; łatwiejsze zastępstwa."
+  },
+  {
+   "k": "b11",
+   "cat": "scale",
+   "n": "Łatwiejsza przyszła zmiana platformy dla obu spółek",
+   "d": "Jedna wspólna migracja (np. do Dynamics 365) zamiast dwóch odrębnych projektów."
+  },
+  {
+   "k": "b12",
+   "cat": "eff",
+   "n": "Standaryzacja magazynu i logistyki",
+   "d": "Partie, daty ważności, lokalizacje i skanery według standardu CP."
+  }
+ ],
+ "benV": [
+  {
+   "v": 1,
+   "n": "niska"
+  },
+  {
+   "v": 2,
+   "n": "średnia"
+  },
+  {
+   "v": 3,
+   "n": "wysoka"
+  },
+  {
+   "v": 4,
+   "n": "bardzo wysoka"
+  }
+ ],
+ "benCf": [
+  {
+   "v": 1,
+   "n": "niska"
+  },
+  {
+   "v": 2,
+   "n": "średnia"
+  },
+  {
+   "v": 3,
+   "n": "wysoka"
+  }
+ ],
+ "benHz": [
+  "do 12 miesięcy",
+  "1–3 lata",
+  "powyżej 3 lat"
+ ],
+ "verdict": {
+  "minCov": 0.8,
+  "goFit": 0.8,
+  "condFit": 0.6,
+  "condCrit": 5
+ },
+ "verd": [
+  {
+   "k": "go",
+   "n": "Migracja rekomendowana",
+   "d": "AX w szablonie CP pokrywa wymagania CC; luki da się zamknąć konfiguracją lub zmianą procesu."
+  },
+  {
+   "k": "cond",
+   "n": "Migracja możliwa pod warunkami",
+   "d": "Migracja jest wykonalna po spełnieniu warunków: zamknięciu luk krytycznych i ograniczeniu głównych ryzyk."
+  },
+  {
+   "k": "nogo",
+   "n": "Migracja niezalecana w obecnym kształcie",
+   "d": "Luki i ryzyka przewyższają korzyści – potrzebny inny wariant lub zmiana zakresu."
+  }
+ ],
+ "areas": [
+  {
+   "k": "gl",
+   "cd": "GL",
+   "n": "Księga główna i zamknięcie",
+   "i": "book-open-text",
+   "c": "c-blue",
+   "ph": 1,
+   "d": "Plan kont, księgowania, zamknięcie miesiąca i roku, raportowanie, rozrachunki wewnątrzgrupowe, środki trwałe, płace"
+  },
+  {
+   "k": "tax",
+   "cd": "TX",
+   "n": "Podatki: VAT, CIT, JPK, KSeF",
+   "i": "receipt",
+   "c": "c-indigo",
+   "ph": 1,
+   "d": "Rejestry VAT, pliki JPK, faktury ustrukturyzowane KSeF, CIT i podatek odroczony"
+  },
+  {
+   "k": "bank",
+   "cd": "BK",
+   "n": "Banki i płatności",
+   "i": "bank",
+   "c": "c-teal",
+   "ph": 1,
+   "d": "Rachunki i wyciągi, uzgodnienia, przelewy, MPP i biała lista, płynność"
+  },
+  {
+   "k": "ar",
+   "cd": "AR",
+   "n": "Należności",
+   "i": "hand-coins",
+   "c": "c-green",
+   "ph": 1,
+   "d": "Faktury sprzedaży w księdze, rozliczenia wpłat, potwierdzenia sald, windykacja i odpisy"
+  },
+  {
+   "k": "ap",
+   "cd": "AP",
+   "n": "Zobowiązania – faktury zakupowe",
+   "i": "invoice",
+   "c": "c-amber",
+   "ph": 1,
+   "d": "Odbiór faktur (KSeF), rejestracja, weryfikacja i akceptacja, rozrachunki z dostawcami"
+  },
+  {
+   "k": "ctl",
+   "cd": "CO",
+   "n": "Kontroling i koszty",
+   "i": "chart-pie-slice",
+   "c": "c-violet",
+   "ph": 2,
+   "d": "Ośrodki kosztów, budżet, kalkulacja kosztu wyrobów, rentowność"
+  },
+  {
+   "k": "credit",
+   "cd": "CR",
+   "n": "Kontrola kredytowa",
+   "i": "shield-check",
+   "c": "c-pink",
+   "ph": 2,
+   "d": "Limity kredytowe, ubezpieczenie należności, blokady i zwalnianie zamówień, monitoring ryzyka"
+  },
+  {
+   "k": "pur",
+   "cd": "PU",
+   "n": "Zakupy",
+   "i": "shopping-cart",
+   "c": "c-cyan",
+   "ph": 2,
+   "d": "Dostawcy i cenniki, zapotrzebowania i zamówienia, przyjęcie dostaw, import i WNT"
+  },
+  {
+   "k": "sal",
+   "cd": "SA",
+   "n": "Sprzedaż i obsługa klienta",
+   "i": "storefront",
+   "c": "c-blue",
+   "ph": 2,
+   "d": "Klienci, cenniki i rabaty, zamówienia, wydanie i fakturowanie, reklamacje, eksport"
+  },
+  {
+   "k": "wh",
+   "cd": "WH",
+   "n": "Magazyn",
+   "i": "warehouse",
+   "c": "c-lime",
+   "ph": 2,
+   "d": "Magazyny i lokalizacje, partie i daty ważności, dokumenty magazynowe, inwentaryzacja, opakowania zwrotne"
+  },
+  {
+   "k": "trn",
+   "cd": "TR",
+   "n": "Transport i logistyka",
+   "i": "truck",
+   "c": "c-teal",
+   "ph": 2,
+   "d": "Planowanie wysyłek, dostawy luzem i paletowe, koszty transportu, dokumenty i ADR"
+  },
+  {
+   "k": "prd",
+   "cd": "PR",
+   "n": "Produkcja i jakość",
+   "i": "factory",
+   "c": "c-slate",
+   "ph": 2,
+   "d": "Receptury, zlecenia i integracja z ARA MES, planowanie, kontrola jakości, zgodność produktowa"
+  },
+  {
+   "k": "md",
+   "cd": "MD",
+   "n": "Dane podstawowe i migracja",
+   "i": "database",
+   "c": "c-navy",
+   "ph": 2,
+   "d": "Indeksy, kontrahenci, zakres i termin migracji danych, archiwum"
+  },
+  {
+   "k": "rep",
+   "cd": "RP",
+   "n": "Raportowanie i BI",
+   "i": "chart-bar",
+   "c": "c-indigo",
+   "ph": 2,
+   "d": "Raporty operacyjne i zarządcze, Power BI, raportowanie grupowe"
+  },
+  {
+   "k": "it",
+   "cd": "IT",
+   "n": "Integracje, uprawnienia i utrzymanie",
+   "i": "plugs-connected",
+   "c": "c-gray",
+   "ph": 2,
+   "d": "Interfejsy, role i SoD, licencje i wsparcie, infrastruktura i środowiska"
+  }
+ ],
+ "procs": [
+  {
+   "k": "gl1",
+   "a": "gl",
+   "n": "Plan kont i wymiary analityczne",
+   "d": "Struktura planu kont, konta syntetyczne i analityczne, słowniki (MPK, projekty), wymiary finansowe w AX, mapowanie na plan kont grupy.",
+   "o": "Kierownik zespołu FSSC",
+   "q": [
+    {
+     "k": "gl1-1",
+     "t": "Jak zbudowany jest plan kont CC (poziomy, analityki, słowniki) i czym różni się od planu kont CP w AX?",
+     "h": "W AX analitykę prowadzi się wymiarami finansowymi, a nie rozbudową kont. Ustal, czy CC może przyjąć plan kont CP – to warunek wspólnego raportowania i jednej procedury w FSSC.",
+     "p": "M"
+    },
+    {
+     "k": "gl1-2",
+     "t": "Jakie wymiary analityczne (MPK, projekty, linie produktowe, regiony, handlowcy) są potrzebne w raportowaniu CC i jak odwzorować je w wymiarach finansowych AX?",
+     "h": "Porównaj z wymiarami używanymi w CP. Nowy wymiar w AX to konfiguracja; wymiar z własną logiką rozliczeń może wymagać rozwoju.",
+     "p": "M"
+    },
+    {
+     "k": "gl1-3",
+     "t": "Jak prowadzone jest mapowanie kont na plan kont grupy (raportowanie do konsolidacji) i kto je utrzymuje?",
+     "h": "Sprawdź, czy mapowanie w CP jest w AX, czy w narzędziu raportowym grupy.",
+     "p": "M"
+    },
+    {
+     "k": "gl1-4",
+     "t": "Czy plan kont i słowniki są utrzymywane centralnie (szablon dla wielu spółek), czy osobno dla CC?",
+     "h": "Wspólny szablon CP i CC zmniejsza koszt utrzymania – wartość dodana.",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "gl2",
+   "a": "gl",
+   "n": "Dokumenty i księgowania",
+   "d": "Typy dokumentów i dzienniki, numeracja, schematy księgowań automatycznych, dekretacja, storna, rozliczenia międzyokresowe, waluty.",
+   "o": "Kierownik zespołu FSSC",
+   "q": [
+    {
+     "k": "gl2-1",
+     "t": "Jakie typy dokumentów i dzienniki księgowe są używane w CC (np. PK, WB, FZ, FS) i jak są numerowane?",
+     "h": "Porównaj z dziennikami i sekwencjami numerów w AX CP. Zmiana symboli dokumentów to typowa zmiana procesowa po stronie CC.",
+     "p": "S"
+    },
+    {
+     "k": "gl2-2",
+     "t": "Które księgowania powstają automatycznie z modułów (sprzedaż, zakupy, magazyn, produkcja), a które są ręczne? Jak zdefiniowane są schematy księgowań?",
+     "h": "W AX księgowania automatyczne wynikają z profili księgowania i grup magazynowych. Oceń, czy logikę CC da się odwzorować konfiguracją.",
+     "p": "M"
+    },
+    {
+     "k": "gl2-3",
+     "t": "Jak rozliczane są koszty i przychody międzyokresowe (RMK) oraz rezerwy?",
+     "h": "Sprawdź, czy CP używa w AX harmonogramów lub dzienników okresowych, czy księguje ręcznie.",
+     "p": "S"
+    },
+    {
+     "k": "gl2-4",
+     "t": "Jak korygowane są błędne księgowania (storno czerwone lub czarne) i jak zatwierdzane są dokumenty PK?",
+     "h": "W polskiej praktyce często wymagane jest storno czerwone – sprawdź ustawienia w AX CP.",
+     "p": "S"
+    },
+    {
+     "k": "gl2-5",
+     "t": "Jak księgowane są transakcje w walutach obcych i jak liczone są różnice kursowe (kurs NBP z dnia poprzedzającego, wycena na koniec miesiąca)?",
+     "h": "Różnice kursowe zrealizowane i niezrealizowane, typy kursów, automatyczny import kursów NBP – porównaj z CP.",
+     "p": "M",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "gl3",
+   "a": "gl",
+   "n": "Zamknięcie miesiąca i roku",
+   "d": "Harmonogram zamknięcia, blokowanie okresów, wyceny i uzgodnienia, zamknięcie roku i bilans otwarcia.",
+   "o": "Kierownik zespołu FSSC",
+   "q": [
+    {
+     "k": "gl3-1",
+     "t": "Jak wygląda harmonogram zamknięcia miesiąca w CC (dzień zamknięcia, kolejność czynności, odpowiedzialni)?",
+     "h": "Porównaj z harmonogramem CP. Wspólny kalendarz zamknięcia w FSSC to wartość dodana.",
+     "p": "M"
+    },
+    {
+     "k": "gl3-2",
+     "t": "Jak blokowane są okresy księgowe i kto może księgować po zamknięciu?",
+     "h": "W AX: statusy okresów i uprawnienia do księgowania w zamkniętym okresie.",
+     "p": "S"
+    },
+    {
+     "k": "gl3-3",
+     "t": "Jakie wyceny i uzgodnienia wykonuje się na koniec miesiąca (różnice kursowe, zapasy, rozrachunki, konta techniczne)?",
+     "h": "Ustal, które czynności w CP są zautomatyzowane w AX, a które ręczne.",
+     "p": "M"
+    },
+    {
+     "k": "gl3-4",
+     "t": "Jak przebiega zamknięcie roku i otwarcie nowego roku (bilans otwarcia, przeksięgowanie wyniku) w Symfonii i w AX?",
+     "h": "Termin migracji na początek roku obrotowego upraszcza ten proces.",
+     "p": "M"
+    },
+    {
+     "k": "gl3-5",
+     "t": "Które czynności zamknięcia są wykonywane w Excelu poza systemem?",
+     "h": "Kandydaci do automatyzacji po migracji – wpisz je też w wartości dodanej.",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "gl4",
+   "a": "gl",
+   "n": "Raportowanie statutowe i grupowe",
+   "d": "Sprawozdanie finansowe, raporty dla zarządu, raportowanie do grupy (konsolidacja), wsparcie audytu.",
+   "o": "Kierownik zespołu FSSC",
+   "q": [
+    {
+     "k": "gl4-1",
+     "t": "Jakie raporty statutowe (bilans, RZiS, rachunek przepływów, zestawienie zmian w kapitale) powstają w systemie, a jakie poza nim?",
+     "h": "Każdy raport, którego nie da się odtworzyć w AX lub narzędziu raportowym, to luka.",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "gl4-2",
+     "t": "Jak przygotowywane są dane do raportowania grupowego (konsolidacji) i w jakim terminie?",
+     "h": "Sprawdź, czy CP zasila raportowanie grupowe bezpośrednio z AX.",
+     "p": "M"
+    },
+    {
+     "k": "gl4-3",
+     "t": "Jakie miesięczne raporty zarządcze przygotowuje FSSC dla CC i z jakich źródeł danych?",
+     "h": "Uzgodnij listę raportów do odtworzenia po migracji.",
+     "p": "S"
+    },
+    {
+     "k": "gl4-4",
+     "t": "Jak wspierany jest audyt (obroty i salda, zestawienia, wydruki ksiąg, ślad zmian)?",
+     "h": "Porównaj z praktyką CP w AX.",
+     "p": "S"
+    },
+    {
+     "k": "gl4-5",
+     "t": "Czy e-sprawozdanie finansowe (XML) jest przygotowywane z systemu, czy w narzędziu zewnętrznym?",
+     "h": "Sprawdź, jak robi to CP – możliwe wspólne narzędzie.",
+     "p": "S",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "gl5",
+   "a": "gl",
+   "n": "Rozrachunki wewnątrzgrupowe",
+   "d": "Transakcje i uzgodnienia z podmiotami grupy (w tym z CP), refaktury, oznaczanie partnerów, eliminacje, potwierdzenia sald.",
+   "o": "Kierownik zespołu FSSC",
+   "q": [
+    {
+     "k": "gl5-1",
+     "t": "Jakie transakcje wewnątrzgrupowe ma CC (sprzedaż i zakupy z podmiotami grupy, usługi, refaktury) i jak są uzgadniane?",
+     "h": "Zbierz listę partnerów grupowych i wolumen transakcji.",
+     "p": "M"
+    },
+    {
+     "k": "gl5-2",
+     "t": "Jak oznaczani są kontrahenci grupowi (kod partnera) na potrzeby eliminacji w konsolidacji?",
+     "h": "Porównaj z oznaczeniem w AX CP.",
+     "p": "M"
+    },
+    {
+     "k": "gl5-3",
+     "t": "Czy po przejściu na AX można zautomatyzować transakcje między CC i CP (zamówienie wewnątrzgrupowe tworzy dokument u drugiej strony)?",
+     "h": "Wartość dodana wspólnego AX – sprawdź, czy CP używa funkcji intercompany.",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "gl6",
+   "a": "gl",
+   "n": "Środki trwałe",
+   "d": "Ewidencja środków trwałych i WNiP, amortyzacja bilansowa i podatkowa, inwestycje w toku, leasing, sprzęt u klientów.",
+   "o": "Kierownik zespołu FSSC",
+   "q": [
+    {
+     "k": "gl6-1",
+     "t": "Gdzie prowadzona jest ewidencja środków trwałych CC i ile jest pozycji?",
+     "h": "Dane do zakresu migracji (karty, wartości, umorzenia).",
+     "p": "M"
+    },
+    {
+     "k": "gl6-2",
+     "t": "Czy prowadzona jest odrębna amortyzacja bilansowa i podatkowa (różne stawki i metody), a także według zasad grupy?",
+     "h": "Sprawdź, ile ksiąg (modeli) amortyzacji używa CP w AX.",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "gl6-3",
+     "t": "Jak rozliczane są inwestycje w toku i przyjęcia środków trwałych (OT)?",
+     "h": "Porównaj obieg dokumentów i powiązanie z zakupami w AX CP.",
+     "p": "S"
+    },
+    {
+     "k": "gl6-4",
+     "t": "Jak ewidencjonowany jest leasing oraz sprzęt instalowany u klientów (np. urządzenia dozujące)?",
+     "h": "Specyfika CC: urządzenia u klientów – lokalizacja, odpowiedzialność, amortyzacja.",
+     "p": "S"
+    },
+    {
+     "k": "gl6-5",
+     "t": "Jak przeprowadzana jest inwentaryzacja środków trwałych?",
+     "h": "",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "gl7",
+   "a": "gl",
+   "n": "Księgowanie płac i rozliczeń pracowniczych",
+   "d": "Import list płac do księgi, rozliczenia ZUS i PIT, delegacje, zaliczki, karty firmowe.",
+   "o": "Kierownik zespołu FSSC",
+   "q": [
+    {
+     "k": "gl7-1",
+     "t": "W jakim systemie liczone są płace CC i jak lista płac trafia do księgi (plik, ręcznie, interfejs)?",
+     "h": "Sprawdź, jak CP importuje płace do AX; uwzględnij zmiany w systemach kadrowych grupy.",
+     "p": "M"
+    },
+    {
+     "k": "gl7-2",
+     "t": "Czy płace są rozksięgowywane na ośrodki kosztów i według jakiego klucza?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "gl7-3",
+     "t": "Jak rozliczane są delegacje, zaliczki i wydatki pracownicze?",
+     "h": "Możliwe wspólne narzędzie z CP.",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "tx1",
+   "a": "tax",
+   "n": "VAT i rejestry VAT",
+   "d": "Rejestry VAT sprzedaży i zakupów, kody GTU i procedury, transakcje zagraniczne, odwrotne obciążenie, korekty, ulga na złe długi.",
+   "o": "Specjalista ds. podatków (FSSC)",
+   "q": [
+    {
+     "k": "tx1-1",
+     "t": "Jak prowadzone są rejestry VAT w CC i jakie oznaczenia są stosowane (kody GTU, procedury, typy dokumentów)?",
+     "h": "Porównaj kody i procedury w AX CP oraz sposób ich nadawania (automatycznie z kartoteki czy ręcznie).",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tx1-2",
+     "t": "Jakie transakcje szczególne występują: WDT, WNT, eksport, import towarów i usług, odwrotne obciążenie, transakcje trójstronne?",
+     "h": "Każdy typ transakcji musi mieć grupę podatku i rejestr w AX.",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tx1-3",
+     "t": "Jak obsługiwane są korekty faktur (in plus i in minus) i moment ujęcia korekty w VAT?",
+     "h": "",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tx1-4",
+     "t": "Jak wyliczane są kursy dla VAT przy transakcjach walutowych (kurs z dnia poprzedzającego powstanie obowiązku podatkowego)?",
+     "h": "",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tx1-5",
+     "t": "Czy stosowana jest ulga na złe długi i jak monitorowane są przeterminowane należności i zobowiązania na jej potrzeby?",
+     "h": "Sprawdź, czy CP ma raport lub automat w AX.",
+     "p": "S",
+     "reg": 1
+    },
+    {
+     "k": "tx1-6",
+     "t": "Czy CC stosuje proporcję lub prewspółczynnik albo ma sprzedaż zwolnioną?",
+     "h": "",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "tx2",
+   "a": "tax",
+   "n": "Pliki JPK",
+   "d": "Generowanie i wysyłka JPK_V7, struktury na żądanie (JPK_KR, JPK_KR_PD, JPK_MAG, JPK_FA, JPK_WB), weryfikacja, korekty.",
+   "o": "Specjalista ds. podatków (FSSC)",
+   "q": [
+    {
+     "k": "tx2-1",
+     "t": "Jak generowany jest JPK_V7M lub JPK_V7K w CC (z Symfonii, narzędziem zewnętrznym) i jak wygląda kontrola przed wysyłką?",
+     "h": "Ustal, czy CP generuje JPK w AX czy w narzędziu zewnętrznym i kto utrzymuje polską lokalizację AX.",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tx2-2",
+     "t": "Jakie inne struktury JPK CC przygotowuje na żądanie (JPK_KR, JPK_KR_PD, JPK_MAG, JPK_FA, JPK_WB) i skąd pochodzą dane?",
+     "h": "Każda struktura musi być dostępna dla nowego podmiotu w AX.",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tx2-3",
+     "t": "Czy konta księgowe mają przypisane znaczniki podatkowe dla JPK_KR_PD i kto je utrzymuje?",
+     "h": "Przy wspólnym planie kont znaczniki można utrzymywać raz dla obu spółek.",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tx2-4",
+     "t": "Czy rozwiązanie JPK używane w CP obejmie CC jako kolejny podmiot i jaki jest koszt dodania podmiotu?",
+     "h": "Kluczowe dla wykonalności – zapytaj partnera utrzymującego lokalizację AX.",
+     "p": "M",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "tx3",
+   "a": "tax",
+   "n": "KSeF – faktury ustrukturyzowane",
+   "d": "Wystawianie i odbiór faktur w KSeF, numer KSeF, tryb offline i awaryjny, uprawnienia, integracja z ERP.",
+   "o": "Specjalista ds. podatków (FSSC)",
+   "q": [
+    {
+     "k": "tx3-1",
+     "t": "Jak CC wystawia faktury w KSeF (integracja Symfonii, narzędzie pośrednie) i jak obsługuje odrzucenia i błędy?",
+     "h": "Porównaj z rozwiązaniem KSeF w AX CP.",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tx3-2",
+     "t": "Jak pobierane są faktury zakupowe z KSeF i jak trafiają do rejestracji i obiegu akceptacji?",
+     "h": "Powiąż z obszarem Zobowiązania – wspólny proces w FSSC to wartość dodana.",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tx3-3",
+     "t": "Jak obsługiwane są tryby offline i awaryjny oraz faktury poza KSeF (odbiorcy zagraniczni, konsumenci)?",
+     "h": "",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tx3-4",
+     "t": "Jak zarządzane są uprawnienia i dane uwierzytelniające KSeF dla CC i kto za nie odpowiada?",
+     "h": "",
+     "p": "S",
+     "reg": 1
+    },
+    {
+     "k": "tx3-5",
+     "t": "Czy rozwiązanie KSeF używane w CP może obsłużyć CC jako kolejny NIP i jaki jest zakres zmian?",
+     "h": "Kluczowe dla wykonalności – zakres i koszt po stronie integratora.",
+     "p": "M",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "tx4",
+   "a": "tax",
+   "n": "CIT, podatek odroczony i inne podatki",
+   "d": "Zaliczki CIT, koszty NKUP, podatek odroczony, ceny transferowe, podatek u źródła, podatki i opłaty lokalne.",
+   "o": "Specjalista ds. podatków (FSSC)",
+   "q": [
+    {
+     "k": "tx4-1",
+     "t": "Jak wyliczane są zaliczki CIT i koszty niestanowiące kosztów uzyskania przychodów – w systemie czy w Excelu?",
+     "h": "Wyróżnienie NKUP kontami lub wymiarem w AX – sprawdź praktykę CP.",
+     "p": "S",
+     "reg": 1
+    },
+    {
+     "k": "tx4-2",
+     "t": "Jak liczony jest podatek odroczony (różnice przejściowe, np. amortyzacja, rezerwy)?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "tx4-3",
+     "t": "Jak ewidencjonowany jest podatek u źródła i jak przygotowywana jest dokumentacja cen transferowych dla transakcji w grupie?",
+     "h": "",
+     "p": "S",
+     "reg": 1
+    },
+    {
+     "k": "tx4-4",
+     "t": "Czy występują inne podatki lub opłaty wymagające ewidencji w ERP (podatek od nieruchomości, opłaty środowiskowe, BDO, opłata produktowa za opakowania)?",
+     "h": "Specyfika chemii budowlanej: opakowania i odpady – sprawdź raportowanie BDO.",
+     "p": "C",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "bk1",
+   "a": "bank",
+   "n": "Rachunki i wyciągi bankowe",
+   "d": "Rachunki bankowe, import wyciągów, automatyczne rozliczanie, uzgodnienia, kasa gotówkowa.",
+   "o": "Specjalista ds. bankowości (FSSC)",
+   "q": [
+    {
+     "k": "bk1-1",
+     "t": "Ile rachunków bankowych, w jakich bankach i walutach ma CC i jak importowane są wyciągi (format, częstotliwość)?",
+     "h": "Sprawdź formaty wyciągów obsługiwane w AX CP (np. MT940, CAMT) i czy CC korzysta z tych samych banków.",
+     "p": "M"
+    },
+    {
+     "k": "bk1-2",
+     "t": "Jaka część pozycji wyciągu rozliczana jest automatycznie z należnościami i zobowiązaniami i jakie reguły dopasowania są stosowane?",
+     "h": "Niska automatyzacja w CC i wyższa w CP to wartość dodana migracji.",
+     "p": "S"
+    },
+    {
+     "k": "bk1-3",
+     "t": "Jak uzgadniane są rachunki bankowe na koniec miesiąca?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "bk1-4",
+     "t": "Czy CC prowadzi kasę gotówkową (KP, KW, raporty kasowe)?",
+     "h": "Sprawdź, czy CP obsługuje kasę w AX.",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "bk2",
+   "a": "bank",
+   "n": "Płatności i przelewy",
+   "d": "Propozycje płatności, akceptacje, wysyłka do banku, mechanizm podzielonej płatności, biała lista, płatności zagraniczne, kompensaty.",
+   "o": "Specjalista ds. bankowości (FSSC)",
+   "q": [
+    {
+     "k": "bk2-1",
+     "t": "Jak przygotowywana jest propozycja płatności (kryteria, terminy, priorytety) i kto ją akceptuje?",
+     "h": "Porównaj z propozycjami płatności w AX CP i ścieżką akceptacji.",
+     "p": "M"
+    },
+    {
+     "k": "bk2-2",
+     "t": "Jak przelewy trafiają do banku (plik, połączenie bezpośrednie, ręcznie w bankowości) i w jakim formacie?",
+     "h": "Sprawdź, czy kanał i format CP można użyć dla CC.",
+     "p": "M"
+    },
+    {
+     "k": "bk2-3",
+     "t": "Jak obsługiwany jest mechanizm podzielonej płatności (MPP) i rachunki VAT?",
+     "h": "",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "bk2-4",
+     "t": "Jak weryfikowana jest biała lista podatników VAT przed płatnością i jak dokumentowany jest wynik weryfikacji?",
+     "h": "Sprawdź, czy weryfikacja w CP jest automatyczna (AX, narzędzie zewnętrzne).",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "bk2-5",
+     "t": "Jak realizowane są płatności zagraniczne i walutowe?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "bk2-6",
+     "t": "Czy stosowane są kompensaty, noty kompensacyjne, cash pooling lub netting w grupie?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "bk3",
+   "a": "bank",
+   "n": "Płynność i raportowanie gotówki",
+   "d": "Prognoza przepływów pieniężnych, raportowanie gotówki do grupy, gwarancje bankowe, faktoring.",
+   "o": "Specjalista ds. bankowości (FSSC)",
+   "q": [
+    {
+     "k": "bk3-1",
+     "t": "Jak przygotowywana jest prognoza płynności i raportowanie gotówki do grupy?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "bk3-2",
+     "t": "Czy CC korzysta z gwarancji bankowych, akredytyw lub faktoringu i jak są ewidencjonowane?",
+     "h": "",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "ar1",
+   "a": "ar",
+   "n": "Faktury sprzedaży w księdze",
+   "d": "Przepływ faktur z modułu handlowego do księgi i rejestru VAT, faktury usługowe i ręczne, noty, faktury zaliczkowe.",
+   "o": "Specjalista ds. należności (FSSC)",
+   "q": [
+    {
+     "k": "ar1-1",
+     "t": "Jak faktury sprzedaży trafiają z modułu handlowego do księgi i rejestru VAT? Czy część faktur wystawia się bezpośrednio w module finansowym?",
+     "h": "W AX faktury powstają w sprzedaży lub jako faktury niezależne – porównaj z CP.",
+     "p": "M"
+    },
+    {
+     "k": "ar1-2",
+     "t": "Jakie dokumenty poza fakturami powstają po stronie należności (noty odsetkowe, obciążeniowe, refaktury)?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "ar1-3",
+     "t": "Jak obsługiwane są faktury zaliczkowe i końcowe?",
+     "h": "",
+     "p": "S",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "ar2",
+   "a": "ar",
+   "n": "Rozliczenia z klientami",
+   "d": "Rozliczanie wpłat, kompensaty, potwierdzenia sald, odsetki i rekompensaty, rabaty posprzedażowe.",
+   "o": "Specjalista ds. należności (FSSC)",
+   "q": [
+    {
+     "k": "ar2-1",
+     "t": "Jak rozliczane są wpłaty klientów (automatycznie z wyciągu, ręcznie) i jak obsługiwane są wpłaty nierozpoznane?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "ar2-2",
+     "t": "Jak przygotowywane są potwierdzenia sald i uzgodnienia z klientami?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "ar2-3",
+     "t": "Jak naliczane są odsetki za opóźnienia i rekompensaty za koszty odzyskiwania należności?",
+     "h": "Sprawdź automatyzację not odsetkowych w AX CP.",
+     "p": "S"
+    },
+    {
+     "k": "ar2-4",
+     "t": "Jak rozliczane są bonusy, rabaty posprzedażowe i korekty dla klientów po stronie należności?",
+     "h": "Powiąż z obszarem Sprzedaż – rabaty retro to częsta luka.",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "ar3",
+   "a": "ar",
+   "n": "Windykacja i odpisy",
+   "d": "Monitorowanie przeterminowań, przypomnienia i wezwania, windykacja, odpisy aktualizujące.",
+   "o": "Specjalista ds. należności (FSSC)",
+   "q": [
+    {
+     "k": "ar3-1",
+     "t": "Jak monitorowane są należności przeterminowane i wysyłane przypomnienia lub wezwania do zapłaty?",
+     "h": "W AX: listy przypomnień – sprawdź, czy CP ich używa.",
+     "p": "M"
+    },
+    {
+     "k": "ar3-2",
+     "t": "Jak tworzone są odpisy aktualizujące należności (zasady, automatyzacja)?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "ar3-3",
+     "t": "Kto prowadzi windykację (FSSC, dział handlowy, firma zewnętrzna) i jak jest dokumentowana w systemie?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "ap1",
+   "a": "ap",
+   "n": "Odbiór i rejestracja faktur zakupowych",
+   "d": "Wpływ faktur (KSeF, e-mail, papier), skanowanie i rozpoznawanie, rejestracja w ERP, dekretacja.",
+   "o": "Specjalista ds. zobowiązań (FSSC)",
+   "q": [
+    {
+     "k": "ap1-1",
+     "t": "Jakimi kanałami wpływają faktury zakupowe do CC (KSeF, PDF e-mailem, papier) i jaki jest wolumen miesięczny?",
+     "h": "Wolumen przyda się do szacunku efektów wspólnego procesu w FSSC.",
+     "p": "M"
+    },
+    {
+     "k": "ap1-2",
+     "t": "Jak faktury są rejestrowane w Symfonii (ręcznie, import z KSeF, rozpoznawanie OCR) i kto to robi (FSSC, CC)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "ap1-3",
+     "t": "Czy CP używa narzędzia do obiegu faktur zintegrowanego z AX (np. WEBCON), które mogłoby objąć CC?",
+     "h": "Wspólny obieg faktur w FSSC to wartość dodana.",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "ap2",
+   "a": "ap",
+   "n": "Weryfikacja i akceptacja faktur",
+   "d": "Dopasowanie do zamówienia i przyjęcia, opis merytoryczny, akceptacje, rozbieżności, dekretacja kosztów.",
+   "o": "Specjalista ds. zobowiązań (FSSC)",
+   "q": [
+    {
+     "k": "ap2-1",
+     "t": "Jak weryfikowane są faktury za towary i surowce: czy jest dopasowanie do zamówienia i przyjęcia (dopasowanie dwu- lub trójstronne)?",
+     "h": "W AX CP faktura jest dopasowywana do zamówienia zakupu i przyjęcia – jeśli CC nie używa zamówień, to istotna zmiana procesu.",
+     "p": "M"
+    },
+    {
+     "k": "ap2-2",
+     "t": "Jak przebiega akceptacja merytoryczna faktur kosztowych (usługi, media) i kto akceptuje?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "ap2-3",
+     "t": "Jak rozwiązywane są rozbieżności ceny i ilości między fakturą a zamówieniem lub przyjęciem?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "ap2-4",
+     "t": "Jak dekretowane są koszty na ośrodki kosztów i wymiary i czy stosuje się rozdzielniki?",
+     "h": "",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "ap3",
+   "a": "ap",
+   "n": "Rozrachunki z dostawcami",
+   "d": "Zakładanie dostawców po stronie finansowej, kontrola rachunków bankowych, zaliczki, uzgodnienia sald, terminy płatności.",
+   "o": "Specjalista ds. zobowiązań (FSSC)",
+   "q": [
+    {
+     "k": "ap3-1",
+     "t": "Jak zakładani i weryfikowani są nowi dostawcy oraz zmiany ich rachunków bankowych (biała lista, zatwierdzanie zmian)?",
+     "h": "Kontrola zmian rachunków ogranicza ryzyko wyłudzeń – porównaj z CP.",
+     "p": "M"
+    },
+    {
+     "k": "ap3-2",
+     "t": "Jak obsługiwane są zaliczki dla dostawców i faktury zaliczkowe zakupu?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "ap3-3",
+     "t": "Czy CC raportuje praktyki płatnicze i terminy zapłaty (sprawozdanie dużych przedsiębiorców) i skąd pochodzą dane?",
+     "h": "Sprawdź, czy obowiązek dotyczy CC i jak raport przygotowuje CP.",
+     "p": "S",
+     "reg": 1
+    },
+    {
+     "k": "ap3-4",
+     "t": "Jak uzgadniane są salda z dostawcami na koniec okresu?",
+     "h": "",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "ct1",
+   "a": "ctl",
+   "n": "Ośrodki kosztów i rozliczenia kosztów",
+   "d": "Struktura MPK, klucze podziałowe, rozliczenia kosztów pośrednich i wydziałowych.",
+   "o": "Kontroler finansowy",
+   "q": [
+    {
+     "k": "ct1-1",
+     "t": "Jaka jest struktura ośrodków kosztów w CC i jak koszty są rozliczane (klucze, rozdzielniki)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "ct1-2",
+     "t": "Czy koszty wydziałowe i ogólnozakładowe są rozliczane na wyroby i jakim kluczem?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "ct2",
+   "a": "ctl",
+   "n": "Budżet i prognozy",
+   "d": "Budżetowanie, prognozy, porównanie wykonania z budżetem.",
+   "o": "Kontroler finansowy",
+   "q": [
+    {
+     "k": "ct2-1",
+     "t": "Gdzie przygotowywany jest budżet CC (ERP, Excel, narzędzie grupowe) i jak porównywane jest wykonanie?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "ct2-2",
+     "t": "Czy CP korzysta w AX z budżetowania lub kontroli budżetu (np. przy zamówieniach)?",
+     "h": "",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "ct3",
+   "a": "ctl",
+   "n": "Kalkulacja kosztu wyrobów i wycena zapasów",
+   "d": "Koszt standardowy lub rzeczywisty, kalkulacje planowane, odchylenia, wycena zapasów na koniec okresu.",
+   "o": "Kontroler finansowy",
+   "q": [
+    {
+     "k": "ct3-1",
+     "t": "Jak liczony jest koszt wytworzenia wyrobów w CC (standardowy, rzeczywisty, średni ważony) i w którym systemie (Symfonia, ARA MES, Excel)?",
+     "h": "Sprawdź model wyceny zapasów i kalkulacje w AX CP – zgodność metod wpływa na wynik i wycenę zapasów.",
+     "p": "M"
+    },
+    {
+     "k": "ct3-2",
+     "t": "Jak analizowane są odchylenia od kosztu standardowego i marża na wyrobie lub kliencie?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "ct3-3",
+     "t": "Jak wyceniane są zapasy na koniec miesiąca (metoda, odpisy na zapasy wolno rotujące i przeterminowane)?",
+     "h": "",
+     "p": "M",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "ct4",
+   "a": "ctl",
+   "n": "Raportowanie zarządcze i rentowność",
+   "d": "Rentowność klientów, produktów i segmentów, raporty dla dyrektora generalnego.",
+   "o": "Kontroler finansowy",
+   "q": [
+    {
+     "k": "ct4-1",
+     "t": "Jakie analizy rentowności (klient, produkt, segment, region) są wymagane przez zarząd CC i skąd pochodzą dane?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "ct4-2",
+     "t": "Czy wymiary i raporty AX pozwolą odtworzyć te analizy bez ręcznej pracy w Excelu?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "cr1",
+   "a": "credit",
+   "n": "Limity kredytowe i ocena klientów",
+   "d": "Przyznawanie i przegląd limitów, ubezpieczenie należności, zabezpieczenia.",
+   "o": "Credit controller",
+   "q": [
+    {
+     "k": "cr1-1",
+     "t": "Jak przyznawane są limity kredytowe (kto, na jakiej podstawie, z jakim udziałem ubezpieczyciela) i gdzie są ewidencjonowane?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "cr1-2",
+     "t": "Czy limity są powiązane z limitem ubezpieczyciela należności i z zabezpieczeniami (gwarancje, weksle)?",
+     "h": "Sprawdź, czy CP przechowuje te dane w AX czy poza nim.",
+     "p": "S"
+    },
+    {
+     "k": "cr1-3",
+     "t": "Jak często i przez kogo limity są weryfikowane?",
+     "h": "",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "cr2",
+   "a": "credit",
+   "n": "Blokady i zwalnianie zamówień",
+   "d": "Kontrola limitu i przeterminowań przy zamówieniu lub wydaniu, blokady, zwalnianie.",
+   "o": "Credit controller",
+   "q": [
+    {
+     "k": "cr2-1",
+     "t": "W którym momencie system sprawdza limit i przeterminowania (oferta, zamówienie, wydanie, faktura)?",
+     "h": "Sprawdź konfigurację kontroli limitu w AX CP i czy obejmuje zamówienia otwarte.",
+     "p": "M"
+    },
+    {
+     "k": "cr2-2",
+     "t": "Kto i jak zwalnia zablokowane zamówienia (ścieżka akceptacji, dokumentowanie decyzji)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "cr2-3",
+     "t": "Czy limit jest wspólny dla grupy powiązanych kontrahentów (holding klienta)?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "cr3",
+   "a": "credit",
+   "n": "Monitoring ryzyka kredytowego",
+   "d": "Wiekowanie, DSO, klienci zagrożeni, komitet kredytowy, klienci wspólni z CP.",
+   "o": "Credit controller",
+   "q": [
+    {
+     "k": "cr3-1",
+     "t": "Jakie raporty kredytowe są używane (wiekowanie, DSO, przekroczenia limitów) i jak często?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "cr3-2",
+     "t": "Czy po migracji możliwy będzie wspólny widok ekspozycji na klientów wspólnych dla CC i CP?",
+     "h": "Wartość dodana: łączna ekspozycja kredytowa na wspólnych klientów.",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "pu1",
+   "a": "pur",
+   "n": "Dostawcy, umowy i cenniki zakupowe",
+   "d": "Kartoteka dostawców, umowy ramowe, cenniki, warunki dostaw (Incoterms), dostawcy grupowi.",
+   "o": "Kierownik zakupów",
+   "q": [
+    {
+     "k": "pu1-1",
+     "t": "Jak prowadzona jest kartoteka dostawców po stronie zakupów (kategorie, warunki płatności i dostawy, Incoterms)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "pu1-2",
+     "t": "Czy ceny zakupu są utrzymywane w systemie (cenniki, umowy ramowe), czy podawane na każdym zamówieniu?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "pu1-3",
+     "t": "Które surowce kupowane są od dostawców grupowych lub z innych spółek grupy i jak wpływa to na proces?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "pu2",
+   "a": "pur",
+   "n": "Zapotrzebowania i zamówienia zakupu",
+   "d": "Zapotrzebowania, akceptacje, zamówienia, potwierdzenia, monitorowanie terminów, planowanie zakupu surowców.",
+   "o": "Kierownik zakupów",
+   "q": [
+    {
+     "k": "pu2-1",
+     "t": "Czy zakupy CC (surowce, opakowania, usługi) są rejestrowane jako zamówienia w systemie? Jaka część zakupów ma zamówienie?",
+     "h": "Brak zamówień oznacza istotną zmianę procesu w AX (dopasowanie faktur, zobowiązania).",
+     "p": "M"
+    },
+    {
+     "k": "pu2-2",
+     "t": "Jak przebiega akceptacja zapotrzebowań i zamówień (progi kwotowe, ścieżki)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "pu2-3",
+     "t": "Jak planowany jest zakup surowców (MRP, punkt zamawiania, ręcznie)?",
+     "h": "Powiąż z obszarem Produkcja i jakość.",
+     "p": "S"
+    },
+    {
+     "k": "pu2-4",
+     "t": "Jak monitorowane są terminy dostaw i potwierdzenia od dostawców?",
+     "h": "",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "pu3",
+   "a": "pur",
+   "n": "Przyjęcie dostaw i kontrola jakości surowca",
+   "d": "Przyjęcie na magazyn z odniesieniem do zamówienia, kontrola jakości, kwarantanna, zwroty do dostawców.",
+   "o": "Kierownik zakupów",
+   "q": [
+    {
+     "k": "pu3-1",
+     "t": "Jak rejestrowane jest przyjęcie dostawy (PZ) – czy z odniesieniem do zamówienia – i kto to robi?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "pu3-2",
+     "t": "Czy surowce przechodzą kontrolę jakości przed dopuszczeniem do produkcji (status partii, kwarantanna, świadectwo dostawcy)?",
+     "h": "Ważne w chemii budowlanej: partie i świadectwa jakości dostawców.",
+     "p": "M"
+    },
+    {
+     "k": "pu3-3",
+     "t": "Jak obsługiwane są reklamacje i zwroty do dostawców?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "pu4",
+   "a": "pur",
+   "n": "Import, WNT i koszty nabycia",
+   "d": "Zakupy z UE i spoza UE, odprawa celna, koszty dodatkowe w wartości zapasu.",
+   "o": "Kierownik zakupów",
+   "q": [
+    {
+     "k": "pu4-1",
+     "t": "Jaka część surowców pochodzi z UE (WNT), a jaka spoza UE (import, odprawa celna)?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "pu4-2",
+     "t": "Jak koszty dodatkowe (transport, cło, ubezpieczenie) są doliczane do wartości zakupu i zapasu?",
+     "h": "Sprawdź, czy CP używa w AX kosztów dodatkowych na zamówieniach zakupu.",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "sa1",
+   "a": "sal",
+   "n": "Klienci i warunki handlowe",
+   "d": "Kartoteka klientów, płatnicy i odbiorcy, miejsca dostaw (np. węzły betoniarskie), segmentacja, klienci wspólni z CP.",
+   "o": "Kierownik obsługi klienta",
+   "q": [
+    {
+     "k": "sa1-1",
+     "t": "Jak zbudowana jest kartoteka klientów CC (płatnik, odbiorca, miejsca dostaw) i ilu klientów jest wspólnych z CP?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "sa1-2",
+     "t": "Jak zakładani i zatwierdzani są nowi klienci (NIP, VIES, biała lista, limit kredytowy)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "sa1-3",
+     "t": "Jakie segmentacje i atrybuty klienta są wykorzystywane w raportowaniu (segment rynku, region, handlowiec)?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "sa2",
+   "a": "sal",
+   "n": "Cenniki, rabaty i umowy handlowe",
+   "d": "Cenniki bazowe, ceny indywidualne, rabaty, bonusy posprzedażowe, umowy roczne i projektowe.",
+   "o": "Kierownik obsługi klienta",
+   "q": [
+    {
+     "k": "sa2-1",
+     "t": "Jak ustalane są ceny dla klientów (cenniki bazowe, ceny indywidualne, umowy na budowę lub projekt)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "sa2-2",
+     "t": "Jak naliczane i rozliczane są rabaty posprzedażowe i bonusy (progi obrotu, okresy rozliczeń)?",
+     "h": "Sprawdź obsługę porozumień rabatowych w AX CP – często rozwiązywane w Excelu.",
+     "p": "M"
+    },
+    {
+     "k": "sa2-3",
+     "t": "Czy ceny zależą od jednostki miary i opakowania (kg, l, t, IBC, cysterna) lub od dostawy luzem?",
+     "h": "Specyfika CC: produkty płynne – przeliczniki jednostek i gęstość.",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "sa3",
+   "a": "sal",
+   "n": "Oferty i zamówienia sprzedaży",
+   "d": "Kanały przyjmowania zamówień, dostępność i terminy, zamówienia ramowe i harmonogramy, uzupełnianie zapasu u klienta.",
+   "o": "Kierownik obsługi klienta",
+   "q": [
+    {
+     "k": "sa3-1",
+     "t": "Jakimi kanałami wpływają zamówienia (telefon, e-mail, portal, EDI) i kto je wprowadza?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "sa3-2",
+     "t": "Czy stosowane są zamówienia ramowe lub harmonogramy dostaw dla stałych klientów (np. cykliczne dostawy do betoniarni)?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "sa3-3",
+     "t": "Jak sprawdzana jest dostępność i termin realizacji przy przyjęciu zamówienia?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "sa3-4",
+     "t": "Czy CC uzupełnia zapas w zbiornikach u klienta (model VMI, konsygnacja) i jak to ewidencjonuje?",
+     "h": "Specyfika CC: zbiorniki i dozowniki u klientów – sprawdź odwzorowanie w AX (magazyn u klienta, konsygnacja).",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "sa4",
+   "a": "sal",
+   "n": "Wydanie i fakturowanie",
+   "d": "Wydania WZ, fakturowanie (KSeF), faktury zbiorcze, korekty, dokumenty towarzyszące dostawie.",
+   "o": "Kierownik obsługi klienta",
+   "q": [
+    {
+     "k": "sa4-1",
+     "t": "Jak przebiega wydanie towaru i fakturowanie (faktura do WZ, faktury zbiorcze okresowe)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "sa4-2",
+     "t": "Jakie dokumenty muszą towarzyszyć dostawie (WZ, świadectwo jakości, karta charakterystyki, dokumenty ADR) i skąd są drukowane?",
+     "h": "",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "sa4-3",
+     "t": "Jak obsługiwane są korekty faktur sprzedaży i ich wysyłka do KSeF?",
+     "h": "",
+     "p": "M",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "sa5",
+   "a": "sal",
+   "n": "Reklamacje i zwroty",
+   "d": "Reklamacje jakościowe i ilościowe, zwroty towarów i opakowań, noty uznaniowe.",
+   "o": "Kierownik obsługi klienta",
+   "q": [
+    {
+     "k": "sa5-1",
+     "t": "Jak rejestrowane i rozpatrywane są reklamacje (jakościowe, ilościowe) i czy są prowadzone w systemie?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "sa5-2",
+     "t": "Jak obsługiwane są zwroty towarów i opakowań zwrotnych (IBC, beczki, palety)?",
+     "h": "Opakowania zwrotne: kaucje, salda u klientów – sprawdź, czy CP ma podobny proces (np. palety).",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "sa6",
+   "a": "sal",
+   "n": "Sprzedaż eksportowa i WDT",
+   "d": "Sprzedaż do UE i poza UE, dowody dostawy i wywozu, Intrastat.",
+   "o": "Kierownik obsługi klienta",
+   "q": [
+    {
+     "k": "sa6-1",
+     "t": "Jaka część sprzedaży to WDT i eksport i jak gromadzone są dowody dostawy lub wywozu?",
+     "h": "",
+     "p": "S",
+     "reg": 1
+    },
+    {
+     "k": "sa6-2",
+     "t": "Jak przygotowywane są deklaracje Intrastat – z systemu czy ręcznie?",
+     "h": "",
+     "p": "S",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "wh1",
+   "a": "wh",
+   "n": "Magazyny i lokalizacje",
+   "d": "Struktura magazynów, lokalizacje, magazyny zewnętrzne i u klientów.",
+   "o": "Kierownik magazynu",
+   "q": [
+    {
+     "k": "wh1-1",
+     "t": "Ile magazynów prowadzi CC (zakład, magazyny zewnętrzne, u klientów) i czy ewidencja jest prowadzona na lokalizacjach?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "wh1-2",
+     "t": "Czy CP używa w AX zaawansowanej gospodarki magazynowej (lokalizacje, skanery) i czy taki model pasuje do CC?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "wh1-3",
+     "t": "Czy zapasy CC są w magazynach obcych lub konsygnacyjnych i jak są uzgadniane?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "wh2",
+   "a": "wh",
+   "n": "Partie, daty ważności i identyfikowalność",
+   "d": "Numery partii, daty produkcji i ważności, FEFO, statusy jakości, genealogia partii.",
+   "o": "Kierownik magazynu",
+   "q": [
+    {
+     "k": "wh2-1",
+     "t": "Czy CC ewidencjonuje partie i daty ważności surowców i wyrobów? Czy wydania są realizowane według FEFO?",
+     "h": "Kluczowe w chemii budowlanej (okres przydatności) – sprawdź śledzenie partii w AX CP.",
+     "p": "M"
+    },
+    {
+     "k": "wh2-2",
+     "t": "Jak blokowane są partie (kwarantanna, negatywny wynik kontroli jakości, przeterminowanie)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "wh2-3",
+     "t": "Czy wymagana jest pełna identyfikowalność partii od surowca do klienta i w jakim czasie trzeba ją odtworzyć?",
+     "h": "",
+     "p": "M",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "wh3",
+   "a": "wh",
+   "n": "Dokumenty magazynowe i jednostki miary",
+   "d": "PZ, WZ, MM, RW, PW, kompletacja, etykiety i skanery, przeliczniki jednostek.",
+   "o": "Kierownik magazynu",
+   "q": [
+    {
+     "k": "wh3-1",
+     "t": "Jakie dokumenty magazynowe są używane w CC (PZ, WZ, MM, RW, PW) i czy powstają w systemie, czy ręcznie?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "wh3-2",
+     "t": "Czy magazyn pracuje na skanerach i etykietach (np. etykiety CLP na opakowaniach)?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "wh3-3",
+     "t": "Jak obsługiwane są jednostki miary i przeliczniki (kg, l, t, szt., IBC), w tym gęstość produktów płynnych?",
+     "h": "Sprawdź przeliczniki jednostek dla produktu w AX – konwersja kg↔l zależna od produktu.",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "wh4",
+   "a": "wh",
+   "n": "Inwentaryzacja i wycena rozchodu",
+   "d": "Inwentaryzacje okresowe i ciągłe, rozliczanie różnic, metoda wyceny rozchodu.",
+   "o": "Kierownik magazynu",
+   "q": [
+    {
+     "k": "wh4-1",
+     "t": "Jak przeprowadzana jest inwentaryzacja (roczna, ciągła, cykliczna) i rozliczanie różnic?",
+     "h": "",
+     "p": "S",
+     "reg": 1
+    },
+    {
+     "k": "wh4-2",
+     "t": "Jaka metoda wyceny rozchodu jest stosowana (FIFO, średnia ważona, standard) i czy jest zgodna z CP?",
+     "h": "Zmiana metody wyceny ma skutki księgowe – decyzja do akceptacji przez finanse.",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "wh5",
+   "a": "wh",
+   "n": "Opakowania zwrotne i towary niebezpieczne",
+   "d": "IBC, beczki, palety, kaucje; klasyfikacja ADR i CLP, ograniczenia składowania.",
+   "o": "Kierownik magazynu",
+   "q": [
+    {
+     "k": "wh5-1",
+     "t": "Jak ewidencjonowane są opakowania zwrotne (IBC, beczki, palety) – salda u klientów, kaucje, zwroty?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "wh5-2",
+     "t": "Czy system przechowuje klasyfikację ADR i CLP produktów i ogranicza składowanie lub wysyłkę?",
+     "h": "",
+     "p": "S",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "tr1",
+   "a": "trn",
+   "n": "Planowanie i realizacja wysyłek",
+   "d": "Planowanie dostaw, przewoźnicy, rodzaje dostaw (luzem, paletowe, kurier), awizacje.",
+   "o": "Kierownik logistyki",
+   "q": [
+    {
+     "k": "tr1-1",
+     "t": "Jak planowane są wysyłki (system, Excel, przewoźnik) i kto wybiera przewoźnika?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "tr1-2",
+     "t": "Jakie rodzaje dostaw realizuje CC (cysterny luzem, palety, kurier, odbiór własny) i jakie wymagania ma każdy z nich?",
+     "h": "Dostawy luzem: ważenie, plomby, mycie cystern – specyfika CC.",
+     "p": "M"
+    },
+    {
+     "k": "tr1-3",
+     "t": "Czy CP używa w AX modułu transportowego lub zewnętrznego systemu?",
+     "h": "",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "tr2",
+   "a": "trn",
+   "n": "Koszty transportu i rozliczenia z przewoźnikami",
+   "d": "Stawki frachtowe, faktury przewoźników, przypisanie kosztu do dostaw, refaktura na klienta.",
+   "o": "Kierownik logistyki",
+   "q": [
+    {
+     "k": "tr2-1",
+     "t": "Jak naliczane i weryfikowane są koszty transportu (stawki, faktury przewoźników) i czy są przypisywane do dostaw lub klientów?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "tr2-2",
+     "t": "Czy koszt transportu jest refakturowany na klienta lub wliczony w cenę (Incoterms)?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "tr3",
+   "a": "trn",
+   "n": "Dokumenty transportowe i ADR",
+   "d": "WZ, CMR, dokumenty ADR, inne wymagania przewozowe.",
+   "o": "Kierownik logistyki",
+   "q": [
+    {
+     "k": "tr3-1",
+     "t": "Jakie dokumenty transportowe są wymagane (CMR, dokumenty ADR, instrukcje pisemne) i skąd są generowane?",
+     "h": "",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "tr3-2",
+     "t": "Czy któreś produkty podlegają szczególnym przepisom przewozowym lub monitorowaniu (np. SENT)?",
+     "h": "Zweryfikuj z logistyką i doradcą ds. bezpieczeństwa (DGSA).",
+     "p": "C",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "pr1",
+   "a": "prd",
+   "n": "Receptury i dane techniczne",
+   "d": "Receptury (formuły) i ich wersje, zamienniki surowców, karty technologiczne, poufność receptur.",
+   "o": "Kierownik produkcji",
+   "q": [
+    {
+     "k": "pr1-1",
+     "t": "Gdzie utrzymywane są receptury (Symfonia, ARA MES, system laboratoryjny) i kto je zatwierdza?",
+     "h": "Sprawdź, czy CP używa w AX formuł (produkcja procesowa) czy zestawień materiałowych.",
+     "p": "M"
+    },
+    {
+     "k": "pr1-2",
+     "t": "Jak obsługiwane są wersje receptur i zamienniki surowców?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "pr1-3",
+     "t": "Czy receptury zawierają dane poufne (know-how grupy) wymagające ograniczonego dostępu?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "pr2",
+   "a": "prd",
+   "n": "Zlecenia produkcyjne i integracja z ARA MES",
+   "d": "Zlecenia, przekazanie do ARA MES, potwierdzenia, zużycia, przyjęcie wyrobu, rozliczenie zlecenia.",
+   "o": "Kierownik produkcji",
+   "q": [
+    {
+     "k": "pr2-1",
+     "t": "Jak powstają zlecenia produkcyjne i jak są przekazywane do ARA MES (AB Industry)?",
+     "h": "Kluczowa integracja: po migracji AX musi zastąpić Symfonię jako system nadrzędny dla MES.",
+     "p": "M"
+    },
+    {
+     "k": "pr2-2",
+     "t": "Jakie dane wracają z ARA MES do Symfonii (zużycia, produkcja, partie, czasy) i jak często?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "pr2-3",
+     "t": "Czy ARA MES zostaje po migracji, czy jego funkcje przejmie produkcja w AX (jak w CP)?",
+     "h": "Decyzja architektoniczna – wpływa na koszt, ryzyko i harmonogram.",
+     "p": "M"
+    },
+    {
+     "k": "pr2-4",
+     "t": "Jak rozliczane są zlecenia (zużycie normatywne lub rzeczywiste, odpad, produkty uboczne)?",
+     "h": "",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "pr3",
+   "a": "prd",
+   "n": "Planowanie produkcji",
+   "d": "Plan produkcji na zamówienie i na magazyn, MRP, zapotrzebowanie na surowce, zdolności.",
+   "o": "Kierownik produkcji",
+   "q": [
+    {
+     "k": "pr3-1",
+     "t": "Jak planowana jest produkcja (na zamówienie, na magazyn) i czy stosowane jest MRP?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "pr3-2",
+     "t": "Czy CP używa planowania głównego w AX i czy CC mogłoby przyjąć ten sposób planowania?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "pr4",
+   "a": "prd",
+   "n": "Kontrola jakości i świadectwa",
+   "d": "Badania laboratoryjne, wyniki, zwolnienie partii, świadectwa jakości dla klientów.",
+   "o": "Kierownik jakości",
+   "q": [
+    {
+     "k": "pr4-1",
+     "t": "Gdzie rejestrowane są wyniki badań laboratoryjnych i jak partia jest zwalniana do sprzedaży?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "pr4-2",
+     "t": "Jak generowane są świadectwa jakości dla klientów i czy są powiązane z partią?",
+     "h": "",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "pr5",
+   "a": "prd",
+   "n": "Zgodność produktowa (REACH, CLP)",
+   "d": "Klasyfikacja produktów, karty charakterystyki, etykiety, deklaracje właściwości użytkowych.",
+   "o": "Kierownik jakości",
+   "q": [
+    {
+     "k": "pr5-1",
+     "t": "Gdzie utrzymywane są karty charakterystyki i klasyfikacja CLP produktów i jak trafiają do klientów?",
+     "h": "",
+     "p": "S",
+     "reg": 1
+    },
+    {
+     "k": "pr5-2",
+     "t": "Czy ERP musi drukować etykiety zgodne z CLP lub deklaracje właściwości użytkowych?",
+     "h": "",
+     "p": "S",
+     "reg": 1
+    }
+   ]
+  },
+  {
+   "k": "md1",
+   "a": "md",
+   "n": "Indeksy materiałowe i produkty",
+   "d": "Kartoteka surowców, opakowań, wyrobów i towarów, grupy, jednostki, atrybuty.",
+   "o": "Właściciel danych podstawowych",
+   "q": [
+    {
+     "k": "md1-1",
+     "t": "Ile indeksów (surowce, opakowania, wyroby, towary) ma CC i jaki jest ich stan (duplikaty, nieaktywne)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "md1-2",
+     "t": "Czy indeksy CC i CP mogą mieć wspólną strukturę kodowania i grup towarowych?",
+     "h": "Harmonizacja danych podstawowych: wartość dodana i zarazem ryzyko projektu.",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "md2",
+   "a": "md",
+   "n": "Kontrahenci",
+   "d": "Klienci i dostawcy, deduplikacja, wspólni kontrahenci z CP, właściciel danych.",
+   "o": "Właściciel danych podstawowych",
+   "q": [
+    {
+     "k": "md2-1",
+     "t": "Ilu aktywnych klientów i dostawców ma CC i ilu jest wspólnych z CP?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "md2-2",
+     "t": "Kto będzie właścicielem danych kontrahentów po migracji (CC, FSSC, CP)?",
+     "h": "",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "md3",
+   "a": "md",
+   "n": "Zakres i termin migracji",
+   "d": "Salda, otwarte pozycje, zapasy, środki trwałe, otwarte zamówienia, historia, archiwum, czyszczenie danych.",
+   "o": "Lider analizy",
+   "q": [
+    {
+     "k": "md3-1",
+     "t": "Jakie dane muszą zostać przeniesione (salda kont, otwarte należności i zobowiązania, zapasy z partiami, środki trwałe, otwarte zamówienia)?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "md3-2",
+     "t": "Ile lat historii musi być dostępne i czy wystarczy archiwum Symfonii w trybie tylko do odczytu?",
+     "h": "Obowiązek przechowywania ksiąg – archiwum (licencja do odczytu) zamiast migracji historii.",
+     "p": "M",
+     "reg": 1
+    },
+    {
+     "k": "md3-3",
+     "t": "Kiedy najlepiej przeprowadzić migrację (początek roku obrotowego, po zamknięciu miesiąca) i jakie są okna wykluczone?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "md3-4",
+     "t": "Kto odpowiada za czyszczenie danych przed migracją i za ich akceptację?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "rp1",
+   "a": "rep",
+   "n": "Raporty operacyjne i zarządcze",
+   "d": "Kluczowe raporty z Symfonii, eksporty do Excela, wskaźniki.",
+   "o": "Kontroler finansowy",
+   "q": [
+    {
+     "k": "rp1-1",
+     "t": "Jakie raporty z Symfonii są krytyczne dla CC (lista 10 najważniejszych) i kto ich używa?",
+     "h": "Każdy raport trzeba zmapować na raport AX lub BI – inaczej to luka.",
+     "p": "M"
+    },
+    {
+     "k": "rp1-2",
+     "t": "Które raporty powstają w Excelu na podstawie eksportów i jak często?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "rp2",
+   "a": "rep",
+   "n": "BI i raportowanie grupowe",
+   "d": "Power BI, hurtownia danych, raporty dla grupy.",
+   "o": "Kontroler finansowy",
+   "q": [
+    {
+     "k": "rp2-1",
+     "t": "Czy CC korzysta z raportów Power BI lub hurtowni danych zasilanych z ERP?",
+     "h": "Sprawdź, czy dane AX CP są już w hurtowni – CC może z niej skorzystać.",
+     "p": "S"
+    },
+    {
+     "k": "rp2-2",
+     "t": "Czy wspólne źródło danych AX dla CP i CC uprości raportowanie grupowe i zarządcze?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "it1",
+   "a": "it",
+   "n": "Interfejsy i integracje",
+   "d": "Systemy zintegrowane z Symfonią (ARA MES, banki, KSeF, EDI, CRM, płace) i ich odpowiedniki w AX.",
+   "o": "Właściciel systemu",
+   "q": [
+    {
+     "k": "it1-1",
+     "t": "Jakie systemy są zintegrowane z Symfonią w CC (ARA MES, bankowość, KSeF, EDI, CRM, płace) i jaką technologią?",
+     "h": "Inwentaryzacja interfejsów – każdy wymaga nowego połączenia z AX.",
+     "p": "M"
+    },
+    {
+     "k": "it1-2",
+     "t": "Które z tych integracji mają odpowiedniki w AX CP i mogą zostać użyte ponownie?",
+     "h": "",
+     "p": "M"
+    },
+    {
+     "k": "it1-3",
+     "t": "Czy nowe integracje mogą korzystać z platformy integracyjnej grupy (np. MuleSoft)?",
+     "h": "",
+     "p": "C"
+    }
+   ]
+  },
+  {
+   "k": "it2",
+   "a": "it",
+   "n": "Uprawnienia i rozdział obowiązków",
+   "d": "Role i uprawnienia, rozdział obowiązków (SoD), przeglądy dostępów.",
+   "o": "Właściciel systemu",
+   "q": [
+    {
+     "k": "it2-1",
+     "t": "Jak zdefiniowane są role i uprawnienia w Symfonii i czy są okresowo przeglądane?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "it2-2",
+     "t": "Czy model ról AX w CP (z kontrolą rozdziału obowiązków) można przyjąć dla użytkowników CC?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  },
+  {
+   "k": "it3",
+   "a": "it",
+   "n": "Licencje, użytkownicy i wsparcie",
+   "d": "Liczba użytkowników, licencje, partnerzy wsparcia, koszty utrzymania, plany platformy.",
+   "o": "Właściciel systemu",
+   "q": [
+    {
+     "k": "it3-1",
+     "t": "Ilu użytkowników Symfonii ma CC (według modułów) i jaki jest roczny koszt licencji i utrzymania?",
+     "h": "Dane do szacunku nakładów i oszczędności w kroku 6.",
+     "p": "M"
+    },
+    {
+     "k": "it3-2",
+     "t": "Kto wspiera Symfonię i AX (zespół wewnętrzny, partner) i na jakich warunkach (SLA)?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "it3-3",
+     "t": "Jakie są plany grupy dla AX 2012 (utrzymanie, migracja do Dynamics 365) i jak wpływają na decyzję o migracji CC?",
+     "h": "AX 2012 nie ma wsparcia producenta – zweryfikuj plany dla platformy.",
+     "p": "M"
+    }
+   ]
+  },
+  {
+   "k": "it4",
+   "a": "it",
+   "n": "Infrastruktura i środowiska",
+   "d": "Serwery AX, przepustowość, środowiska testowe, kopie zapasowe, dostęp zdalny.",
+   "o": "Właściciel systemu",
+   "q": [
+    {
+     "k": "it4-1",
+     "t": "Gdzie działa AX CP i czy wystarczy zasobów na nową firmę i użytkowników CC?",
+     "h": "",
+     "p": "S"
+    },
+    {
+     "k": "it4-2",
+     "t": "Czy są dostępne środowiska testowe AX do zbudowania i przetestowania konfiguracji dla CC?",
+     "h": "",
+     "p": "S"
+    }
+   ]
+  }
+ ],
+ "analyses": []
+}

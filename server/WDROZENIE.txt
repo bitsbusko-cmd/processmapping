@@ -1,0 +1,23 @@
+Analiza Fit-Gap ERP – wersja wieloosobowa na hostingu z PHP (wspólna baza analizy)
+==================================================================================
+
+Wymagania: hosting z PHP 8.1 lub nowszym. Baza danych MySQL nie jest potrzebna – dane są w pliku data/state.json.
+
+1. W pliku config.php wpisz hasło zespołu (co najmniej 10 znaków) zamiast ZMIEN-TO-HASLO.
+2. Wgraj do jednego katalogu strony (np. public_html/fitgap):
+   - z katalogu głównego repozytorium: index.html, folder fonts/ i folder vendor/,
+   - z tego folderu: api.php, config.php, folder data/ oraz htaccess.txt – po wgraniu zmień jego nazwę na .htaccess.
+3. Włącz certyfikat SSL dla domeny (https), żeby hasło i dane nie szły otwartym tekstem.
+4. Ogranicz dostęp do katalogu (np. hasło katalogu w panelu hostingu albo dostęp tylko z sieci firmowej) –
+   wyniki analizy są informacją wewnętrzną.
+5. Otwórz adres strony. Każda osoba przy pierwszym wejściu podaje imię i nazwisko, rolę i hasło zespołu.
+
+Sprawdzenie:
+- https://twoja-domena/…/api.php?ping   → {"app":"fitgap","v":1,"configured":true}
+- https://twoja-domena/…/data/state.json → błąd 403 (plik niedostępny z zewnątrz)
+- https://twoja-domena/…/config.php      → błąd 403
+
+Kopia zapasowa: plik data/state.json oraz w aplikacji menu „…” → Zapisz dane do pliku.
+Zmiana hasła: zmień je w config.php i przekaż zespołowi – aplikacja poprosi o nowe hasło.
+Przeniesienie danych z wersji lokalnej: tam menu „…” → Zapisz dane do pliku, tutaj menu „…” → Wczytaj dane z pliku –
+dane trafią do wspólnej bazy.

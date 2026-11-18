@@ -1,0 +1,138 @@
+// Fit-Gap ERP: wspólna baza analizy na Cloudflare Pages (baza D1).
+// Obsługuje adres /api.php tak samo jak server/api.php z hostingu PHP; pozostałe adresy to pliki strony.
+// Ustawienia projektu Pages:
+//   DB          – powiązanie z bazą D1 (Settings → Bindings → D1 database)
+//   TEAM_DOMAIN – adres zespołu Cloudflare Access, np. https://twoj-zespol.cloudflareaccess.com
+//   POLICY_AUD  – Application Audience (AUD) Tag aplikacji Access
+//   TEAM_KEY    – (zamiast Access) hasło zespołu, co najmniej 10 znaków, jako sekret
+
+const ID_RE = /^(an|ar|pr|rq|os|rk|bn|sg)\|[A-Za-z0-9_-]{1,40}(\|[A-Za-z0-9_-]{1,60})?$/;
+const KEY_RE = /^[A-Za-z0-9_]{1,40}$/;
+let ready = false, jwks = null, jwksAt = 0;
+
+const json = (status, body) => new Response(JSON.stringify(body), {
+  status, headers: {'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff'}});
+
+function mode(env) {
+  if (String(env.TEAM_DOMAIN || '').trim() && audOf(env)) return 'access';
+  if (typeof env.TEAM_KEY === 'string' && env.TEAM_KEY.length >= 10) return 'key';
+  return '';
+}
+const b64u = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4)), c => c.charCodeAt(0));
+const teamOf = env => { const t = String(env.TEAM_DOMAIN || '').trim().replace(/\/+$/, ''); return /^https?:\/\//.test(t) ? t : 'https://' + t; };
+const audOf = env => String(env.POLICY_AUD || '').trim();
+
+// '' = token poprawny; inaczej powód odrzucenia (widoczny w api.php?ping, żeby łatwo znaleźć błąd w ustawieniach)
+async function accessCheck(request, env) {
+  const token = request.headers.get('Cf-Access-Jwt-Assertion') || '';
+  if (!token) return 'no-token';
+  const parts = token.split('.');
+  if (parts.length !== 3) return 'bad-token';
+  let head, claims;
+  try { head = JSON.parse(new TextDecoder().decode(b64u(parts[0]))); claims = JSON.parse(new TextDecoder().decode(b64u(parts[1]))); } catch (e) { return 'bad-token'; }
+  if (head.alg !== 'RS256') return 'bad-token';
+  const team = teamOf(env);
+  if (claims.iss !== team) return 'team-mismatch';
+  if (![].concat(claims.aud || []).includes(audOf(env))) return 'aud-mismatch';
+  const now = Date.now() / 1000;
+  if (!(claims.exp > now) || (claims.nbf && claims.nbf > now + 60)) return 'expired';
+  if (!jwks || Date.now() - jwksAt > 3600e3 || !jwks.some(k => k.kid === head.kid)) {
+    let r; try { r = await fetch(team + '/cdn-cgi/access/certs'); } catch (e) { return 'certs-unreachable'; }
+    if (!r.ok) return 'certs-unreachable';
+    jwks = (await r.json()).keys || []; jwksAt = Date.now();
+  }
+  const jwk = jwks.find(k => k.kid === head.kid);
+  if (!jwk) return 'unknown-key';
+  const key = await crypto.subtle.importKey('jwk', jwk, {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256'}, false, ['verify']);
+  const ok = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, b64u(parts[2]), new TextEncoder().encode(parts[0] + '.' + parts[1]));
+  return ok ? '' : 'bad-signature';
+}
+function keyOk(request, env) {
+  const a = new TextEncoder().encode(request.headers.get('X-Team-Key') || ''), b = new TextEncoder().encode(env.TEAM_KEY);
+  if (a.length !== b.length) return false;
+  let d = 0; for (let i = 0; i < a.length; i++) d |= a[i] ^ b[i];
+  return d === 0;
+}
+// oczyszczenie wpisu: tylko proste typy, ograniczona głębokość, długość i liczba elementów
+function clean(v, depth) {
+  if (v === null || typeof v === 'boolean') return v;
+  if (typeof v === 'number') return Number.isFinite(v) ? v : null;
+  if (typeof v === 'string') return v.slice(0, 10000);
+  if (typeof v !== 'object' || depth > 4) return null;
+  if (Array.isArray(v)) return v.slice(0, 300).map(x => clean(x, depth + 1));
+  const out = {}; let n = 0;
+  for (const k of Object.keys(v)) { if (++n > 300) break; if (KEY_RE.test(k)) out[k] = clean(v[k], depth + 1); }
+  return out;
+}
+// RODO: narzędzie nie przechowuje adresów e-mail – osoby opisuje imię i nazwisko oraz SGID
+function noMail(id, v) { if (v && typeof v === 'object') delete v.em; return v; }
+async function setup(db) {
+  if (ready) return;
+  await db.batch([
+    db.prepare('CREATE TABLE IF NOT EXISTS fg_e (id TEXT PRIMARY KEY, sq INTEGER NOT NULL, ts TEXT NOT NULL, v TEXT NOT NULL)'),
+    db.prepare('CREATE INDEX IF NOT EXISTS fg_e_sq ON fg_e (sq)')]);
+  ready = true;
+}
+async function api(request, env) {
+  const url = new URL(request.url), m = mode(env);
+  if (url.searchParams.has('ping')) {
+    const out = {app: 'fitgap', v: 1, configured: !!(m && env.DB), auth: m === 'access' ? 'access' : 'key', db: !!env.DB};
+    if (m === 'access') {
+      const tok = request.headers.get('Cf-Access-Jwt-Assertion') || '';
+      let iss = '', aud = [];
+      try { const c = JSON.parse(new TextDecoder().decode(b64u(tok.split('.')[1] || ''))); iss = c.iss || ''; aud = [].concat(c.aud || []); } catch (e) {}
+      out.check = {team: teamOf(env), aud: audOf(env).slice(0, 8) + '…', tokenTeam: iss, tokenAud: aud.map(x => String(x).slice(0, 8) + '…'), result: (await accessCheck(request, env)) || 'ok'};
+    }
+    return json(200, out);
+  }
+  if (!m || !env.DB) return json(503, {error: 'config'});
+  const why = m === 'access' ? await accessCheck(request, env) : (keyOk(request, env) ? '' : 'key');
+  if (why) return json(401, {error: 'auth', why});
+  const db = env.DB;
+  await setup(db);
+  if (request.method === 'GET') {
+    const since = Math.max(0, parseInt(url.searchParams.get('since') || '0', 10) || 0);
+    const [rows, top] = await db.batch([
+      db.prepare('SELECT id, v FROM fg_e WHERE sq > ?1 ORDER BY sq').bind(since),
+      db.prepare('SELECT COALESCE(MAX(sq), 0) AS seq FROM fg_e')]);
+    return json(200, {seq: top.results[0].seq, e: rows.results.map(r => [r.id, noMail(r.id, JSON.parse(r.v))])});
+  }
+  if (request.method !== 'POST') return json(405, {error: 'method'});
+  const body = await request.text();
+  if (body.length > 8 * 1024 * 1024) return json(413, {error: 'size'});
+  let input; try { input = JSON.parse(body); } catch (e) { return json(400, {error: 'input'}); }
+  if (!input || !Array.isArray(input.ch) || input.ch.length > 20000) return json(400, {error: 'input'});
+  // nowszy zapis (ts) wygrywa; usunięty wpis (znacznik {del, ts}, bez treści) zostaje usunięty na zawsze
+  const up = db.prepare(`INSERT INTO fg_e (id, sq, ts, v) VALUES (?1, (SELECT COALESCE(MAX(sq), 0) + 1 FROM fg_e), ?2, ?3)
+    ON CONFLICT(id) DO UPDATE SET sq = excluded.sq, ts = excluded.ts, v = excluded.v
+    WHERE json_extract(fg_e.v, '$.del') IS NULL AND (excluded.ts > fg_e.ts OR json_extract(excluded.v, '$.del') = 1)`);
+  const stmts = [];
+  for (const c of input.ch) {
+    if (!Array.isArray(c) || c.length !== 2) continue;
+    const [id, raw] = c;
+    if (typeof id !== 'string' || !ID_RE.test(id) || !raw || typeof raw !== 'object' || Array.isArray(raw)) continue;
+    let v = noMail(id, clean(raw, 0));
+    if (typeof v.ts !== 'string' || v.ts.length > 40) continue;
+    if (v.del) v = {del: true, ts: v.ts};
+    const txt = JSON.stringify(v);
+    if (txt.length > 65536) continue;
+    stmts.push(up.bind(id, v.ts, txt));
+  }
+  let ok = 0;
+  for (let i = 0; i < stmts.length; i += 100) {
+    const res = await db.batch(stmts.slice(i, i + 100));
+    res.forEach(r => { ok += (r.meta && r.meta.changes) || 0; });
+  }
+  return json(200, {ok});
+}
+
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    if (url.pathname === '/api.php' || url.pathname.endsWith('/api.php')) {
+      try { return await api(request, env); } catch (e) { return json(500, {error: 'server'}); }
+    }
+    if (url.pathname.startsWith('/server/') || url.pathname.startsWith('/dev/')) return new Response('Not found', {status: 404});
+    return env.ASSETS.fetch(request);
+  }
+};
