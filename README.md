@@ -50,9 +50,9 @@ Wszystkie parametry i katalogi są w `dev/data.json`. Ustal je przed pierwszym w
 
 Tak samo jak Businessimpact (BIA) i wd-data-mapping: projekt Pages połączony z tym repozytorium, baza D1 i Cloudflare Access. Każdy push do `main` publikuje nową wersję.
 
-1. **Baza D1** – Storage & Databases → D1 SQL Database → Create database: nazwa `fitgap`, Data location → Specify jurisdiction → **EU** (jurysdykcję można ustawić tylko przy tworzeniu bazy). Tabela `fg_e` powstaje sama przy pierwszym zapisie.
-2. **Projekt Pages** – Workers & Pages → Create application → Pages → Import an existing Git repository → to repozytorium (jeśli nie jest widoczne, dodaj je w uprawnieniach aplikacji Cloudflare na GitHubie). Production branch `main`, Framework preset `None`, Build command – puste, Build output directory `/` → Save and Deploy.
-3. **Powiązanie z bazą** – projekt → Settings → Bindings → Add → D1 database: Variable name `DB`, baza `fitgap`.
+1. **Baza D1** – Storage & Databases → D1 SQL Database → Create database: nazwa `processmapping`, Data location → Specify jurisdiction → **EU** (jurysdykcję można ustawić tylko przy tworzeniu bazy). Tabela `fg_e` powstaje sama przy pierwszym zapisie.
+2. **Projekt Pages** – Workers & Pages → Create application → Pages → Import an existing Git repository → `bitsbusko-cmd/processmapping` (jeśli repozytorium nie jest widoczne, dodaj je w uprawnieniach aplikacji Cloudflare na GitHubie: Repository access → Only select repositories). Nazwa projektu np. `processmapping` (adres `processmapping.pages.dev`), Production branch `main`, Framework preset `None`, Build command – puste, Build output directory `/` → Save and Deploy.
+3. **Powiązanie z bazą** – projekt → Settings → Bindings → Add → D1 database: Variable name `DB`, baza `processmapping`.
 4. **Cloudflare Access** – Zero Trust → Access controls → Applications → Create new application → Self-hosted and private: nazwa np. `Fit-Gap ERP`; hostname `<projekt>.pages.dev` i `*.<projekt>.pages.dev`; polityka **Allow** dla uczestników analizy (adresy, domena firmowa albo grupa) – metody logowania jak w BIA; po zapisaniu skopiuj Application Audience (AUD) Tag.
 5. **Zmienne** – projekt → Settings → Variables and Secrets: `TEAM_DOMAIN` = `https://<zespół>.cloudflareaccess.com` (ten sam co w projektach BIA i wd-data-mapping), `POLICY_AUD` = skopiowany AUD Tag.
 6. **Ponowne wdrożenie** – Deployments → ostatnie wdrożenie → Retry deployment (powiązanie i zmienne działają od następnego wdrożenia).
