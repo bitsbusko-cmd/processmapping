@@ -601,15 +601,10 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 .ptab tr.kprow td{border-top:0;padding:0 6px 10px}
 .kp{display:grid;grid-template-columns:150px minmax(0,560px);gap:6px 12px;align-items:start;margin-left:4px;padding-left:12px;border-left:3px solid var(--acc-line)}
 .kp>.lb{font-size:.8rem;font-weight:600;color:var(--muted);padding-top:7px}
-.kp .kpchips{grid-column:2;display:flex;flex-wrap:wrap;gap:5px}
-.kp .tg b{font:600 .733rem/1 var(--fm);margin-right:3px}
 .kp .msel>summary{height:32px}
 .kp .msel>summary[aria-invalid="true"]{border-color:var(--err)}
-.kp .msel .mlist{max-height:320px}
-.msel .mgrp+.mgrp{border-top:1px solid var(--line);margin-top:4px;padding-top:4px}
-.msel .mlist label.mga{font-size:.867rem}
-.msel .mga small{margin-left:auto;color:var(--faint);font-weight:500}
-.msel .mlist label .qcode{min-width:34px}
+.kp .msel .mlist{max-height:360px}
+.msel .mlist label small{margin-left:auto;color:var(--faint);font-size:.75rem;white-space:nowrap}
 .acard .parts{border-top:1px dashed var(--line2);padding-top:10px;display:grid;gap:8px}
 .acard .parts .ph2{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:.833rem;font-weight:600;color:var(--ink2)}
 .acard .parts .ph2 small{font-weight:500;color:var(--muted)}
@@ -835,7 +830,7 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
   .hbars .hb{grid-template-columns:110px minmax(0,1fr) 60px}
   .doc{padding:24px 18px}.doc .meta{grid-template-columns:minmax(0,1fr)}.doc .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .sysmig{grid-template-columns:minmax(0,1fr)}.sysarr{transform:rotate(90deg);height:30px}
-  .kp{grid-template-columns:minmax(0,1fr);margin-left:0}.kp .kpchips{grid-column:1}.kp>.lb{padding-top:0}
+  .kp{grid-template-columns:minmax(0,1fr);margin-left:0}.kp>.lb{padding-top:0}
   .ptab thead{display:none}.ptab tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;padding:8px 0;border-top:1px solid var(--line)}.ptab td{border:0;padding:2px 0}.ptab td.wide{grid-column:1/-1}
 }
 
@@ -892,7 +887,7 @@ const PI = {"book-open-text":"<path d=\"M232,56V200H160a32,32,0,0,0-32,32V88a32,
 
 /* ===================== Fit-Gap ERP – rdzeń: konfiguracja, stan, model, ocena, synchronizacja ===================== */
 const D = JSON.parse(document.getElementById('data').textContent);
-const VER = '19.11.2026 09:51';
+const VER = '19.11.2026 11:33';
 const APP = 'fitgap-erp';
 const LS = 'fitgap:v1', LSK = 'fitgap:key', LSU = 'fitgap:ui';
 const $ = (s, r = document) => r.querySelector(s);
@@ -937,7 +932,7 @@ const resName = k => (RESBY[k] || {}).n || '';
 const effMd = k => (EFFBY[k] || {}).md || 0;
 const sysCC = co => (co.srcCo || DEF.srcCo) + ' · ' + (co.srcSys || DEF.srcSys);
 const sysCP = co => (co.tgtCo || DEF.tgtCo) + ' · ' + (co.tgtSys || DEF.tgtSys);
-/* rola key usera – osoba z tą rolą ma przypisane procesy */
+/* rola key usera – osoba z tą rolą ma przypisane obszary */
 const KU = D.roles.find(r => /^key user/i.test(r)) || '';
 /* dane z wersji 1.0: skróty spółek CC i CP, domyślna nazwa analizy i nazwy ról w narzędziu */
 const CO_OLD = {CC: DEF.srcCo, CP: DEF.tgtCo}, coRaw = v => CO_OLD[v] || v, NAME_OLD = 'Migracja CC: Symfonia → AX 2012';
@@ -1007,7 +1002,7 @@ function build(cid) {
   const byCr = (a, b) => String(a.cr || '').localeCompare(String(b.cr || ''));
   /* osoby (zespół i uczestnicy) */
   const people = Object.keys(osE).map(k => Object.assign({}, osE[k], {k})).sort(byCr);
-  people.forEach(p => { p.n = norm(p.n); p.co = D.coTypes.includes(coRaw(p.co)) ? coRaw(p.co) : ''; p.role = D.roles.includes(p.role) ? p.role : ''; p.ku = !!KU && p.role === KU; p.ps = arr(p.ps); });
+  people.forEach(p => { p.n = norm(p.n); p.co = D.coTypes.includes(coRaw(p.co)) ? coRaw(p.co) : ''; p.role = D.roles.includes(p.role) ? p.role : ''; p.ku = !!KU && p.role === KU; });
   const OBY = {}; people.forEach(p => { OBY[p.k] = p; });
   /* obszary */
   const areas = AREAS.map((a, i) => Object.assign({}, a, arE[a.k] || {}, {k: a.k, i: a.i, c: a.c, cd: a.cd, std: true, ord: i}));
@@ -1025,10 +1020,10 @@ function build(cid) {
   });
   procs.forEach((p, i) => { p.area = ABY[p.a]; p.act = p.on === 'Y' && !!p.area && p.area.in; p.n = norm(p.n) || 'Proces bez nazwy'; p.no = i + 1; p.cd = (p.area.cd || 'X') + p.ai; });
   const PBY = {}; procs.forEach(p => { PBY[p.k] = p; });
-  /* procesy key userów: do wyboru procesy obszarów w zakresie, bez oznaczonych „Nie dotyczy” */
-  const kuProcs = procs.filter(p => p.area && p.area.in && p.on !== 'N');
-  people.forEach(x => { x.kp = x.ku ? kuProcs.filter(p => x.ps.includes(p.k)) : []; });
-  procs.forEach(p => { p.kus = people.filter(x => x.kp.includes(p)); });
+  /* obszary key userów (ka); wcześniej wybrane procesy (ps) przeliczamy na ich obszary */
+  people.forEach(x => { x.ka = Array.isArray(x.ka) ? x.ka.slice() : uniq(arr(x.ps).map(k => PBY[k] ? PBY[k].a : '').filter(Boolean));
+    x.kas = x.ku ? areas.filter(a => x.ka.includes(a.k)) : []; });
+  areas.forEach(a => { a.kus = people.filter(x => x.kas.includes(a)); });
   /* wymagania (pytania) */
   const RBY = {}, reqs = [];
   procs.forEach(p => {
@@ -1054,7 +1049,7 @@ function build(cid) {
   Object.keys(bnE).filter(k => !BENBY[k] && bnE[k].cus).map(k => Object.assign({cat: 'eff', d: ''}, bnE[k], {k, std: false})).sort(byCr).forEach(b => bens.push(b));
   bens.forEach(b => { b.in = b.on === 'Y'; b.n = norm(b.n) || 'Korzyść bez nazwy'; b.score = b.in ? (+b.v || 0) * (+b.cf || 0) : 0; });
   const dis = {}; Object.keys(sgE).forEach(k => { dis[k] = true; });
-  return {cid, co, people, OBY, areas, ABY, inArea: areas.filter(a => a.in), later: areas.filter(a => a.later), procs, PBY, kuProcs, reqs, RBY, risks, bens, dis};
+  return {cid, co, people, OBY, areas, ABY, inArea: areas.filter(a => a.in), later: areas.filter(a => a.later), procs, PBY, reqs, RBY, risks, bens, dis};
 }
 /* wycinek modelu dla filtra obszaru */
 function slice(m, aid) {
@@ -1101,7 +1096,7 @@ function required(m, step, aid) {
       if (!p.n) add('Zespół: imię i nazwisko osoby', fsel(pi, 'n'), pi + '#n');
       if (!D.coTypes.includes(p.co)) add(nm + ': zespół', fsel(pi, 'co'), pi + '#co');
       if (!D.roles.includes(p.role)) add(nm + ': rola', fsel(pi, 'role'), pi + '#role');
-      else if (p.ku && !p.kp.length) add(nm + ': procesy, za które odpowiada key user', `details[data-o="${p.k}"]>summary`, pi + '#ps'); });
+      else if (p.ku && !p.kas.length) add(nm + ': obszar key usera', `details[data-o="${p.k}"]>summary`, pi + '#ka'); });
     const und = m.areas.filter(a => a.on !== 'Y' && a.on !== 'L' && a.on !== 'N');
     if (und.length) add('Obszary bez decyzji „W zakresie / Kolejny etap / Poza zakresem”: ' + und.length, `#area-${und[0].k} .seg button`, 'und');
     else if (!m.inArea.length) add('Co najmniej jeden obszar w zakresie analizy', `#area-${m.areas[0].k} .seg button`);
@@ -1590,7 +1585,7 @@ function helpHtml() {
   return `<div class="help">
     <h3>Po co jest analiza fit-gap</h3><p>Analiza odpowiada na pytania: czy ${esc(DEF.srcCo)} może przejść z systemu ${esc(DEF.srcSys)} na ${esc(DEF.tgtSys)} używany w ${esc(DEF.tgtCo)}, jakie zmiany procesów musi wprowadzić ${esc(DEF.srcCo)}, co trzeba dobudować w systemie docelowym, jakie są ryzyka i jaką wartość da migracja. Punktem odniesienia jest szablon AX w ${esc(DEF.tgtCo)} – to, jak ${esc(DEF.tgtCo)} faktycznie pracuje w systemie, a nie standard producenta.</p>
     <h3>Przebieg analizy</h3><ol>
-      <li><b>Zakres i zespół</b> – dane analizy, osoby (imię i nazwisko, zespół, rola; key userom przypisujesz procesy), obszary w zakresie, eksperci obu stron i uczestnicy. Dla każdego obszaru narzędzie przygotuje agendę i pytania do wysłania uczestnikom w załączniku e-maila.</li>
+      <li><b>Zakres i zespół</b> – dane analizy, osoby (imię i nazwisko, zespół, rola; key userom przypisujesz obszary), obszary w zakresie, eksperci obu stron i uczestnicy. Dla każdego obszaru narzędzie przygotuje agendę i pytania do wysłania uczestnikom w załączniku e-maila.</li>
       <li><b>Procesy AS-IS</b> – które procesy z katalogu występują w ${esc(DEF.srcCo)}, właściciele, wolumeny, narzędzia, opis praktyki w obu spółkach i możliwość wspólnego standardu.</li>
       <li><b>Ocena fit-gap</b> – pytania z katalogu dla każdego procesu: praktyka ${esc(DEF.srcCo)}, praktyka ${esc(DEF.tgtCo)} w AX i ocena dopasowania. Tryb skupienia pokazuje jedno pytanie naraz – wygodny podczas spotkania z ekspertami.</li>
       <li><b>Luki i zmiany</b> – rejestr luk z pracochłonnością i decyzją oraz lista zmian procesowych w ${esc(DEF.srcCo)} (skala, kogo dotyczą, szkolenia).</li>
@@ -1676,7 +1671,7 @@ function step1(m) {
       <td>${selF(pi, 'role', p.role, D.roles.map(x => [x, x]), {empty: '– rola –', label: 'Rola', req: 1})}</td>
       <td class="act"><button type="button" class="btn icon sm ghost" data-act="os-del" data-o="${esc(p.k)}" aria-label="Usuń osobę ${esc(p.n)}" title="Usuń osobę">${ic('trash')}</button></td></tr>${p.ku ? kuRow(m, p) : ''}`; }).join('');
   const pplSec = `<section class="sec" id="team"><div class="sech"><h2>${pic('users-three')}Zespół i uczestnicy</h2><div class="acts"><span>${esc(plural(m.people.length, F_PER))}</span></div></div>
-    <div class="secb"><p class="blk">Dodaj osoby, które biorą udział w analizie: ekspertów obu spółek (${esc(c.srcCo)} i ${esc(c.tgtCo)}), osoby z FSSC i zespół prowadzący. Key userom przypisz procesy, za które odpowiadają. Narzędzie nie zbiera adresów e-mail.</p>
+    <div class="secb"><p class="blk">Dodaj osoby, które biorą udział w analizie: ekspertów obu spółek (${esc(c.srcCo)} i ${esc(c.tgtCo)}), osoby z FSSC i zespół prowadzący. Key userom przypisz obszary, za które odpowiadają. Narzędzie nie zbiera adresów e-mail.</p>
     ${m.people.length ? `<div class="tblwrap"><table class="ptab"><thead><tr><th>Imię i nazwisko<span class="rq">*</span></th><th>Zespół<span class="rq">*</span></th><th>Rola<span class="rq">*</span></th><th></th></tr></thead><tbody>${ppl}</tbody></table></div>` : ''}
     <div style="margin-top:10px"><button type="button" class="btn dash" data-act="os-add">${ic('plus')}Dodaj osobę</button></div></div></section>`;
   const und = m.areas.filter(a => !a.on).length;
@@ -1689,19 +1684,13 @@ function step1(m) {
     ${m.people.length ? '' : `<div class="note warn">${ic('warn')}<p>Najpierw dodaj osoby w sekcji „Zespół i uczestnicy” – ekspertów i uczestników obszarów wybierasz z tej listy.</p></div>`}
     <div class="agrid">${cards}</div><div style="margin-top:12px">${add}</div></div></section>`;
 }
-/* procesy key usera: lista rozwijana z wyborem wielokrotnym (procesy obszarów w zakresie) */
+/* obszar key usera: lista rozwijana obszarów z wyborem wielokrotnym */
 function kuRow(m, p) {
-  const pi = ID.os(m.cid, p.k), bad = MISS.has(pi + '#ps'), sel = new Set(p.kp.map(x => x.k));
-  const groups = m.inArea.map(a => { const ps = m.kuProcs.filter(x => x.a === a.k); if (!ps.length) return '';
-    const n = ps.filter(x => sel.has(x.k)).length;
-    return `<div class="mgrp" data-key="mg-${esc(a.k)}"><label class="mga"><input type="checkbox" data-act="ms-area" data-o="${esc(p.k)}" data-a="${esc(a.k)}"${n === ps.length ? ' checked' : ''}${n && n < ps.length ? ' data-mixed="1"' : ''}><b>${esc(a.n)}</b><small>${n}/${ps.length}</small></label>
-      ${ps.map(x => `<label data-key="mp-${esc(x.k)}"><input type="checkbox" data-act="ms-tog" data-o="${esc(p.k)}" data-p="${esc(x.k)}"${sel.has(x.k) ? ' checked' : ''}><span class="qcode">${esc(x.cd)}</span><span>${esc(x.n)}</span></label>`).join('')}</div>`; }).join('');
-  const sum = p.kp.length ? `<span class="val">Wybrano: ${esc(plural(p.kp.length, F_PROC))}</span>` : `<span class="ph">${m.kuProcs.length ? 'Wybierz procesy z listy' : 'Najpierw oznacz obszary „W zakresie”'}</span>`;
-  const chips = p.kp.map(x => `<span class="tg" data-key="kp-${esc(x.k)}"><span><b>${esc(x.cd)}</b> ${esc(x.n)}</span><button type="button" class="tgx" data-act="ms-rm" data-o="${esc(p.k)}" data-p="${esc(x.k)}" aria-label="Usuń proces: ${esc(x.n)}">${ic('x')}</button></span>`).join('');
-  return `<tr class="kprow" data-key="osk-${esc(p.k)}"><td colspan="4" class="wide"><div class="kp"><span class="lb">${rq('Procesy key usera')}</span>
-    <details class="msel" data-act="ms" data-o="${esc(p.k)}"${V.ms === p.k ? ' open' : ''}><summary class="inp"${bad ? ' aria-invalid="true"' : ''} aria-label="Procesy key usera – ${esc(p.n || 'bez nazwy')}">${sum}</summary>
-      <div class="mlist">${groups || '<p class="muted sm" style="margin:6px 8px">Brak procesów do wyboru – w sekcji „Obszary analizy” oznacz obszary „W zakresie”.</p>'}</div></details>
-    ${chips ? `<div class="kpchips">${chips}</div>` : ''}</div></td></tr>`;
+  const pi = ID.os(m.cid, p.k), bad = MISS.has(pi + '#ka'), names = p.kas.map(a => a.n).join(', ');
+  const items = m.areas.map(a => `<label data-key="ma-${esc(a.k)}"><input type="checkbox" data-act="ms-tog" data-o="${esc(p.k)}" data-a="${esc(a.k)}"${p.kas.includes(a) ? ' checked' : ''}><span>${esc(a.n)}</span>${a.later ? '<small>kolejny etap</small>' : a.on === 'N' ? '<small>poza zakresem</small>' : ''}</label>`).join('');
+  return `<tr class="kprow" data-key="osk-${esc(p.k)}"><td colspan="4" class="wide"><div class="kp"><span class="lb">${rq('Obszar')}</span>
+    <details class="msel" data-act="ms" data-o="${esc(p.k)}"${V.ms === p.k ? ' open' : ''}><summary class="inp"${bad ? ' aria-invalid="true"' : ''} aria-label="Obszar key usera – ${esc(p.n || 'bez nazwy')}"${names ? ` title="${esc(names)}"` : ''}>${names ? `<span class="val">${esc(names)}</span>` : '<span class="ph">Wybierz obszar z listy</span>'}</summary>
+      <div class="mlist">${items}</div></details></div></td></tr>`;
 }
 function areaCard(m, a) {
   const id = ID.ar(m.cid, a.k), c = m.co, n = m.procs.filter(p => p.a === a.k).length, st = a.in ? 'in' : a.later ? 'later' : a.on === 'N' ? 'out' : 'und';
@@ -1710,7 +1699,7 @@ function areaCard(m, a) {
   let body = '';
   if (a.in) {
     const opts = m.people.map(p => [p.k, (p.n || 'bez nazwy') + (p.co ? ' · ' + p.co : '') + (p.role ? ' · ' + p.role : '')]);
-    const kuA = new Set(m.people.filter(p => p.kp.some(x => x.a === a.k)).map(p => p.k));
+    const kuA = new Set(a.kus.map(p => p.k));
     const chips = m.people.map(p => `<button type="button" class="chipbtn" data-act="us-tog" data-a="${esc(a.k)}" data-o="${esc(p.k)}" aria-pressed="${a.us.includes(p.k)}">${esc(p.n || 'bez nazwy')} <small>${esc([p.co, kuA.has(p.k) ? 'key user' : ''].filter(Boolean).join(' · '))}</small></button>`).join('');
     body = `<div class="af">
       ${fld(rq('Ekspert ' + esc(c.srcCo) + ' – ' + esc(c.srcSys)), selF(id, 'xcc', a.ecc ? a.xcc : '', opts, {empty: m.people.length ? '– wybierz osobę –' : '– najpierw dodaj osoby –', req: 1, label: 'Ekspert ' + c.srcCo}), 'cc')}
@@ -2081,7 +2070,7 @@ function reportDoc(m) {
   const scope = `<h2>Zakres i metoda</h2>${norm(co.scope) ? lines(co.scope).map(x => `<p>${esc(x)}</p>`).join('') : ''}
     <h3>Obszary analizy</h3>${docTbl([['Obszar'], ['Zakres'], ['Ekspert ' + co.srcCo], ['Ekspert ' + co.tgtCo], ['Procesy', 1], ['Wymagania', 1]], arRows, 'Nie wskazano obszarów.')}
     ${m.areas.filter(a => a.on === 'N').length ? `<p class="sm muted">Poza zakresem: ${esc(m.areas.filter(a => a.on === 'N').map(a => a.n).join(', '))}.</p>` : ''}
-    <h3>Zespół i uczestnicy</h3>${docTbl([['Imię i nazwisko'], ['Zespół'], ['Rola'], ['Procesy key usera']], m.people.map(p => `<tr><td>${esc(p.n)}</td><td>${esc(p.co || '')}</td><td>${esc(p.role || '')}</td><td class="sm">${esc(p.kp.map(x => x.cd + ' ' + x.n).join('; ') || '–')}</td></tr>`), 'Brak osób.')}
+    <h3>Zespół i uczestnicy</h3>${docTbl([['Imię i nazwisko'], ['Zespół'], ['Rola'], ['Obszary key usera']], m.people.map(p => `<tr><td>${esc(p.n)}</td><td>${esc(p.co || '')}</td><td>${esc(p.role || '')}</td><td class="sm">${esc(p.kas.map(x => x.n).join('; ') || '–')}</td></tr>`), 'Brak osób.')}
     <h3>Metoda oceny</h3><p>Punktem odniesienia jest szablon ${esc(co.tgtSys)} w ${esc(co.tgtCo)} – sposób, w jaki ${esc(co.tgtCo)} faktycznie pracuje w systemie. Dla każdego pytania z katalogu zapisano praktykę ${esc(co.srcCo)} i ${esc(co.tgtCo)} oraz ocenę dopasowania:</p>
     <ul>${FIT.map(f => `<li><b>${esc(f.n)}</b> – ${esc(f.d)}</li>`).join('')}</ul>
     <p>Indeks dopasowania to średnia ocen (Fit = 1, Częściowe = ${D.fitW.P}, Luka = 0) ważona priorytetem MoSCoW (Must ×${D.priW.M}, Should ×${D.priW.S}, Could ×${D.priW.C}). Luka krytyczna to luka o priorytecie Must, która wymaga rozwoju AX, integracji albo obejścia poza ERP.</p>`;
@@ -2129,17 +2118,17 @@ function agendaDoc(m, aid) {
   const co = m.co, a = m.ABY[aid];
   if (!a) return '<div class="empty"><b>Nie znaleziono obszaru</b></div>';
   const procs = m.procs.filter(p => p.a === a.k && p.on !== 'N'), parts = a.us.map(k => m.OBY[k]).filter(Boolean);
-  const nq = procs.reduce((x, p) => x + p.reqs.length, 0), kpA = x => x.kp.filter(p => p.a === a.k);
-  const meta = `<div class="meta"><div><span>Ekspert ${esc(co.srcCo)}</span>${esc(a.ecc ? a.ecc.n : '–')}</div><div><span>Ekspert ${esc(co.tgtCo)}</span>${esc(a.ecp ? a.ecp.n : '–')}</div><div><span>Lider analizy</span>${esc(co.pl || '–')}</div>
-    <div><span>Zakres</span>${esc(plural(procs.length, F_PROC))} · ${esc(plural(nq, F_Q))}</div><div><span>Uczestnicy</span>${esc(parts.length ? plural(parts.length, F_PER) : 'do wskazania')}</div><div><span>Przygotowano</span>${esc(fd(today()))}</div></div>`;
+  const nq = procs.reduce((x, p) => x + p.reqs.length, 0);
+  const meta = `<div class="meta"><div><span>Ekspert ${esc(co.srcCo)}</span>${esc(a.ecc ? a.ecc.n : '–')}</div><div><span>Ekspert ${esc(co.tgtCo)}</span>${esc(a.ecp ? a.ecp.n : '–')}</div><div><span>Key user</span>${esc(a.kus.map(x => x.n).join(', ') || '–')}</div>
+    <div><span>Zakres</span>${esc(plural(procs.length, F_PROC))} · ${esc(plural(nq, F_Q))}</div><div><span>Lider analizy</span>${esc(co.pl || '–')}</div><div><span>Przygotowano</span>${esc(fd(today()))}</div></div>`;
   const plan = [`Cel, skala oceny i sposób pracy (5 min)`, ...procs.map(p => `${p.cd} ${p.n} – ${plural(p.reqs.length, F_Q)}`), 'Podsumowanie: luki, pytania otwarte, kolejne kroki (10 min)'];
-  const qs = procs.map(p => `<h3><span class="mono">${esc(p.cd)}</span> ${esc(p.n)}</h3>${p.d ? `<p class="sm muted">${esc(p.d)}</p>` : ''}${p.kus.length ? `<p class="sm">Key user: <b>${esc(p.kus.map(x => x.n).join(', '))}</b></p>` : ''}
+  const qs = procs.map(p => `<h3><span class="mono">${esc(p.cd)}</span> ${esc(p.n)}</h3>${p.d ? `<p class="sm muted">${esc(p.d)}</p>` : ''}
     <ol class="qlist">${p.reqs.map(r => `<li data-c="${esc(r.code)}"><div><b>${esc(r.t)}</b>${r.h ? `<div class="sm muted">${esc(r.h)}</div>` : ''}
       <div class="ans"><div><span class="src">${esc(co.srcCo)}</span> ${esc(r.cc || '')}</div><div><span class="tgt">${esc(co.tgtCo)}</span> ${esc(r.cp || '')}</div></div></div></li>`).join('')}</ol>`).join('');
   return `<article class="doc"><div class="cover"><div class="k">Analiza Fit-Gap ERP · agenda i pytania</div><h1>${esc(a.n)}</h1><p class="sub">${esc(co.n)} · ${esc(sysCC(co))} → ${esc(sysCP(co))}</p>${meta}</div>
     <h2>Cel</h2><p>Porównujemy procesy obszaru „${esc(a.n)}” w ${esc(co.srcCo)} (${esc(co.srcSys)}) z szablonem ${esc(co.tgtCo)} w systemie ${esc(co.tgtSys)} i oceniamy, czy szablon pokryje wymagania ${esc(co.srcCo)}. Każde pytanie dostaje ocenę: ${FIT.map(f => esc(f.n)).join(', ')}.</p>
     <p>Prosimy o zapoznanie się z pytaniami przed spotkaniem i przygotowanie przykładów: dokumentów, raportów, zestawień z systemu i plików Excel używanych w procesach. Odpowiedzi można wpisać w ramkach przy pytaniach.</p>
-    ${parts.length ? `<h3>Uczestnicy</h3><ul>${parts.map(p => `<li>${esc(p.n)}${p.co || p.role ? ' – ' + esc([p.co, p.role].filter(Boolean).join(', ')) : ''}${kpA(p).length ? `<br><span class="sm muted">Procesy: ${esc(kpA(p).map(x => x.cd + ' ' + x.n).join('; '))}</span>` : ''}</li>`).join('')}</ul>` : ''}
+    ${parts.length ? `<h3>Uczestnicy</h3><ul>${parts.map(p => `<li>${esc(p.n)}${p.co || p.role ? ' – ' + esc([p.co, p.role].filter(Boolean).join(', ')) : ''}</li>`).join('')}</ul>` : ''}
     <h2>Agenda</h2><ol>${plan.map(x => `<li>${esc(x)}</li>`).join('')}</ol>
     <h2>Pytania</h2>${qs || '<p>Brak procesów w obszarze – potwierdź je w kroku 2.</p>'}
     <h2>Skala oceny</h2><ul>${FIT.map(f => `<li><b>${esc(f.n)}</b> – ${esc(f.d)}</li>`).join('')}</ul>
@@ -2233,8 +2222,8 @@ async function exportXlsx(cid) {
     ['Propozycja narzędzia', prop ? prop.n : 'za mało danych do rekomendacji'], ['Rekomendacja zespołu', rec ? rec.n : 'nie wpisano'], ['Uzasadnienie', co.recJ], ['Warunki migracji', co.recC], ['Następne kroki', co.next],
     ['Zatwierdzenie', co.sg ? co.sg + ', ' + fd(co.sgAt) : 'niezatwierdzone']]);
   /* 2. Zespół */
-  sh = xsheet(wb, 'Zespół', 'Zespół i uczestnicy', [['Osoba', G1, [['Imię i nazwisko', 26], ['Zespół', 22], ['Rola', 24], ['Procesy key usera', 44]]], ['Udział', G2, [['Ekspert obszarów', 36], ['Uczestnik obszarów', 36]]]], 1);
-  m.people.forEach(p => xrow(sh, [p.n, p.co || '', p.role || '', p.kp.map(x => x.cd + ' ' + x.n).join('\n'), m.inArea.filter(a => a.xcc === p.k || a.xcp === p.k).map(a => a.n).join(', '), m.inArea.filter(a => a.us.includes(p.k)).map(a => a.n).join(', ')], (c, ci) => { if (ci === 1) xbold(c); }));
+  sh = xsheet(wb, 'Zespół', 'Zespół i uczestnicy', [['Osoba', G1, [['Imię i nazwisko', 26], ['Zespół', 22], ['Rola', 24], ['Obszary key usera', 36]]], ['Udział', G2, [['Ekspert obszarów', 36], ['Uczestnik obszarów', 36]]]], 1);
+  m.people.forEach(p => xrow(sh, [p.n, p.co || '', p.role || '', p.kas.map(x => x.n).join('\n'), m.inArea.filter(a => a.xcc === p.k || a.xcp === p.k).map(a => a.n).join(', '), m.inArea.filter(a => a.us.includes(p.k)).map(a => a.n).join(', ')], (c, ci) => { if (ci === 1) xbold(c); }));
   xend(sh, 'Brak osób.');
   /* 3. Procesy AS-IS */
   sh = xsheet(wb, 'Procesy AS-IS', 'Procesy AS-IS', [
@@ -2321,7 +2310,6 @@ function render() {
     document.title = ag ? 'Agenda i pytania – ' + ag.n + ' – ' + c.n : c ? c.n + ' – ' + (V.doc === 'raport' ? 'Raport końcowy' : STEPS[V.step] || '') + ' – Fit-Gap ERP' : 'Analiza Fit-Gap ERP';
     renderTop(); renderSide();
     paint($('#main'), c ? (V.doc ? renderDoc(model(c.k)) : renderAnalysis()) : renderStart());
-    $$('input[data-mixed]').forEach(x => { x.indeterminate = true; }); $$('.mga input:not([data-mixed])').forEach(x => { x.indeterminate = false; });
   } finally { RENDERING = false; }
   if (AGAIN) { AGAIN = false; render(); }
 }
@@ -2425,8 +2413,8 @@ function deleteAnalysis() {
 }
 
 /* ---------- zdarzenia ---------- */
-/* procesy key usera: zmiana listy procesów osoby */
-function setKu(o, fn) { const id = ID.os(V.cid, o), cur = arr((ent(id) || {}).ps); put(id, {ps: uniq(fn(cur))}); render(); }
+/* obszary key usera: zmiana listy obszarów osoby (punktem wyjścia jest lista z modelu – także przeliczona z procesów) */
+function setKa(o, fn) { const p = cur().OBY[o]; if (!p) return; put(ID.os(V.cid, o), {ka: uniq(fn(p.ka.slice()))}); render(); }
 document.addEventListener('click', ev => {
   // lista rozwijana procesów zamyka się po kliknięciu poza nią
   $$('details.msel[open]').forEach(x => { if (!x.contains(ev.target)) { x.open = false; if (V.ms === x.dataset.o) V.ms = ''; } });
@@ -2471,7 +2459,6 @@ document.addEventListener('click', ev => {
       put(ID.ar(V.cid, newId()), {cus: true, n, d: norm($('#na-d').value), on: 'Y', cr: now()}); V.open['area-add'] = false; render(); toast('Dodano obszar ' + n + '.'); break; }
     case 'area-del': { const a = m.ABY[d.a]; confirmBox('Usunąć obszar „' + a.n + '”?', 'Obszar zniknie z analizy razem z dodanymi w nim procesami. Tej operacji nie można cofnąć.', 'Usuń obszar', () => { drop(ID.ar(V.cid, d.a)); m.procs.filter(p => p.a === d.a && !p.cat).forEach(p => drop(ID.pr(V.cid, p.k))); if (V.aid === d.a) go(href(V.step, '')); else render(); }); break; }
     case 'us-tog': { const a = m.ABY[d.a], us = a.us.includes(d.o) ? a.us.filter(x => x !== d.o) : a.us.concat(d.o); put(ID.ar(V.cid, d.a), {us}); render(); break; }
-    case 'ms-rm': setKu(d.o, cur => cur.filter(x => x !== d.p)); break;
     /* krok 2 */
     case 'proc-on': { const p = m.PBY[d.p]; put(ID.pr(V.cid, d.p), {on: p.on === d.v ? '' : d.v}); render(); break; }
     case 'proc-all': m.procs.filter(p => p.a === d.a && p.on !== 'Y' && p.on !== 'N').forEach(p => put(ID.pr(V.cid, p.k), {on: 'Y'})); render(); break;
@@ -2539,8 +2526,7 @@ document.addEventListener('change', ev => {
   else if (act === 'rv') { if (t.dataset.a === GLOBAL) put(ID.an(V.cid), {rvg: t.checked}); else put(ID.ar(V.cid, t.dataset.a), {rv: t.checked}); render(); }
   else if (act === 'ansel') go(href(1, '', t.value));
   else if (act === 'msel') go(href(V.step, t.value));
-  else if (act === 'ms-tog') setKu(t.dataset.o, cur => t.checked ? cur.concat(t.dataset.p) : cur.filter(x => x !== t.dataset.p));
-  else if (act === 'ms-area') { const ks = cur().kuProcs.filter(p => p.a === t.dataset.a).map(p => p.k); setKu(t.dataset.o, c => t.checked ? c.concat(ks) : c.filter(x => !ks.includes(x))); }
+  else if (act === 'ms-tog') setKa(t.dataset.o, c => t.checked ? c.concat(t.dataset.a) : c.filter(x => x !== t.dataset.a));
 });
 document.addEventListener('toggle', ev => { const x = ev.target; if (!x.dataset) return; if (x.dataset.act === 'pmore') V.open['pm-' + x.dataset.p] = x.open;
   if (x.dataset.act === 'ms') { if (x.open) V.ms = x.dataset.o; else if (V.ms === x.dataset.o) V.ms = ''; } }, true);

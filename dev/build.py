@@ -20,7 +20,7 @@ assert set(data['critRes']) <= {r['k'] for r in data['res']}, 'nieznany sposób 
 assert len(data['riskP']) == len(data['riskI']) == 4, 'oczekiwano skali ryzyka 1–4'
 assert all(b['cat'] in {c['k'] for c in data['benCats']} for b in data['benefits']), 'korzyść z nieznaną kategorią'
 assert all(r['cat'] in {c['k'] for c in data['riskCats']} for r in data['sysRisks']), 'ryzyko z nieznaną kategorią'
-assert any(r.lower().startswith('key user') for r in data['roles']), 'brak roli key usera (procesy przypisane osobie)'
+assert any(r.lower().startswith('key user') for r in data['roles']), 'brak roli key usera (obszary przypisane osobie)'
 js = '(() => {\n\'use strict\';\n' + '\n'.join(read(m) for m in MODULES) + '\n/* ---------- start ---------- */\npurgeSgid();\nroute();\nif (!known()) openModal(\'who\');\ndetectShared();\n})();\n'
 ver = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=1))).strftime('%d.%m.%Y %H:%M')
 js = js.replace('{{VER}}', ver)

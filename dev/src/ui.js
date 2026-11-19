@@ -250,7 +250,7 @@ function helpHtml() {
   return `<div class="help">
     <h3>Po co jest analiza fit-gap</h3><p>Analiza odpowiada na pytania: czy ${esc(DEF.srcCo)} może przejść z systemu ${esc(DEF.srcSys)} na ${esc(DEF.tgtSys)} używany w ${esc(DEF.tgtCo)}, jakie zmiany procesów musi wprowadzić ${esc(DEF.srcCo)}, co trzeba dobudować w systemie docelowym, jakie są ryzyka i jaką wartość da migracja. Punktem odniesienia jest szablon AX w ${esc(DEF.tgtCo)} – to, jak ${esc(DEF.tgtCo)} faktycznie pracuje w systemie, a nie standard producenta.</p>
     <h3>Przebieg analizy</h3><ol>
-      <li><b>Zakres i zespół</b> – dane analizy, osoby (imię i nazwisko, zespół, rola; key userom przypisujesz procesy), obszary w zakresie, eksperci obu stron i uczestnicy. Dla każdego obszaru narzędzie przygotuje agendę i pytania do wysłania uczestnikom w załączniku e-maila.</li>
+      <li><b>Zakres i zespół</b> – dane analizy, osoby (imię i nazwisko, zespół, rola; key userom przypisujesz obszary), obszary w zakresie, eksperci obu stron i uczestnicy. Dla każdego obszaru narzędzie przygotuje agendę i pytania do wysłania uczestnikom w załączniku e-maila.</li>
       <li><b>Procesy AS-IS</b> – które procesy z katalogu występują w ${esc(DEF.srcCo)}, właściciele, wolumeny, narzędzia, opis praktyki w obu spółkach i możliwość wspólnego standardu.</li>
       <li><b>Ocena fit-gap</b> – pytania z katalogu dla każdego procesu: praktyka ${esc(DEF.srcCo)}, praktyka ${esc(DEF.tgtCo)} w AX i ocena dopasowania. Tryb skupienia pokazuje jedno pytanie naraz – wygodny podczas spotkania z ekspertami.</li>
       <li><b>Luki i zmiany</b> – rejestr luk z pracochłonnością i decyzją oraz lista zmian procesowych w ${esc(DEF.srcCo)} (skala, kogo dotyczą, szkolenia).</li>

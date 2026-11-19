@@ -77,8 +77,8 @@ async function exportXlsx(cid) {
     ['Propozycja narzędzia', prop ? prop.n : 'za mało danych do rekomendacji'], ['Rekomendacja zespołu', rec ? rec.n : 'nie wpisano'], ['Uzasadnienie', co.recJ], ['Warunki migracji', co.recC], ['Następne kroki', co.next],
     ['Zatwierdzenie', co.sg ? co.sg + ', ' + fd(co.sgAt) : 'niezatwierdzone']]);
   /* 2. Zespół */
-  sh = xsheet(wb, 'Zespół', 'Zespół i uczestnicy', [['Osoba', G1, [['Imię i nazwisko', 26], ['Zespół', 22], ['Rola', 24], ['Procesy key usera', 44]]], ['Udział', G2, [['Ekspert obszarów', 36], ['Uczestnik obszarów', 36]]]], 1);
-  m.people.forEach(p => xrow(sh, [p.n, p.co || '', p.role || '', p.kp.map(x => x.cd + ' ' + x.n).join('\n'), m.inArea.filter(a => a.xcc === p.k || a.xcp === p.k).map(a => a.n).join(', '), m.inArea.filter(a => a.us.includes(p.k)).map(a => a.n).join(', ')], (c, ci) => { if (ci === 1) xbold(c); }));
+  sh = xsheet(wb, 'Zespół', 'Zespół i uczestnicy', [['Osoba', G1, [['Imię i nazwisko', 26], ['Zespół', 22], ['Rola', 24], ['Obszary key usera', 36]]], ['Udział', G2, [['Ekspert obszarów', 36], ['Uczestnik obszarów', 36]]]], 1);
+  m.people.forEach(p => xrow(sh, [p.n, p.co || '', p.role || '', p.kas.map(x => x.n).join('\n'), m.inArea.filter(a => a.xcc === p.k || a.xcp === p.k).map(a => a.n).join(', '), m.inArea.filter(a => a.us.includes(p.k)).map(a => a.n).join(', ')], (c, ci) => { if (ci === 1) xbold(c); }));
   xend(sh, 'Brak osób.');
   /* 3. Procesy AS-IS */
   sh = xsheet(wb, 'Procesy AS-IS', 'Procesy AS-IS', [

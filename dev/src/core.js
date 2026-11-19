@@ -45,7 +45,7 @@ const resName = k => (RESBY[k] || {}).n || '';
 const effMd = k => (EFFBY[k] || {}).md || 0;
 const sysCC = co => (co.srcCo || DEF.srcCo) + ' · ' + (co.srcSys || DEF.srcSys);
 const sysCP = co => (co.tgtCo || DEF.tgtCo) + ' · ' + (co.tgtSys || DEF.tgtSys);
-/* rola key usera – osoba z tą rolą ma przypisane procesy */
+/* rola key usera – osoba z tą rolą ma przypisane obszary */
 const KU = D.roles.find(r => /^key user/i.test(r)) || '';
 /* dane z wersji 1.0: skróty spółek CC i CP, domyślna nazwa analizy i nazwy ról w narzędziu */
 const CO_OLD = {CC: DEF.srcCo, CP: DEF.tgtCo}, coRaw = v => CO_OLD[v] || v, NAME_OLD = 'Migracja CC: Symfonia → AX 2012';
@@ -115,7 +115,7 @@ function build(cid) {
   const byCr = (a, b) => String(a.cr || '').localeCompare(String(b.cr || ''));
   /* osoby (zespół i uczestnicy) */
   const people = Object.keys(osE).map(k => Object.assign({}, osE[k], {k})).sort(byCr);
-  people.forEach(p => { p.n = norm(p.n); p.co = D.coTypes.includes(coRaw(p.co)) ? coRaw(p.co) : ''; p.role = D.roles.includes(p.role) ? p.role : ''; p.ku = !!KU && p.role === KU; p.ps = arr(p.ps); });
+  people.forEach(p => { p.n = norm(p.n); p.co = D.coTypes.includes(coRaw(p.co)) ? coRaw(p.co) : ''; p.role = D.roles.includes(p.role) ? p.role : ''; p.ku = !!KU && p.role === KU; });
   const OBY = {}; people.forEach(p => { OBY[p.k] = p; });
   /* obszary */
   const areas = AREAS.map((a, i) => Object.assign({}, a, arE[a.k] || {}, {k: a.k, i: a.i, c: a.c, cd: a.cd, std: true, ord: i}));
@@ -133,10 +133,10 @@ function build(cid) {
   });
   procs.forEach((p, i) => { p.area = ABY[p.a]; p.act = p.on === 'Y' && !!p.area && p.area.in; p.n = norm(p.n) || 'Proces bez nazwy'; p.no = i + 1; p.cd = (p.area.cd || 'X') + p.ai; });
   const PBY = {}; procs.forEach(p => { PBY[p.k] = p; });
-  /* procesy key userów: do wyboru procesy obszarów w zakresie, bez oznaczonych „Nie dotyczy” */
-  const kuProcs = procs.filter(p => p.area && p.area.in && p.on !== 'N');
-  people.forEach(x => { x.kp = x.ku ? kuProcs.filter(p => x.ps.includes(p.k)) : []; });
-  procs.forEach(p => { p.kus = people.filter(x => x.kp.includes(p)); });
+  /* obszary key userów (ka); wcześniej wybrane procesy (ps) przeliczamy na ich obszary */
+  people.forEach(x => { x.ka = Array.isArray(x.ka) ? x.ka.slice() : uniq(arr(x.ps).map(k => PBY[k] ? PBY[k].a : '').filter(Boolean));
+    x.kas = x.ku ? areas.filter(a => x.ka.includes(a.k)) : []; });
+  areas.forEach(a => { a.kus = people.filter(x => x.kas.includes(a)); });
   /* wymagania (pytania) */
   const RBY = {}, reqs = [];
   procs.forEach(p => {
@@ -162,7 +162,7 @@ function build(cid) {
   Object.keys(bnE).filter(k => !BENBY[k] && bnE[k].cus).map(k => Object.assign({cat: 'eff', d: ''}, bnE[k], {k, std: false})).sort(byCr).forEach(b => bens.push(b));
   bens.forEach(b => { b.in = b.on === 'Y'; b.n = norm(b.n) || 'Korzyść bez nazwy'; b.score = b.in ? (+b.v || 0) * (+b.cf || 0) : 0; });
   const dis = {}; Object.keys(sgE).forEach(k => { dis[k] = true; });
-  return {cid, co, people, OBY, areas, ABY, inArea: areas.filter(a => a.in), later: areas.filter(a => a.later), procs, PBY, kuProcs, reqs, RBY, risks, bens, dis};
+  return {cid, co, people, OBY, areas, ABY, inArea: areas.filter(a => a.in), later: areas.filter(a => a.later), procs, PBY, reqs, RBY, risks, bens, dis};
 }
 /* wycinek modelu dla filtra obszaru */
 function slice(m, aid) {
@@ -209,7 +209,7 @@ function required(m, step, aid) {
       if (!p.n) add('Zespół: imię i nazwisko osoby', fsel(pi, 'n'), pi + '#n');
       if (!D.coTypes.includes(p.co)) add(nm + ': zespół', fsel(pi, 'co'), pi + '#co');
       if (!D.roles.includes(p.role)) add(nm + ': rola', fsel(pi, 'role'), pi + '#role');
-      else if (p.ku && !p.kp.length) add(nm + ': procesy, za które odpowiada key user', `details[data-o="${p.k}"]>summary`, pi + '#ps'); });
+      else if (p.ku && !p.kas.length) add(nm + ': obszar key usera', `details[data-o="${p.k}"]>summary`, pi + '#ka'); });
     const und = m.areas.filter(a => a.on !== 'Y' && a.on !== 'L' && a.on !== 'N');
     if (und.length) add('Obszary bez decyzji „W zakresie / Kolejny etap / Poza zakresem”: ' + und.length, `#area-${und[0].k} .seg button`, 'und');
     else if (!m.inArea.length) add('Co najmniej jeden obszar w zakresie analizy', `#area-${m.areas[0].k} .seg button`);

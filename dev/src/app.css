@@ -591,15 +591,10 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 .ptab tr.kprow td{border-top:0;padding:0 6px 10px}
 .kp{display:grid;grid-template-columns:150px minmax(0,560px);gap:6px 12px;align-items:start;margin-left:4px;padding-left:12px;border-left:3px solid var(--acc-line)}
 .kp>.lb{font-size:.8rem;font-weight:600;color:var(--muted);padding-top:7px}
-.kp .kpchips{grid-column:2;display:flex;flex-wrap:wrap;gap:5px}
-.kp .tg b{font:600 .733rem/1 var(--fm);margin-right:3px}
 .kp .msel>summary{height:32px}
 .kp .msel>summary[aria-invalid="true"]{border-color:var(--err)}
-.kp .msel .mlist{max-height:320px}
-.msel .mgrp+.mgrp{border-top:1px solid var(--line);margin-top:4px;padding-top:4px}
-.msel .mlist label.mga{font-size:.867rem}
-.msel .mga small{margin-left:auto;color:var(--faint);font-weight:500}
-.msel .mlist label .qcode{min-width:34px}
+.kp .msel .mlist{max-height:360px}
+.msel .mlist label small{margin-left:auto;color:var(--faint);font-size:.75rem;white-space:nowrap}
 .acard .parts{border-top:1px dashed var(--line2);padding-top:10px;display:grid;gap:8px}
 .acard .parts .ph2{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:.833rem;font-weight:600;color:var(--ink2)}
 .acard .parts .ph2 small{font-weight:500;color:var(--muted)}
@@ -825,7 +820,7 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
   .hbars .hb{grid-template-columns:110px minmax(0,1fr) 60px}
   .doc{padding:24px 18px}.doc .meta{grid-template-columns:minmax(0,1fr)}.doc .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .sysmig{grid-template-columns:minmax(0,1fr)}.sysarr{transform:rotate(90deg);height:30px}
-  .kp{grid-template-columns:minmax(0,1fr);margin-left:0}.kp .kpchips{grid-column:1}.kp>.lb{padding-top:0}
+  .kp{grid-template-columns:minmax(0,1fr);margin-left:0}.kp>.lb{padding-top:0}
   .ptab thead{display:none}.ptab tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;padding:8px 0;border-top:1px solid var(--line)}.ptab td{border:0;padding:2px 0}.ptab td.wide{grid-column:1/-1}
 }
 

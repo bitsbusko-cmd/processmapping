@@ -10,7 +10,6 @@ function render() {
     document.title = ag ? 'Agenda i pytania – ' + ag.n + ' – ' + c.n : c ? c.n + ' – ' + (V.doc === 'raport' ? 'Raport końcowy' : STEPS[V.step] || '') + ' – Fit-Gap ERP' : 'Analiza Fit-Gap ERP';
     renderTop(); renderSide();
     paint($('#main'), c ? (V.doc ? renderDoc(model(c.k)) : renderAnalysis()) : renderStart());
-    $$('input[data-mixed]').forEach(x => { x.indeterminate = true; }); $$('.mga input:not([data-mixed])').forEach(x => { x.indeterminate = false; });
   } finally { RENDERING = false; }
   if (AGAIN) { AGAIN = false; render(); }
 }
@@ -114,8 +113,8 @@ function deleteAnalysis() {
 }
 
 /* ---------- zdarzenia ---------- */
-/* procesy key usera: zmiana listy procesów osoby */
-function setKu(o, fn) { const id = ID.os(V.cid, o), cur = arr((ent(id) || {}).ps); put(id, {ps: uniq(fn(cur))}); render(); }
+/* obszary key usera: zmiana listy obszarów osoby (punktem wyjścia jest lista z modelu – także przeliczona z procesów) */
+function setKa(o, fn) { const p = cur().OBY[o]; if (!p) return; put(ID.os(V.cid, o), {ka: uniq(fn(p.ka.slice()))}); render(); }
 document.addEventListener('click', ev => {
   // lista rozwijana procesów zamyka się po kliknięciu poza nią
   $$('details.msel[open]').forEach(x => { if (!x.contains(ev.target)) { x.open = false; if (V.ms === x.dataset.o) V.ms = ''; } });
@@ -160,7 +159,6 @@ document.addEventListener('click', ev => {
       put(ID.ar(V.cid, newId()), {cus: true, n, d: norm($('#na-d').value), on: 'Y', cr: now()}); V.open['area-add'] = false; render(); toast('Dodano obszar ' + n + '.'); break; }
     case 'area-del': { const a = m.ABY[d.a]; confirmBox('Usunąć obszar „' + a.n + '”?', 'Obszar zniknie z analizy razem z dodanymi w nim procesami. Tej operacji nie można cofnąć.', 'Usuń obszar', () => { drop(ID.ar(V.cid, d.a)); m.procs.filter(p => p.a === d.a && !p.cat).forEach(p => drop(ID.pr(V.cid, p.k))); if (V.aid === d.a) go(href(V.step, '')); else render(); }); break; }
     case 'us-tog': { const a = m.ABY[d.a], us = a.us.includes(d.o) ? a.us.filter(x => x !== d.o) : a.us.concat(d.o); put(ID.ar(V.cid, d.a), {us}); render(); break; }
-    case 'ms-rm': setKu(d.o, cur => cur.filter(x => x !== d.p)); break;
     /* krok 2 */
     case 'proc-on': { const p = m.PBY[d.p]; put(ID.pr(V.cid, d.p), {on: p.on === d.v ? '' : d.v}); render(); break; }
     case 'proc-all': m.procs.filter(p => p.a === d.a && p.on !== 'Y' && p.on !== 'N').forEach(p => put(ID.pr(V.cid, p.k), {on: 'Y'})); render(); break;
@@ -228,8 +226,7 @@ document.addEventListener('change', ev => {
   else if (act === 'rv') { if (t.dataset.a === GLOBAL) put(ID.an(V.cid), {rvg: t.checked}); else put(ID.ar(V.cid, t.dataset.a), {rv: t.checked}); render(); }
   else if (act === 'ansel') go(href(1, '', t.value));
   else if (act === 'msel') go(href(V.step, t.value));
-  else if (act === 'ms-tog') setKu(t.dataset.o, cur => t.checked ? cur.concat(t.dataset.p) : cur.filter(x => x !== t.dataset.p));
-  else if (act === 'ms-area') { const ks = cur().kuProcs.filter(p => p.a === t.dataset.a).map(p => p.k); setKu(t.dataset.o, c => t.checked ? c.concat(ks) : c.filter(x => !ks.includes(x))); }
+  else if (act === 'ms-tog') setKa(t.dataset.o, c => t.checked ? c.concat(t.dataset.a) : c.filter(x => x !== t.dataset.a));
 });
 document.addEventListener('toggle', ev => { const x = ev.target; if (!x.dataset) return; if (x.dataset.act === 'pmore') V.open['pm-' + x.dataset.p] = x.open;
   if (x.dataset.act === 'ms') { if (x.open) V.ms = x.dataset.o; else if (V.ms === x.dataset.o) V.ms = ''; } }, true);

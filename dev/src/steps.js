@@ -64,7 +64,7 @@ function step1(m) {
       <td>${selF(pi, 'role', p.role, D.roles.map(x => [x, x]), {empty: '– rola –', label: 'Rola', req: 1})}</td>
       <td class="act"><button type="button" class="btn icon sm ghost" data-act="os-del" data-o="${esc(p.k)}" aria-label="Usuń osobę ${esc(p.n)}" title="Usuń osobę">${ic('trash')}</button></td></tr>${p.ku ? kuRow(m, p) : ''}`; }).join('');
   const pplSec = `<section class="sec" id="team"><div class="sech"><h2>${pic('users-three')}Zespół i uczestnicy</h2><div class="acts"><span>${esc(plural(m.people.length, F_PER))}</span></div></div>
-    <div class="secb"><p class="blk">Dodaj osoby, które biorą udział w analizie: ekspertów obu spółek (${esc(c.srcCo)} i ${esc(c.tgtCo)}), osoby z FSSC i zespół prowadzący. Key userom przypisz procesy, za które odpowiadają. Narzędzie nie zbiera adresów e-mail.</p>
+    <div class="secb"><p class="blk">Dodaj osoby, które biorą udział w analizie: ekspertów obu spółek (${esc(c.srcCo)} i ${esc(c.tgtCo)}), osoby z FSSC i zespół prowadzący. Key userom przypisz obszary, za które odpowiadają. Narzędzie nie zbiera adresów e-mail.</p>
     ${m.people.length ? `<div class="tblwrap"><table class="ptab"><thead><tr><th>Imię i nazwisko<span class="rq">*</span></th><th>Zespół<span class="rq">*</span></th><th>Rola<span class="rq">*</span></th><th></th></tr></thead><tbody>${ppl}</tbody></table></div>` : ''}
     <div style="margin-top:10px"><button type="button" class="btn dash" data-act="os-add">${ic('plus')}Dodaj osobę</button></div></div></section>`;
   const und = m.areas.filter(a => !a.on).length;
@@ -77,19 +77,13 @@ function step1(m) {
     ${m.people.length ? '' : `<div class="note warn">${ic('warn')}<p>Najpierw dodaj osoby w sekcji „Zespół i uczestnicy” – ekspertów i uczestników obszarów wybierasz z tej listy.</p></div>`}
     <div class="agrid">${cards}</div><div style="margin-top:12px">${add}</div></div></section>`;
 }
-/* procesy key usera: lista rozwijana z wyborem wielokrotnym (procesy obszarów w zakresie) */
+/* obszar key usera: lista rozwijana obszarów z wyborem wielokrotnym */
 function kuRow(m, p) {
-  const pi = ID.os(m.cid, p.k), bad = MISS.has(pi + '#ps'), sel = new Set(p.kp.map(x => x.k));
-  const groups = m.inArea.map(a => { const ps = m.kuProcs.filter(x => x.a === a.k); if (!ps.length) return '';
-    const n = ps.filter(x => sel.has(x.k)).length;
-    return `<div class="mgrp" data-key="mg-${esc(a.k)}"><label class="mga"><input type="checkbox" data-act="ms-area" data-o="${esc(p.k)}" data-a="${esc(a.k)}"${n === ps.length ? ' checked' : ''}${n && n < ps.length ? ' data-mixed="1"' : ''}><b>${esc(a.n)}</b><small>${n}/${ps.length}</small></label>
-      ${ps.map(x => `<label data-key="mp-${esc(x.k)}"><input type="checkbox" data-act="ms-tog" data-o="${esc(p.k)}" data-p="${esc(x.k)}"${sel.has(x.k) ? ' checked' : ''}><span class="qcode">${esc(x.cd)}</span><span>${esc(x.n)}</span></label>`).join('')}</div>`; }).join('');
-  const sum = p.kp.length ? `<span class="val">Wybrano: ${esc(plural(p.kp.length, F_PROC))}</span>` : `<span class="ph">${m.kuProcs.length ? 'Wybierz procesy z listy' : 'Najpierw oznacz obszary „W zakresie”'}</span>`;
-  const chips = p.kp.map(x => `<span class="tg" data-key="kp-${esc(x.k)}"><span><b>${esc(x.cd)}</b> ${esc(x.n)}</span><button type="button" class="tgx" data-act="ms-rm" data-o="${esc(p.k)}" data-p="${esc(x.k)}" aria-label="Usuń proces: ${esc(x.n)}">${ic('x')}</button></span>`).join('');
-  return `<tr class="kprow" data-key="osk-${esc(p.k)}"><td colspan="4" class="wide"><div class="kp"><span class="lb">${rq('Procesy key usera')}</span>
-    <details class="msel" data-act="ms" data-o="${esc(p.k)}"${V.ms === p.k ? ' open' : ''}><summary class="inp"${bad ? ' aria-invalid="true"' : ''} aria-label="Procesy key usera – ${esc(p.n || 'bez nazwy')}">${sum}</summary>
-      <div class="mlist">${groups || '<p class="muted sm" style="margin:6px 8px">Brak procesów do wyboru – w sekcji „Obszary analizy” oznacz obszary „W zakresie”.</p>'}</div></details>
-    ${chips ? `<div class="kpchips">${chips}</div>` : ''}</div></td></tr>`;
+  const pi = ID.os(m.cid, p.k), bad = MISS.has(pi + '#ka'), names = p.kas.map(a => a.n).join(', ');
+  const items = m.areas.map(a => `<label data-key="ma-${esc(a.k)}"><input type="checkbox" data-act="ms-tog" data-o="${esc(p.k)}" data-a="${esc(a.k)}"${p.kas.includes(a) ? ' checked' : ''}><span>${esc(a.n)}</span>${a.later ? '<small>kolejny etap</small>' : a.on === 'N' ? '<small>poza zakresem</small>' : ''}</label>`).join('');
+  return `<tr class="kprow" data-key="osk-${esc(p.k)}"><td colspan="4" class="wide"><div class="kp"><span class="lb">${rq('Obszar')}</span>
+    <details class="msel" data-act="ms" data-o="${esc(p.k)}"${V.ms === p.k ? ' open' : ''}><summary class="inp"${bad ? ' aria-invalid="true"' : ''} aria-label="Obszar key usera – ${esc(p.n || 'bez nazwy')}"${names ? ` title="${esc(names)}"` : ''}>${names ? `<span class="val">${esc(names)}</span>` : '<span class="ph">Wybierz obszar z listy</span>'}</summary>
+      <div class="mlist">${items}</div></details></div></td></tr>`;
 }
 function areaCard(m, a) {
   const id = ID.ar(m.cid, a.k), c = m.co, n = m.procs.filter(p => p.a === a.k).length, st = a.in ? 'in' : a.later ? 'later' : a.on === 'N' ? 'out' : 'und';
@@ -98,7 +92,7 @@ function areaCard(m, a) {
   let body = '';
   if (a.in) {
     const opts = m.people.map(p => [p.k, (p.n || 'bez nazwy') + (p.co ? ' · ' + p.co : '') + (p.role ? ' · ' + p.role : '')]);
-    const kuA = new Set(m.people.filter(p => p.kp.some(x => x.a === a.k)).map(p => p.k));
+    const kuA = new Set(a.kus.map(p => p.k));
     const chips = m.people.map(p => `<button type="button" class="chipbtn" data-act="us-tog" data-a="${esc(a.k)}" data-o="${esc(p.k)}" aria-pressed="${a.us.includes(p.k)}">${esc(p.n || 'bez nazwy')} <small>${esc([p.co, kuA.has(p.k) ? 'key user' : ''].filter(Boolean).join(' · '))}</small></button>`).join('');
     body = `<div class="af">
       ${fld(rq('Ekspert ' + esc(c.srcCo) + ' – ' + esc(c.srcSys)), selF(id, 'xcc', a.ecc ? a.xcc : '', opts, {empty: m.people.length ? '– wybierz osobę –' : '– najpierw dodaj osoby –', req: 1, label: 'Ekspert ' + c.srcCo}), 'cc')}

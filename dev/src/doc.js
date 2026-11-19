@@ -39,7 +39,7 @@ function reportDoc(m) {
   const scope = `<h2>Zakres i metoda</h2>${norm(co.scope) ? lines(co.scope).map(x => `<p>${esc(x)}</p>`).join('') : ''}
     <h3>Obszary analizy</h3>${docTbl([['Obszar'], ['Zakres'], ['Ekspert ' + co.srcCo], ['Ekspert ' + co.tgtCo], ['Procesy', 1], ['Wymagania', 1]], arRows, 'Nie wskazano obszarów.')}
     ${m.areas.filter(a => a.on === 'N').length ? `<p class="sm muted">Poza zakresem: ${esc(m.areas.filter(a => a.on === 'N').map(a => a.n).join(', '))}.</p>` : ''}
-    <h3>Zespół i uczestnicy</h3>${docTbl([['Imię i nazwisko'], ['Zespół'], ['Rola'], ['Procesy key usera']], m.people.map(p => `<tr><td>${esc(p.n)}</td><td>${esc(p.co || '')}</td><td>${esc(p.role || '')}</td><td class="sm">${esc(p.kp.map(x => x.cd + ' ' + x.n).join('; ') || '–')}</td></tr>`), 'Brak osób.')}
+    <h3>Zespół i uczestnicy</h3>${docTbl([['Imię i nazwisko'], ['Zespół'], ['Rola'], ['Obszary key usera']], m.people.map(p => `<tr><td>${esc(p.n)}</td><td>${esc(p.co || '')}</td><td>${esc(p.role || '')}</td><td class="sm">${esc(p.kas.map(x => x.n).join('; ') || '–')}</td></tr>`), 'Brak osób.')}
     <h3>Metoda oceny</h3><p>Punktem odniesienia jest szablon ${esc(co.tgtSys)} w ${esc(co.tgtCo)} – sposób, w jaki ${esc(co.tgtCo)} faktycznie pracuje w systemie. Dla każdego pytania z katalogu zapisano praktykę ${esc(co.srcCo)} i ${esc(co.tgtCo)} oraz ocenę dopasowania:</p>
     <ul>${FIT.map(f => `<li><b>${esc(f.n)}</b> – ${esc(f.d)}</li>`).join('')}</ul>
     <p>Indeks dopasowania to średnia ocen (Fit = 1, Częściowe = ${D.fitW.P}, Luka = 0) ważona priorytetem MoSCoW (Must ×${D.priW.M}, Should ×${D.priW.S}, Could ×${D.priW.C}). Luka krytyczna to luka o priorytecie Must, która wymaga rozwoju AX, integracji albo obejścia poza ERP.</p>`;
@@ -87,17 +87,17 @@ function agendaDoc(m, aid) {
   const co = m.co, a = m.ABY[aid];
   if (!a) return '<div class="empty"><b>Nie znaleziono obszaru</b></div>';
   const procs = m.procs.filter(p => p.a === a.k && p.on !== 'N'), parts = a.us.map(k => m.OBY[k]).filter(Boolean);
-  const nq = procs.reduce((x, p) => x + p.reqs.length, 0), kpA = x => x.kp.filter(p => p.a === a.k);
-  const meta = `<div class="meta"><div><span>Ekspert ${esc(co.srcCo)}</span>${esc(a.ecc ? a.ecc.n : '–')}</div><div><span>Ekspert ${esc(co.tgtCo)}</span>${esc(a.ecp ? a.ecp.n : '–')}</div><div><span>Lider analizy</span>${esc(co.pl || '–')}</div>
-    <div><span>Zakres</span>${esc(plural(procs.length, F_PROC))} · ${esc(plural(nq, F_Q))}</div><div><span>Uczestnicy</span>${esc(parts.length ? plural(parts.length, F_PER) : 'do wskazania')}</div><div><span>Przygotowano</span>${esc(fd(today()))}</div></div>`;
+  const nq = procs.reduce((x, p) => x + p.reqs.length, 0);
+  const meta = `<div class="meta"><div><span>Ekspert ${esc(co.srcCo)}</span>${esc(a.ecc ? a.ecc.n : '–')}</div><div><span>Ekspert ${esc(co.tgtCo)}</span>${esc(a.ecp ? a.ecp.n : '–')}</div><div><span>Key user</span>${esc(a.kus.map(x => x.n).join(', ') || '–')}</div>
+    <div><span>Zakres</span>${esc(plural(procs.length, F_PROC))} · ${esc(plural(nq, F_Q))}</div><div><span>Lider analizy</span>${esc(co.pl || '–')}</div><div><span>Przygotowano</span>${esc(fd(today()))}</div></div>`;
   const plan = [`Cel, skala oceny i sposób pracy (5 min)`, ...procs.map(p => `${p.cd} ${p.n} – ${plural(p.reqs.length, F_Q)}`), 'Podsumowanie: luki, pytania otwarte, kolejne kroki (10 min)'];
-  const qs = procs.map(p => `<h3><span class="mono">${esc(p.cd)}</span> ${esc(p.n)}</h3>${p.d ? `<p class="sm muted">${esc(p.d)}</p>` : ''}${p.kus.length ? `<p class="sm">Key user: <b>${esc(p.kus.map(x => x.n).join(', '))}</b></p>` : ''}
+  const qs = procs.map(p => `<h3><span class="mono">${esc(p.cd)}</span> ${esc(p.n)}</h3>${p.d ? `<p class="sm muted">${esc(p.d)}</p>` : ''}
     <ol class="qlist">${p.reqs.map(r => `<li data-c="${esc(r.code)}"><div><b>${esc(r.t)}</b>${r.h ? `<div class="sm muted">${esc(r.h)}</div>` : ''}
       <div class="ans"><div><span class="src">${esc(co.srcCo)}</span> ${esc(r.cc || '')}</div><div><span class="tgt">${esc(co.tgtCo)}</span> ${esc(r.cp || '')}</div></div></div></li>`).join('')}</ol>`).join('');
   return `<article class="doc"><div class="cover"><div class="k">Analiza Fit-Gap ERP · agenda i pytania</div><h1>${esc(a.n)}</h1><p class="sub">${esc(co.n)} · ${esc(sysCC(co))} → ${esc(sysCP(co))}</p>${meta}</div>
     <h2>Cel</h2><p>Porównujemy procesy obszaru „${esc(a.n)}” w ${esc(co.srcCo)} (${esc(co.srcSys)}) z szablonem ${esc(co.tgtCo)} w systemie ${esc(co.tgtSys)} i oceniamy, czy szablon pokryje wymagania ${esc(co.srcCo)}. Każde pytanie dostaje ocenę: ${FIT.map(f => esc(f.n)).join(', ')}.</p>
     <p>Prosimy o zapoznanie się z pytaniami przed spotkaniem i przygotowanie przykładów: dokumentów, raportów, zestawień z systemu i plików Excel używanych w procesach. Odpowiedzi można wpisać w ramkach przy pytaniach.</p>
-    ${parts.length ? `<h3>Uczestnicy</h3><ul>${parts.map(p => `<li>${esc(p.n)}${p.co || p.role ? ' – ' + esc([p.co, p.role].filter(Boolean).join(', ')) : ''}${kpA(p).length ? `<br><span class="sm muted">Procesy: ${esc(kpA(p).map(x => x.cd + ' ' + x.n).join('; '))}</span>` : ''}</li>`).join('')}</ul>` : ''}
+    ${parts.length ? `<h3>Uczestnicy</h3><ul>${parts.map(p => `<li>${esc(p.n)}${p.co || p.role ? ' – ' + esc([p.co, p.role].filter(Boolean).join(', ')) : ''}</li>`).join('')}</ul>` : ''}
     <h2>Agenda</h2><ol>${plan.map(x => `<li>${esc(x)}</li>`).join('')}</ol>
     <h2>Pytania</h2>${qs || '<p>Brak procesów w obszarze – potwierdź je w kroku 2.</p>'}
     <h2>Skala oceny</h2><ul>${FIT.map(f => `<li><b>${esc(f.n)}</b> – ${esc(f.d)}</li>`).join('')}</ul>
