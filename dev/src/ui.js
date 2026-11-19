@@ -265,7 +265,7 @@ function helpHtml() {
       <dt>Luka krytyczna</dt><dd>Luka z priorytetem Must, która wymaga rozwoju AX, integracji albo obejścia poza ERP.</dd>
       <dt>MoSCoW</dt><dd>Priorytet wymagania: Must, Should, Could.</dd>
       <dt>AS-IS</dt><dd>Obecny sposób realizacji procesu.</dd>
-      <dt>FSSC</dt><dd>Centrum usług księgowych obsługujące obie spółki.</dd></dl>
+      <dt>FSSC</dt><dd>Centrum Usług Księgowych obsługujące obie spółki.</dd></dl>
     <h3>Zapisywanie danych i RODO</h3><p>${SH.on ? 'Dane zapisują się we wspólnej bazie i widzą je wszyscy uczestnicy analizy; zmiany innych osób pojawiają się co kilkanaście sekund. Plik z menu „…” służy jako kopia zapasowa.' : 'Dane zapisują się automatycznie w tej przeglądarce. Aby przekazać je innej osobie, użyj menu „…” → Zapisz dane do pliku; druga osoba wczytuje plik tym samym menu. Do pracy zespołowej uruchom wersję wieloosobową (instrukcja w README repozytorium).'} Narzędzie nie zbiera adresów e-mail – osoby opisuje imię i nazwisko. Agendę i pytania wysyłasz uczestnikom samodzielnie, w załączniku e-maila.</p>
   </div>`;
 }

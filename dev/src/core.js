@@ -49,7 +49,7 @@ const sysCP = co => (co.tgtCo || DEF.tgtCo) + ' · ' + (co.tgtSys || DEF.tgtSys)
 const KU = D.roles.find(r => /^key user/i.test(r)) || '';
 /* dane z wersji 1.0: skróty spółek CC i CP, domyślna nazwa analizy i nazwy ról w narzędziu */
 const CO_OLD = {CC: DEF.srcCo, CP: DEF.tgtCo}, coRaw = v => CO_OLD[v] || v, NAME_OLD = 'Migracja CC: Symfonia → AX 2012';
-const TEAM_OLD = {'Ekspert CC': TEAMS[1].n, 'Ekspert CP': TEAMS[2].n};
+const TEAM_OLD = {'Zespół analizy': TEAMS[0].n, 'Ekspert CC': TEAMS[1].n, 'Ekspert CP': TEAMS[2].n};
 
 /* ---------- stan ---------- */
 let S = {who: '', name: '', team: '', e: {}};
