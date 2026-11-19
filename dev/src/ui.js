@@ -166,7 +166,7 @@ function fbarHtml(c, lg) {
 const fleg = () => `<div class="fleg">${FORD.map(k => `<span><i class="${k}"></i>${esc(FITBY[k].n)}</span>`).join('')}<span><i class="U"></i>bez oceny</span></div>`;
 const priTag = k => PRIBY[k] ? `<span class="tag ${k === 'M' ? 'err' : k === 'S' ? 'warn' : ''}" title="${esc(PRIBY[k].d)}">${esc(PRIBY[k].n)}</span>` : '';
 const resTag = k => RESBY[k] ? `<span class="tag${k === 'proc' ? ' sig' : k === 'dev' || k === 'int' || k === 'wa' ? ' err' : ' acc'}" title="${esc(RESBY[k].d)}">${esc(RESBY[k].n)}</span>` : '';
-const critTag = r => r.crit ? `<span class="critb" title="Luka krytyczna: Must, wymaga rozwoju AX, integracji albo obejścia">${ic('warn')}krytyczna</span>` : '';
+const critTag = r => r.crit ? `<span class="critb" title="Luka krytyczna: Must, wymaga rozwoju AX 2012, integracji albo obejścia">${ic('warn')}krytyczna</span>` : '';
 const regTag = r => r.reg ? '<span class="regb" title="Wymaganie wynikające z przepisów">przepisy</span>' : '';
 const pname = (m, k) => (m.OBY[k] || {}).n || '';
 
@@ -233,7 +233,7 @@ function renderModal() {
   if (M.kind === 'scales') {
     const row = (a, b) => `<tr><td style="white-space:nowrap;font-weight:700">${a}</td><td>${b}</td></tr>`;
     m.innerHTML = box('Skale oceny', `<div class="help">
-      <h3>Ocena dopasowania wymagania</h3><table class="mtx"><tbody>${FIT.map(f => row(fsTag(f.k), esc(f.d))).join('')}</tbody></table>
+      <h3>Ocena dopasowania wymagania</h3><table class="mtx"><tbody>${FIT.map(f => row(fsTag(f.k), `<b>${esc(f.l)}</b> – ${esc(f.d)}`)).join('')}</tbody></table>
       <h3>Sposób zamknięcia luki</h3><table class="mtx"><tbody>${RES.map(r => row(esc(r.n), esc(r.d))).join('')}</tbody></table>
       <p class="sm muted">Luka krytyczna: ocena „Luka”, priorytet Must i zamknięcie przez ${CRITRES.map(k => resName(k).toLowerCase()).join(', ')}.</p>
       <h3>Priorytet (MoSCoW) i pracochłonność</h3><table class="mtx"><tbody>${PRI.map(p => row(esc(p.n), esc(p.d))).join('')}${EFF.map(e => row(esc(e.n), esc(e.d) + ' · w szacunku ' + plural(e.md, F_MD))).join('')}</tbody></table>
@@ -248,11 +248,11 @@ function renderModal() {
 }
 function helpHtml() {
   return `<div class="help">
-    <h3>Po co jest analiza fit-gap</h3><p>Analiza odpowiada na pytania: czy ${esc(DEF.srcCo)} może przejść z systemu ${esc(DEF.srcSys)} na ${esc(DEF.tgtSys)} używany w ${esc(DEF.tgtCo)}, jakie zmiany procesów musi wprowadzić ${esc(DEF.srcCo)}, co trzeba dobudować w systemie docelowym, jakie są ryzyka i jaką wartość da migracja. Punktem odniesienia jest szablon AX w ${esc(DEF.tgtCo)} – to, jak ${esc(DEF.tgtCo)} faktycznie pracuje w systemie, a nie standard producenta.</p>
+    <h3>Po co jest analiza fit-gap</h3><p>Analiza odpowiada na pytania: czy ${esc(DEF.srcCo)} może przejść z systemu ${esc(DEF.srcSys)} na ${esc(DEF.tgtSys)} używany w ${esc(DEF.tgtCo)}, jakie zmiany procesów musi wprowadzić ${esc(DEF.srcCo)}, co trzeba dobudować w systemie docelowym, jakie są ryzyka i jaką wartość da migracja. Punktem odniesienia jest szablon AX 2012 w ${esc(DEF.tgtCo)} – to, jak ${esc(DEF.tgtCo)} faktycznie pracuje w systemie, a nie standard producenta.</p>
     <h3>Przebieg analizy</h3><ol>
       <li><b>Zakres i zespół</b> – dane analizy, osoby (imię i nazwisko, zespół, rola; key userom przypisujesz obszary), obszary w zakresie, eksperci obu stron i uczestnicy. Dla każdego obszaru narzędzie przygotuje agendę i pytania do wysłania uczestnikom w załączniku e-maila.</li>
       <li><b>Procesy AS-IS</b> – które procesy z katalogu występują w ${esc(DEF.srcCo)}, właściciele, wolumeny, narzędzia, opis praktyki w obu spółkach i możliwość wspólnego standardu.</li>
-      <li><b>Ocena fit-gap</b> – pytania z katalogu dla każdego procesu: praktyka ${esc(DEF.srcCo)}, praktyka ${esc(DEF.tgtCo)} w AX i ocena dopasowania. Tryb skupienia pokazuje jedno pytanie naraz – wygodny podczas spotkania z ekspertami.</li>
+      <li><b>Ocena fit-gap</b> – pytania z katalogu dla każdego procesu: praktyka ${esc(DEF.srcCo)}, praktyka ${esc(DEF.tgtCo)} w AX 2012 i ocena dopasowania. Tryb skupienia pokazuje jedno pytanie naraz – wygodny podczas spotkania z ekspertami.</li>
       <li><b>Luki i zmiany</b> – rejestr luk z pracochłonnością i decyzją oraz lista zmian procesowych w ${esc(DEF.srcCo)} (skala, kogo dotyczą, szkolenia).</li>
       <li><b>Ryzyka</b> – rejestr ryzyk z podpowiedziami: ryzyka typowe dla tej migracji, luki krytyczne i duże zmiany procesów.</li>
       <li><b>Wartość dodana</b> – korzyści migracji i szacunek nakładów (business case).</li>
@@ -260,9 +260,9 @@ function helpHtml() {
     <h3>Ocena krok po kroku</h3><p>Wybierz obszar na liście po lewej – kolejne kroki pokażą tylko jego procesy, a ocenę jednego obszaru zakończysz bez czekania na pozostałe. W trybie skupienia klawisze <span class="kbd">1</span>–<span class="kbd">5</span> ustawiają ocenę (Fit, Częściowe, Luka, N/D, Do wyjaśnienia), <span class="kbd">←</span> <span class="kbd">→</span> przechodzą między pytaniami, a <span class="kbd">Ctrl</span>+<span class="kbd">Enter</span> w polu tekstowym przechodzi do następnego pytania.</p>
     <h3>Pola wymagane</h3><p>Pola z gwiazdką (*) trzeba uzupełnić przed przejściem do kolejnego kroku. Przycisk „Dalej” pokaże listę braków – kliknij pozycję, aby przejść do pola.</p>
     <h3>Słownik</h3><dl>
-      <dt>Fit</dt><dd>Szablon AX w ${esc(DEF.tgtCo)} obsługuje wymaganie bez zmian.</dd>
-      <dt>Luka (gap)</dt><dd>Wymaganie, którego szablon nie obsługuje – zamykane zmianą procesu w ${esc(DEF.srcCo)}, konfiguracją, rozwojem AX, integracją, raportem, migracją danych albo obejściem.</dd>
-      <dt>Luka krytyczna</dt><dd>Luka z priorytetem Must, która wymaga rozwoju AX, integracji albo obejścia poza ERP.</dd>
+      <dt>Fit</dt><dd>Szablon AX 2012 w ${esc(DEF.tgtCo)} obsługuje wymaganie bez zmian.</dd>
+      <dt>Luka (gap)</dt><dd>Wymaganie, którego szablon nie obsługuje – zamykane zmianą procesu w ${esc(DEF.srcCo)}, konfiguracją, rozwojem AX 2012, integracją, raportem, migracją danych albo obejściem.</dd>
+      <dt>Luka krytyczna</dt><dd>Luka z priorytetem Must, która wymaga rozwoju AX 2012, integracji albo obejścia poza ERP.</dd>
       <dt>MoSCoW</dt><dd>Priorytet wymagania: Must, Should, Could.</dd>
       <dt>AS-IS</dt><dd>Obecny sposób realizacji procesu.</dd>
       <dt>FSSC</dt><dd>Centrum Usług Księgowych obsługujące obie spółki.</dd></dl>

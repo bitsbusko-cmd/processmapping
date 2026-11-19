@@ -135,11 +135,11 @@ async function exportXlsx(cid) {
     (c, ci) => { if (ci === 1 && b.in) xbold(c); if (ci === 7) c.numFmt = '#,##0'; if (!b.in) c.font = Object.assign({}, XA, {color: {argb: XGREY}}); }));
   xend(sh);
   xblock(sh, 'Szacunek nakładów (orientacyjny)', [['Stawka za osobodzień (zł)', bc.rate || ''], ['Nakład bazowy wdrożenia (md)', bc.base], ['Pracochłonność luk (md)', bc.gapMd], ['Inne koszty jednorazowe (zł)', bc.other],
-    ['Nakład jednorazowy (zł)', bc.rate ? Math.round(bc.oneOff) : ''], ['Roczny koszt ' + co.srcSys + ' (zł)', bc.symf], ['Roczny koszt AX dla ' + co.srcCo + ' (zł)', bc.axc], ['Korzyści wycenione (zł rocznie)', bc.benPln],
+    ['Nakład jednorazowy (zł)', bc.rate ? Math.round(bc.oneOff) : ''], ['Roczny koszt ' + co.srcSys + ' (zł)', bc.symf], ['Roczny koszt AX 2012 dla ' + co.srcCo + ' (zł)', bc.axc], ['Korzyści wycenione (zł rocznie)', bc.benPln],
     ['Efekt roczny razem (zł)', Math.round(bc.annual)], ['Prosty okres zwrotu (lata)', bc.payback != null ? Math.round(bc.payback * 10) / 10 : '']]);
   /* 9. Skale */
   sh = xsheet(wb, 'Skale', 'Skale oceny', [['Skala', G3, [['Skala', 26], ['Wartość', 24], ['Opis', 80]]]]);
-  FIT.forEach(f => xrow(sh, ['Ocena dopasowania', f.n, f.d], (c, ci) => { if (ci === 2) xfit(c, f.k); }));
+  FIT.forEach(f => xrow(sh, ['Ocena dopasowania', f.l, ucFirst(f.d)], (c, ci) => { if (ci === 2) xfit(c, f.k); }));
   RES.forEach(x => xrow(sh, ['Sposób zamknięcia luki', x.n, x.d]));
   PRI.forEach(x => xrow(sh, ['Priorytet (MoSCoW)', x.n, x.d]));
   EFF.forEach(x => xrow(sh, ['Pracochłonność', x.n, x.d + ' (w szacunku ' + x.md + ' md)']));

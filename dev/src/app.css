@@ -578,9 +578,12 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 .sysbox span{display:block;font-size:.8rem;color:var(--muted);margin-top:2px}
 .sysarr{display:grid;place-items:center;color:var(--muted)}
 .sysarr svg{width:30px;height:30px}
-.scale5{display:grid;gap:6px;margin:0}
-.scale5 li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:10px;align-items:start;font-size:.833rem;color:var(--ink2);list-style:none}
-.scale5 .fs{justify-content:flex-start}
+.scale5{display:grid;gap:7px;margin:0;padding:0}
+.scale5 li{display:grid;grid-template-columns:8px minmax(0,1fr);gap:9px;align-items:start;font-size:.833rem;color:var(--ink2);list-style:none}
+.scale5 li>i{width:8px;height:8px;border-radius:50%;margin-top:6px;background:var(--muted)}
+.scale5 li.F>i{background:var(--fF)}.scale5 li.P>i{background:var(--fP)}.scale5 li.G>i{background:var(--fG)}.scale5 li.N>i{background:var(--fN)}.scale5 li.O>i{background:var(--fO)}
+.scale5 li b{color:var(--ink)}
+.demo h3.fn{font-size:.833rem;margin:12px 0 6px;color:var(--ink)}
 
 /* krok 1: zespół i uczestnicy */
 .ptab{width:100%;border-collapse:collapse;font-size:.9rem}
@@ -856,7 +859,7 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 /* poprawki układu (Fit-Gap) */
 .whobox .teams span{flex-direction:column;height:auto;min-height:50px;padding:6px 8px;gap:1px;line-height:1.25}
 .whobox .teams label{display:flex}.whobox .teams label>span{flex:1 1 auto}
-.scale5 .fs{justify-self:start}
+
 .acard .ah{flex-wrap:wrap;row-gap:8px}
 .acard .ah b{flex:1 1 150px;min-width:0}
 .acard .ah input.inp{flex:1 1 150px}

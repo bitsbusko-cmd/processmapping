@@ -48,7 +48,11 @@ const sysCP = co => (co.tgtCo || DEF.tgtCo) + ' · ' + (co.tgtSys || DEF.tgtSys)
 /* rola key usera – osoba z tą rolą ma przypisane obszary */
 const KU = D.roles.find(r => /^key user/i.test(r)) || '';
 /* dane z wersji 1.0: skróty spółek CC i CP, domyślna nazwa analizy i nazwy ról w narzędziu */
-const CO_OLD = {CC: DEF.srcCo, CP: DEF.tgtCo}, coRaw = v => CO_OLD[v] || v, NAME_OLD = 'Migracja CC: Symfonia → AX 2012';
+const CO_OLD = {CC: DEF.srcCo, CP: DEF.tgtCo}, coRaw = v => CO_OLD[v] || v;
+const NAME_OLD = ['Migracja CC: Symfonia → AX 2012', 'Migracja Construction Chemicals: Symfonia → AX 2012'], SYS_OLD = {Symfonia: DEF.srcSys}, sysRaw = v => SYS_OLD[v] || v;
+/* nazwy narzędzi z podpowiedzi wcześniejszych wersji: „Symfonia …” i „AX – …” */
+const ucFirst = s => { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); };
+const toolRaw = t => String(t).replace(/^Symfonia (?!ERP)/, 'Symfonia ERP ').replace(/^AX (?!2012)/, 'AX 2012 ');
 const TEAM_OLD = {'Zespół analizy': TEAMS[0].n, 'Ekspert CC': TEAMS[1].n, 'Ekspert CP': TEAMS[2].n};
 
 /* ---------- stan ---------- */
@@ -99,7 +103,7 @@ function idx() {
 function analyses() {
   const X = idx(), out = [];
   Object.keys(X.an).forEach(k => { const e = X.an[k]; if (!e || e.del) return;
-    out.push(Object.assign({}, DEF, e, {k, n: (norm(e.n) === NAME_OLD ? DEF.n : norm(e.n)) || 'Analiza bez nazwy', srcCo: norm(coRaw(e.srcCo)) || DEF.srcCo, srcSys: norm(e.srcSys) || DEF.srcSys, tgtCo: norm(coRaw(e.tgtCo)) || DEF.tgtCo, tgtSys: norm(e.tgtSys) || DEF.tgtSys})); });
+    out.push(Object.assign({}, DEF, e, {k, n: (NAME_OLD.includes(norm(e.n)) ? DEF.n : norm(e.n)) || 'Analiza bez nazwy', srcCo: norm(coRaw(e.srcCo)) || DEF.srcCo, srcSys: norm(sysRaw(e.srcSys)) || DEF.srcSys, tgtCo: norm(coRaw(e.tgtCo)) || DEF.tgtCo, tgtSys: norm(e.tgtSys) || DEF.tgtSys})); });
   return out.sort((a, b) => String(a.cr || '').localeCompare(String(b.cr || '')));
 }
 const analysis = cid => analyses().find(c => c.k === cid) || null;
@@ -132,7 +136,7 @@ function build(cid) {
     list.forEach((p, i) => { p.ai = i + 1; procs.push(p); });
   });
   procs.forEach((p, i) => { p.area = ABY[p.a]; p.act = p.on === 'Y' && !!p.area && p.area.in; p.n = norm(p.n) || 'Proces bez nazwy'; p.no = i + 1; p.cd = (p.area.cd || 'X') + p.ai; });
-  const PBY = {}; procs.forEach(p => { PBY[p.k] = p; });
+  const PBY = {}; procs.forEach(p => { PBY[p.k] = p; p.tcc = arr(p.tcc).map(toolRaw); p.tcp = arr(p.tcp).map(toolRaw); });
   /* obszary key userów (ka); wcześniej wybrane procesy (ps) przeliczamy na ich obszary */
   people.forEach(x => { x.ka = Array.isArray(x.ka) ? x.ka.slice() : uniq(arr(x.ps).map(k => PBY[k] ? PBY[k].a : '').filter(Boolean));
     x.kas = x.ku ? areas.filter(a => x.ka.includes(a.k)) : []; });

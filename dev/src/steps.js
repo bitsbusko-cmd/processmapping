@@ -31,12 +31,14 @@ function renderStart() {
   }
   return `<div class="card"><div class="hero">
       <div><h1>Analiza Fit-Gap ERP</h1>
-        <p>Narzędzie prowadzi zespół przez analizę dopasowania procesów spółki ${esc(DEF.srcCo)}, pracującej w systemie ${esc(DEF.srcSys)}, do systemu ${esc(DEF.tgtSys)} używanego w ${esc(DEF.tgtCo)}. Razem z ekspertami obu systemów porównujemy praktykę obu spółek proces po procesie.</p>
-        <p>Wynik odpowiada na cztery pytania: czy migracja jest wykonalna, jakie są ryzyka, jakie zmiany procesów musi wprowadzić ${esc(DEF.srcCo)} i jaką wartość da przejście na wspólny system.</p>
+        <p>Aplikacja wspiera proces oceny możliwości migracji z systemu ${esc(DEF.srcSys)} do ${esc(DEF.tgtSys)} poprzez porównanie procesów biznesowych ${esc(DEF.srcCo)} i ${esc(DEF.tgtCo)}. Wspólnie z ekspertami obu systemów identyfikuje różnice procesowe, ryzyka, wymagane dostosowania oraz potencjalne korzyści biznesowe wynikające z wdrożenia wspólnego rozwiązania.</p>
         <ol class="method">${method.map((x, i) => `<li><span class="k">${i + 1}</span><span><b>${esc(x[0])}</b>${esc(x[1])}</span></li>`).join('')}</ol></div>
-      <div class="demo" aria-label="Skala oceny dopasowania"><h2>Jak oceniamy dopasowanie</h2><p>Punktem odniesienia jest szablon AX w ${esc(DEF.tgtCo)} – to, jak ${esc(DEF.tgtCo)} faktycznie pracuje w systemie. Każde wymaganie ${esc(DEF.srcCo)} dostaje jedną z ocen:</p>
-        <div class="sysmig"><div class="sysbox s"><small>${esc(DEF.srcCo)} · obecnie</small><b>${esc(DEF.srcSys)}</b><span>procesy i praktyka AS-IS</span></div><div class="sysarr">${ic('right')}</div><div class="sysbox t"><small>${esc(DEF.tgtCo)} · szablon docelowy</small><b>${esc(DEF.tgtSys)}</b><span>konfiguracja i procesy ${esc(DEF.tgtCo)}</span></div></div>
-        <ul class="scale5">${FIT.map(f => `<li>${fsTag(f.k)}<span>${esc(f.d)}</span></li>`).join('')}</ul></div>
+      <div class="demo" aria-label="Metodyka oceny dopasowania procesów"><h2>Metodyka oceny dopasowania procesów</h2>
+        <p>Punktem odniesienia dla oceny jest standard procesowy i konfiguracja systemu AX 2012 funkcjonujące w ${esc(DEF.tgtCo)}. Analiza polega na porównaniu rzeczywistych procesów i sposobu pracy ${esc(DEF.srcCo)} w systemie ${esc(DEF.srcSys)} (stan obecny – AS-IS) z rozwiązaniami stosowanymi w ${esc(DEF.tgtCo)} (model referencyjny – TO-BE).</p>
+        <div class="sysmig"><div class="sysbox s"><small>${esc(DEF.srcCo)}</small><b>AS-IS – ${esc(DEF.srcSys)}</b><span>Aktualne procesy biznesowe, wymagania i praktyki operacyjne.</span></div><div class="sysarr">${ic('right')}</div><div class="sysbox t"><small>${esc(DEF.tgtCo)}</small><b>Model referencyjny – AX 2012</b><span>Obowiązująca konfiguracja systemu, procesy i standardy operacyjne ${esc(DEF.tgtCo)}.</span></div></div>
+        <p>Każde wymaganie biznesowe ${esc(DEF.srcCo)} podlega indywidualnej ocenie według następującej skali:</p>
+        <h3 class="fn">Kategorie oceny dopasowania</h3>
+        <ul class="scale5">${FIT.map(f => `<li class="${f.k}"><i aria-hidden="true"></i><span><b>${esc(f.l)}</b> – ${esc(f.d)}</span></li>`).join('')}</ul></div>
     </div></div>
     <div class="card"><div class="cardb"><h2>${all.length ? 'Wybierz analizę' : 'Rozpocznij pierwszą analizę'}</h2><p class="blk">Każda analiza dotyczy jednej spółki przenoszonej do systemu docelowego. Zacznij od zakresu i zespołu, potem przejdź kolejne kroki analizy.</p>
       <div class="cogrid">${cards}${add}</div></div></div>
@@ -45,12 +47,12 @@ function renderStart() {
 
 /* ---------- krok 1: zakres i zespół ---------- */
 function step1(m) {
-  const c = m.co, id = ID.an(m.cid), e = ent(id) || {}, raw = f => e[f] != null ? coRaw(e[f]) : DEF[f];
+  const c = m.co, id = ID.an(m.cid), e = ent(id) || {}, raw = f => e[f] != null ? sysRaw(coRaw(e[f])) : DEF[f];
   const coSec = `<section class="sec"><div class="sech"><h2>${pic('arrows-left-right')}Dane analizy</h2><div class="acts"><button type="button" class="lnk del" data-act="an-del">${ic('trash')} Usuń analizę</button></div></div>
     <div class="secb fgrid">
       ${fld(rq('Nazwa analizy'), inpF(id, 'n', c.n, {max: 90, req: 1}), 'wide')}
       ${fld(rq('Spółka przenoszona'), inpF(id, 'srcCo', raw('srcCo'), {max: 40, req: 1, ph: 'np. ' + DEF.srcCo}), 'cc')}
-      ${fld(rq('System źródłowy'), inpF(id, 'srcSys', raw('srcSys'), {max: 60, req: 1, ph: 'np. Symfonia'}), 'cc')}
+      ${fld(rq('System źródłowy'), inpF(id, 'srcSys', raw('srcSys'), {max: 60, req: 1, ph: 'np. Symfonia ERP'}), 'cc')}
       ${fld(rq('Spółka z systemem docelowym'), inpF(id, 'tgtCo', raw('tgtCo'), {max: 40, req: 1, ph: 'np. ' + DEF.tgtCo}), 'cp')}
       ${fld(rq('System docelowy'), inpF(id, 'tgtSys', raw('tgtSys'), {max: 60, req: 1, ph: 'np. Axapta (AX 2012)'}), 'cp')}
       ${fld(rq('Sponsor analizy'), inpF(id, 'sp', fval(c, 'sp'), {ph: 'Imię i nazwisko, np. dyrektor generalny ' + c.srcCo, req: 1}))}
@@ -133,7 +135,7 @@ function procRow(m, p) {
         ${p.hm === 'N' || p.hm === 'P' ? `<span style="flex:1;min-width:240px">${inpF(id, 'hmj', fval(p, 'hmj'), {ph: 'Uzasadnienie specyfiki ' + c.srcCo + ' (np. produkcja, obsługa klienta)', label: 'Uzasadnienie specyfiki – ' + p.n, max: 400})}</span>` : ''}</div>
       <details class="more" data-act="pmore" data-p="${esc(p.k)}"${V.open['pm-' + p.k] || hasTxt ? ' open' : ''}><summary>Opis AS-IS, problemy i uwagi${hasTxt ? '' : ' <span class="faint" style="font-weight:400">(opcjonalnie)</span>'}</summary><div class="in">
         ${fld('Jak proces działa w ' + esc(c.srcCo) + ' (' + esc(c.srcSys) + ')', txtF(id, 'dcc', fval(p, 'dcc'), {rows: 3, ph: 'Kroki, dokumenty, role, obejścia w Excelu'}), 'cc')}
-        ${fld('Jak proces działa w ' + esc(c.tgtCo) + ' (' + esc(c.tgtSys) + ')', txtF(id, 'dcp', fval(p, 'dcp'), {rows: 3, ph: 'Szablon AX: konfiguracja, kroki, raporty'}), 'cp')}
+        ${fld('Jak proces działa w ' + esc(c.tgtCo) + ' (' + esc(c.tgtSys) + ')', txtF(id, 'dcp', fval(p, 'dcp'), {rows: 3, ph: 'Szablon AX 2012: konfiguracja, kroki, raporty'}), 'cp')}
         ${fld('Problemy i oczekiwania ' + esc(c.srcCo), txtF(id, 'pain', fval(p, 'pain'), {rows: 2, ph: 'Co dziś nie działa, czego oczekuje biznes'}))}
         ${fld('Uwagi', txtF(id, 'nt', fval(p, 'nt'), {rows: 2}))}</div></details></div>` : '';
   const edit = !p.cat && ed ? `<div class="edit">${fld('Nazwa procesu', inpF(id, 'n', p.n, {max: 160}))}${fld('Opis', txtF(id, 'd', fval(p, 'd'), {rows: 2}))}</div>` : '';
@@ -180,7 +182,7 @@ const MINE = '<span class="mineb">Twoja kolumna</span>';
 function qCols(m, r, rows) {
   const ri = ID.rq(m.cid, r.k), co = m.co, side = mySide(), need = r.gap && MISS.has(ri + '#cc');
   return `<div class="qcols"><label class="qcol cc"><span><span class="src">${esc(co.srcCo)} · ${esc(co.srcSys)}</span>${r.gap ? '<span class="rq" aria-hidden="true">*</span>' : ''}${side === 'cc' ? MINE : ''}</span>${txtF(ri, 'cc', fval(r, 'cc'), {rows, ph: 'Jak to robi ' + co.srcCo + ' dziś?', label: co.srcCo + ' – ' + r.code, req: r.gap, bad: need})}</label>
-    <label class="qcol cp"><span><span class="tgt">${esc(co.tgtCo)} · ${esc(co.tgtSys)}</span>${side === 'cp' ? MINE : ''}</span>${txtF(ri, 'cp', fval(r, 'cp'), {rows, ph: 'Jak to robi ' + co.tgtCo + ' w AX?', label: co.tgtCo + ' – ' + r.code})}</label></div>`;
+    <label class="qcol cp"><span><span class="tgt">${esc(co.tgtCo)} · ${esc(co.tgtSys)}</span>${side === 'cp' ? MINE : ''}</span>${txtF(ri, 'cp', fval(r, 'cp'), {rows, ph: 'Jak to robi ' + co.tgtCo + ' w AX 2012?', label: co.tgtCo + ' – ' + r.code})}</label></div>`;
 }
 function qRes(m, r) {
   if (!r.gap) return '';
@@ -196,7 +198,7 @@ function qCard(m, r) {
   const tools = !r.cat ? `<button type="button" class="lnk del" data-act="q-del" data-q="${esc(r.k)}">${ic('trash')} Usuń wymaganie</button>` : '';
   return `<div class="qc k-${r.st || 'U'}${bad ? ' bad' : ''}" id="q-${esc(r.k)}" data-key="q-${esc(r.k)}">
     <div class="qh"><div><div class="qt"><span class="qcode">${esc(r.code)}</span>${esc(r.t)} ${regTag(r)}${!r.cat ? ' <span class="custq">specyficzne</span>' : ''}</div>${hint}</div>
-      ${segB('q-st', r.st, FIT.map(f => [f.k, esc(f.n), f.k, f.d]), `data-q="${esc(r.k)}"`, 'st sm' + (bad ? ' bad' : ''))}</div>
+      ${segB('q-st', r.st, FIT.map(f => [f.k, esc(f.n), f.k, f.l + ' – ' + f.d]), `data-q="${esc(r.k)}"`, 'st sm' + (bad ? ' bad' : ''))}</div>
     ${qCols(m, r, 2)}${qRes(m, r)}
     ${(e && e.ts) || tools ? `<div class="qmeta">${lastBy(e)}${tools}</div>` : ''}</div>`;
 }
@@ -208,7 +210,7 @@ function focusView(m, s) {
   const r = list[i], p = r.proc, co = m.co, ri = ID.rq(m.cid, r.k), e = ent(ri);
   let prev = null; const dots = list.map(x => { const sep = prev && prev !== x.proc ? '<span class="sep"></span>' : ''; prev = x.proc;
     return sep + `<button type="button" class="${x.st || ''}" data-act="fq-go" data-q="${esc(x.k)}" data-tip="${esc(x.code + ' · ' + fitName(x.st))}" data-tip2="${esc(trunc(x.t, 120))}" aria-label="${esc(x.code + ': ' + fitName(x.st))}"${x.k === r.k ? ' aria-current="true"' : ''}></button>`; }).join('');
-  const big = FIT.map((f, j) => `<button type="button" class="${f.k}" data-act="q-st" data-q="${esc(r.k)}" data-v="${f.k}" aria-pressed="${r.st === f.k}" title="${esc(f.d)}"><b>${esc(f.n)}<span class="kb">${j + 1}</span></b><small>${esc(trunc(f.d, 70))}</small></button>`).join('');
+  const big = FIT.map((f, j) => `<button type="button" class="${f.k}" data-act="q-st" data-q="${esc(r.k)}" data-v="${f.k}" aria-pressed="${r.st === f.k}" title="${esc(f.l + ' – ' + f.d)}"><b>${esc(f.n)}<span class="kb">${j + 1}</span></b><small>${esc(trunc(f.d, 70))}</small></button>`).join('');
   return `<div class="qdots" role="group" aria-label="Pytania w obszarze">${dots}</div>
     <div class="focus" id="q-${esc(r.k)}" data-key="fq-${esc(r.k)}"><div class="fh"><span class="where">${tile(p.area, 's')}<b>${esc(p.area.n)}</b>${ic('right')}<span class="qcode">${esc(p.cd)}</span><b>${esc(p.n)}</b></span><span class="cnt">${i + 1} / ${list.length}</span></div>
       <div class="fb"><div><div class="fq"><span class="qcode">${esc(r.code)}</span>${esc(r.t)} ${regTag(r)}</div>${r.h ? `<div class="qhint" style="margin-top:6px">${ic('bulb')}<span>${esc(r.h)}</span></div>` : ''}</div>
@@ -259,7 +261,7 @@ function chgRow(m, r) {
   const ri = ID.rq(m.cid, r.k), co = m.co;
   return `<div class="grow2 chg${r.wd ? ' off' : ''}" id="g-${esc(r.k)}" data-key="c-${esc(r.k)}">
     <div class="gh"><div class="gt"><span class="qcode">${esc(r.code)}</span>${esc(r.t)}<small>${esc(r.proc.n)}</small></div><div class="chips">${fsTag(r.st)}${priTag(r.pri0)}${r.wd ? '<span class="tag">wycofane</span>' : ''}</div></div>
-    <div class="gans"><p><span class="src">${esc(co.srcCo)} dziś</span>${esc(trunc(r.cc, 280) || '–')}</p><p><span class="tgt">${esc(co.tgtCo)} w AX</span>${esc(trunc(r.cp, 280) || '–')}</p></div>
+    <div class="gans"><p><span class="src">${esc(co.srcCo)} dziś</span>${esc(trunc(r.cc, 280) || '–')}</p><p><span class="tgt">${esc(co.tgtCo)} w AX 2012</span>${esc(trunc(r.cp, 280) || '–')}</p></div>
     <div class="cf">${fld(rq('Co zmienia się w ' + esc(co.srcCo)), txtF(ri, 'chg', fval(r, 'chg'), {rows: 2, req: 1, ph: 'Nowy sposób pracy, dokumenty, role i odpowiedzialności'}))}${fld('Kogo dotyczy', inpF(ri, 'who', fval(r, 'who'), {ph: 'np. FSSC – zobowiązania, zakupy ' + co.srcCo + ', magazyn', max: 200}))}</div>
     <div class="cf2"><div><span class="lb">${rq('Skala zmiany')}</span>${segB('g-imp', r.imp || '', IMP.map(x => [x.v, x.v + ' – ' + x.n, x.v === 3 ? 'e' : x.v === 2 ? 'q' : 'y', x.d]), `data-q="${esc(r.k)}"`, 'sm' + (MISS.has('imp-' + r.k) ? ' bad' : ''))}</div>
       ${fld('Etap', selF(ri, 'ph', fval(r, 'ph'), D.phase.map(x => [x, x]), {empty: '–'}))}
@@ -310,14 +312,14 @@ function step6(m) {
     <div class="secb bcase"><div class="in">
       ${fld('Stawka (zł za osobodzień)', inpF(id, 'rate', fval(co, 'rate'), {num: 1, ph: 'np. 1 400', max: 12}))}
       ${fld('Nakład bazowy wdrożenia (osobodni)', inpF(id, 'base', fval(co, 'base'), {num: 1, ph: 'np. 180', max: 8}))}
-      ${fld('Inne koszty jednorazowe (zł)', inpF(id, 'oth', fval(co, 'oth'), {num: 1, ph: 'licencje AX, infrastruktura, archiwum', max: 14}))}
-      <p class="sm muted" style="grid-column:1/-1;margin:0">Nakład bazowy: utworzenie firmy ${esc(co.srcCo)} w AX, migracja danych, testy, szkolenia, uruchomienie i wsparcie powdrożeniowe – bez luk z kroku 4.</p>
+      ${fld('Inne koszty jednorazowe (zł)', inpF(id, 'oth', fval(co, 'oth'), {num: 1, ph: 'licencje AX 2012, infrastruktura, archiwum', max: 14}))}
+      <p class="sm muted" style="grid-column:1/-1;margin:0">Nakład bazowy: utworzenie firmy ${esc(co.srcCo)} w AX 2012, migracja danych, testy, szkolenia, uruchomienie i wsparcie powdrożeniowe – bez luk z kroku 4.</p>
       ${fld('Roczny koszt ' + esc(co.srcSys) + ' (zł)', inpF(id, 'symf', fval(co, 'symf'), {num: 1, ph: 'licencje, utrzymanie, wsparcie', max: 14}))}
-      ${fld('Roczny koszt AX dla ' + esc(co.srcCo) + ' (zł)', inpF(id, 'axc', fval(co, 'axc'), {num: 1, ph: 'licencje i utrzymanie po migracji', max: 14}))}
+      ${fld('Roczny koszt AX 2012 dla ' + esc(co.srcCo) + ' (zł)', inpF(id, 'axc', fval(co, 'axc'), {num: 1, ph: 'licencje i utrzymanie po migracji', max: 14}))}
     </div><div class="out">
       ${out('Pracochłonność luk', fnum(bc.gapMd) + ' md', 'z rejestru luk (krok 4)')}
       ${out('Nakład jednorazowy', bc.rate ? fpln(bc.oneOff) : '–', bc.rate ? '(' + fnum(bc.base) + ' + ' + fnum(bc.gapMd) + ' md) × ' + fnum(bc.rate) + ' zł + inne koszty' : 'podaj stawkę za osobodzień')}
-      ${out('Roczna zmiana kosztów IT', bc.symf || bc.axc ? fpln(bc.symf - bc.axc) : '–', 'koszt ' + co.srcSys + ' minus koszt AX dla ' + co.srcCo)}
+      ${out('Roczna zmiana kosztów IT', bc.symf || bc.axc ? fpln(bc.symf - bc.axc) : '–', 'koszt ' + co.srcSys + ' minus koszt AX 2012 dla ' + co.srcCo)}
       ${out('Korzyści wycenione', fpln(bc.benPln) + ' / rok', plural(bs.on.filter(b => num(b.pln)).length, ['{n} korzyść z kwotą', '{n} korzyści z kwotą', '{n} korzyści z kwotą']))}
       ${out('Efekt roczny razem', bc.any || bc.benPln ? fpln(bc.annual) : '–', '', 'tot')}
       ${out('Prosty okres zwrotu', bc.payback != null ? fnum(bc.payback, 1) + ' lat' : '–', bc.payback != null ? 'nakład jednorazowy ÷ efekt roczny' : 'wymaga nakładu i dodatniego efektu rocznego')}
@@ -345,7 +347,7 @@ function verdictPanel(m, v, opt) {
   const crit = [
     li(v.cov >= P.minCov ? 'ok' : 'wn', v.cov >= P.minCov ? 'checkc' : 'clock', `Pokrycie oceny: <b>${fpct(v.cov)}</b> – ocena ostateczna dla ${v.done} z ${esc(plural(v.tot, F_REQ))}${v.open ? `, do wyjaśnienia: ${v.open}` : ''}`),
     li(v.fi == null ? 'wn' : v.fi >= P.goFit ? 'ok' : v.fi >= P.condFit ? 'wn' : 'er', v.fi != null && v.fi >= P.goFit ? 'checkc' : 'warn', `Indeks dopasowania: <b>${fpct(v.fi)}</b> (rekomendacja od ${fpct(P.goFit)}, warunkowa od ${fpct(P.condFit)})`),
-    li(!v.crit.length ? 'ok' : v.crit.length <= P.condCrit ? 'wn' : 'er', !v.crit.length ? 'checkc' : 'warn', `Luki krytyczne: <b>${v.crit.length}</b> (Must, wymagające rozwoju AX, integracji albo obejścia)`),
+    li(!v.crit.length ? 'ok' : v.crit.length <= P.condCrit ? 'wn' : 'er', !v.crit.length ? 'checkc' : 'warn', `Luki krytyczne: <b>${v.crit.length}</b> (Must, wymagające rozwoju AX 2012, integracji albo obejścia)`),
     li(!v.rkNo.length ? 'ok' : 'er', !v.rkNo.length ? 'checkc' : 'warn', `Ryzyka krytyczne i wysokie bez działań: <b>${v.rkNo.length}</b> · krytyczne: ${v.rkCrit.length}, wysokie: ${v.rkHi.length}`),
     li(v.chgHi.length ? 'wn' : 'ok', v.chgHi.length ? 'info' : 'checkc', `Zmiany procesowe w ${esc(co.srcCo)}: <b>${v.chg.length}</b>${v.chgHi.length ? `, w tym o wysokiej skali: ${v.chgHi.length}` : ''}`),
     li('ok', 'info', `Szacowana pracochłonność luk: <b>${fnum(v.md)} osobodni</b>${v.noEff ? ` (bez oszacowania: ${v.noEff})` : ''}`)];

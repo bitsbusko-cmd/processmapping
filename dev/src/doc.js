@@ -41,8 +41,8 @@ function reportDoc(m) {
     ${m.areas.filter(a => a.on === 'N').length ? `<p class="sm muted">Poza zakresem: ${esc(m.areas.filter(a => a.on === 'N').map(a => a.n).join(', '))}.</p>` : ''}
     <h3>Zespół i uczestnicy</h3>${docTbl([['Imię i nazwisko'], ['Zespół'], ['Rola'], ['Obszary key usera']], m.people.map(p => `<tr><td>${esc(p.n)}</td><td>${esc(p.co || '')}</td><td>${esc(p.role || '')}</td><td class="sm">${esc(p.kas.map(x => x.n).join('; ') || '–')}</td></tr>`), 'Brak osób.')}
     <h3>Metoda oceny</h3><p>Punktem odniesienia jest szablon ${esc(co.tgtSys)} w ${esc(co.tgtCo)} – sposób, w jaki ${esc(co.tgtCo)} faktycznie pracuje w systemie. Dla każdego pytania z katalogu zapisano praktykę ${esc(co.srcCo)} i ${esc(co.tgtCo)} oraz ocenę dopasowania:</p>
-    <ul>${FIT.map(f => `<li><b>${esc(f.n)}</b> – ${esc(f.d)}</li>`).join('')}</ul>
-    <p>Indeks dopasowania to średnia ocen (Fit = 1, Częściowe = ${D.fitW.P}, Luka = 0) ważona priorytetem MoSCoW (Must ×${D.priW.M}, Should ×${D.priW.S}, Could ×${D.priW.C}). Luka krytyczna to luka o priorytecie Must, która wymaga rozwoju AX, integracji albo obejścia poza ERP.</p>`;
+    <ul>${FIT.map(f => `<li><b>${esc(f.l)}</b> – ${esc(f.d)}</li>`).join('')}</ul>
+    <p>Indeks dopasowania to średnia ocen (Fit = 1, Częściowe = ${D.fitW.P}, Luka = 0) ważona priorytetem MoSCoW (Must ×${D.priW.M}, Should ×${D.priW.S}, Could ×${D.priW.C}). Luka krytyczna to luka o priorytecie Must, która wymaga rozwoju AX 2012, integracji albo obejścia poza ERP.</p>`;
   /* 3. wyniki według obszarów */
   const byArea = `<h2>Wyniki według obszarów</h2>` + s.areas.map(a => { const rs = s.reqs.filter(r => r.a === a.k), c = cnt(rs), fi = fitIndex(rs), act = m.procs.filter(p => p.a === a.k && p.act);
     const keyG = rs.filter(r => r.gap && !r.wd && (r.crit || r.pri0 === 'M')).slice(0, 6);
@@ -66,7 +66,7 @@ function reportDoc(m) {
     ${bc.any || bc.gapMd ? `<h3>Szacunek nakładów (orientacyjny)</h3>${docTbl([['Pozycja'], ['Wartość', 1]], [
       `<tr><td>Nakład bazowy wdrożenia</td><td class="n">${fnum(bc.base)} md</td></tr>`, `<tr><td>Pracochłonność luk (rejestr luk)</td><td class="n">${fnum(bc.gapMd)} md</td></tr>`,
       `<tr><td>Stawka za osobodzień</td><td class="n">${bc.rate ? esc(fpln(bc.rate)) : '–'}</td></tr>`, `<tr><td>Inne koszty jednorazowe</td><td class="n">${esc(fpln(bc.other))}</td></tr>`,
-      `<tr><td><b>Nakład jednorazowy</b></td><td class="n"><b>${bc.rate ? esc(fpln(bc.oneOff)) : '–'}</b></td></tr>`, `<tr><td>Roczna zmiana kosztów IT (${esc(co.srcSys)} minus AX dla ${esc(co.srcCo)})</td><td class="n">${esc(fpln(bc.symf - bc.axc))}</td></tr>`,
+      `<tr><td><b>Nakład jednorazowy</b></td><td class="n"><b>${bc.rate ? esc(fpln(bc.oneOff)) : '–'}</b></td></tr>`, `<tr><td>Roczna zmiana kosztów IT (${esc(co.srcSys)} minus AX 2012 dla ${esc(co.srcCo)})</td><td class="n">${esc(fpln(bc.symf - bc.axc))}</td></tr>`,
       `<tr><td>Korzyści wycenione rocznie</td><td class="n">${esc(fpln(bc.benPln))}</td></tr>`, `<tr><td><b>Efekt roczny razem</b></td><td class="n"><b>${esc(fpln(bc.annual))}</b></td></tr>`,
       `<tr><td>Prosty okres zwrotu</td><td class="n">${bc.payback != null ? fnum(bc.payback, 1) + ' lat' : '–'}</td></tr>`])}<p class="sm muted">Szacunek do weryfikacji z partnerem wdrożeniowym i właścicielami kosztów.</p>` : ''}`;
   /* 8. pytania otwarte i następne kroki */
@@ -100,7 +100,7 @@ function agendaDoc(m, aid) {
     ${parts.length ? `<h3>Uczestnicy</h3><ul>${parts.map(p => `<li>${esc(p.n)}${p.co || p.role ? ' – ' + esc([p.co, p.role].filter(Boolean).join(', ')) : ''}</li>`).join('')}</ul>` : ''}
     <h2>Agenda</h2><ol>${plan.map(x => `<li>${esc(x)}</li>`).join('')}</ol>
     <h2>Pytania</h2>${qs || '<p>Brak procesów w obszarze – potwierdź je w kroku 2.</p>'}
-    <h2>Skala oceny</h2><ul>${FIT.map(f => `<li><b>${esc(f.n)}</b> – ${esc(f.d)}</li>`).join('')}</ul>
+    <h2>Skala oceny</h2><ul>${FIT.map(f => `<li><b>${esc(f.l)}</b> – ${esc(f.d)}</li>`).join('')}</ul>
     <div class="foot2">Dokument wewnętrzny · przygotowano ${esc(fdt(now()))} w narzędziu Analiza Fit-Gap ERP</div></article>`;
 }
 
