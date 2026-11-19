@@ -264,16 +264,40 @@ p.blk{margin:0 0 12px;color:var(--muted);font-size:.933rem;max-width:80ch}
 /* ---------- start ---------- */
 .hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:28px;padding:28px 32px;align-items:center}
 .hero h1{font-size:2rem;line-height:1.15;margin:0 0 12px;letter-spacing:-.015em}
+/* strona główna: opis i schemat migracji, przebieg analizy, metodyka oceny */
+.hero2 .hero{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;padding:30px 32px 26px}
+.hero2 .hero p{margin:0}
+.hero2 .lnk.more{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:.9rem;font-weight:600}
+.hero2 .lnk.more .ic{width:15px;height:15px}
+.hero2 .sysmig{margin:0}
+.flowb{border-top:1px solid var(--line);padding:18px 32px 24px}
+.flowb h2,.met h3{font-size:.773rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:16px;position:relative}
+.flow::before{content:"";position:absolute;left:12px;right:calc(100% / 7 - 12px);top:12px;height:2px;background:var(--line)}
+.flow li{position:relative;display:flex;flex-direction:column;gap:3px;font-size:.8rem;line-height:1.4;color:var(--muted)}
+.flow .k{width:26px;height:26px;border-radius:50%;background:var(--acc-bg);color:var(--acc);border:1.5px solid var(--acc-line);font:700 .8rem/23px var(--f);text-align:center;margin:-1px 0 8px;box-shadow:0 0 0 5px var(--paper)}
+.flow b{color:var(--ink);font-size:.9rem;line-height:1.3}
+#metodyka{scroll-margin-top:78px}
+.met .mtext{max-width:86ch;margin:6px 0 20px}
+.met .mtext p{margin:0 0 8px;color:var(--ink2);line-height:1.6}
+.cats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.cats li{--c:var(--fN);display:flex;flex-direction:column;gap:7px;border:1px solid var(--line);border-top:3px solid var(--c);border-radius:var(--r2);padding:13px 14px 14px;font-size:.833rem;line-height:1.5;color:var(--ink2)}
+.cats li b{display:flex;align-items:center;gap:8px;font-size:.9rem;line-height:1.3;color:var(--c)}
+.cats li b i{width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
+.cats li.F{--c:var(--fF)}.cats li.P{--c:var(--fP)}.cats li.G{--c:var(--fG)}.cats li.N{--c:var(--fN)}.cats li.O{--c:var(--fO)}
+table.ov.sum th,table.ov.sum th.n{white-space:normal;min-width:56px}
+table.ov.sum td.nm{min-width:220px}
+table.ov.sum .tag{line-height:1.35}
+@media screen and (max-width:1180px){
+  .flow{grid-template-columns:repeat(4,minmax(0,1fr));row-gap:20px}.flow::before{display:none}
+  .cats{grid-template-columns:minmax(0,1fr);gap:8px}
+  table.ov.sum .tag{white-space:normal;border-radius:7px;padding:2px 8px}
+  .cats li{display:grid;grid-template-columns:minmax(170px,230px) minmax(0,1fr);column-gap:20px;align-items:baseline;border-top:1px solid var(--line);border-left:3px solid var(--c);padding:11px 16px}
+}
+@media screen and (min-width:901px) and (max-width:1180px){
+  .hero2 .hero{gap:32px}.hero2 .sysmig{grid-template-columns:minmax(0,1fr);gap:4px}.hero2 .sysarr{transform:rotate(90deg);height:26px}
+}
 .hero p{margin:0 0 12px;color:var(--ink2);max-width:62ch;font-size:1.033rem}
-.hero p+ol{margin-top:18px}
-.method{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 14px}
-.method li{display:flex;gap:9px;align-items:flex-start;font-size:.867rem;color:var(--ink2);line-height:1.35}
-.method li b{display:block;color:var(--ink);font-size:.933rem}
-.method .k{width:22px;height:22px;border-radius:50%;background:var(--acc-bg);color:var(--acc);font:700 .8rem/22px var(--f);text-align:center;flex:none}
-.demo{background:var(--sunk);border-radius:var(--r3);padding:16px 18px 12px}
-.demo h2{font-size:.967rem;margin:0 0 2px}
-.demo p{font-size:.833rem;color:var(--muted);margin:0 0 10px}
-.demo .fn{font-size:.8rem;margin:10px 0 2px}
 .cogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin:0 0 8px}
 .cocard{display:flex;flex-direction:column;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);padding:16px 16px 14px;text-decoration:none;color:inherit;position:relative;min-height:176px}
 .cocard:hover{border-color:var(--acc);box-shadow:var(--sh)}
@@ -503,8 +527,7 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
   .side{display:none}
   .mselect{display:block;width:100%;margin:0 0 12px}
   .phead{padding:18px 16px 4px}.pane{padding:12px 16px 6px}.foot{padding:12px 16px 16px}
-  .hero{grid-template-columns:minmax(0,1fr);padding:22px 18px}.cardb{padding:18px 16px}
-  .method{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero,.hero2 .hero{grid-template-columns:minmax(0,1fr);gap:22px;padding:22px 18px}.cardb{padding:18px 16px}.flowb{padding:16px 18px 20px}
   .agrid,.fgrid,.acard .af,.rk .r2{grid-template-columns:minmax(0,1fr)}
   .prow .pf{grid-template-columns:minmax(0,1fr)}
   
@@ -516,7 +539,10 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .rtab thead{display:none}.rtab tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;padding:8px 0;border-top:1px solid var(--line)}.rtab td{border:0;padding:2px 0}.rtab td.rn{grid-column:1/-1}
 }
-@media screen and (max-width:520px){.seg{max-width:100%}.seg button{white-space:normal;text-align:left}.method{grid-template-columns:minmax(0,1fr)}.kpis{grid-template-columns:minmax(0,1fr)}}
+@media screen and (max-width:560px){.hero2 .sysmig{grid-template-columns:minmax(0,1fr)}.hero2 .sysarr{transform:rotate(90deg);height:30px}
+  .flow{grid-template-columns:minmax(0,1fr);row-gap:12px}.flow li{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:12px}.flow .k{grid-row:1/3;margin:0}
+  .cats li{display:flex;padding:12px 14px}table.ov.sum td.nm{min-width:180px}}
+@media screen and (max-width:520px){.seg{max-width:100%}.seg button{white-space:normal;text-align:left}.kpis{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* ---------- druk (wyniki) ---------- */
@@ -588,12 +614,6 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 .sysbox span{display:block;font-size:.8rem;color:var(--muted);margin-top:2px}
 .sysarr{display:grid;place-items:center;color:var(--muted)}
 .sysarr svg{width:30px;height:30px}
-.scale5{display:grid;gap:7px;margin:0;padding:0}
-.scale5 li{display:grid;grid-template-columns:8px minmax(0,1fr);gap:9px;align-items:start;font-size:.833rem;color:var(--ink2);list-style:none}
-.scale5 li>i{width:8px;height:8px;border-radius:50%;margin-top:6px;background:var(--muted)}
-.scale5 li.F>i{background:var(--fF)}.scale5 li.P>i{background:var(--fP)}.scale5 li.G>i{background:var(--fG)}.scale5 li.N>i{background:var(--fN)}.scale5 li.O>i{background:var(--fO)}
-.scale5 li b{color:var(--ink)}
-.demo h3.fn{font-size:.833rem;margin:12px 0 6px;color:var(--ink)}
 
 /* krok 1: zespół i uczestnicy */
 .ptab{width:100%;border-collapse:collapse;font-size:.9rem}
@@ -838,7 +858,6 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
   .amap .ar{grid-template-columns:minmax(0,1fr) 54px}.amap .ar .fbar{grid-column:1/-1;grid-row:2}
   .hbars .hb{grid-template-columns:110px minmax(0,1fr) 60px}
   .doc{padding:24px 18px}.doc .meta{grid-template-columns:minmax(0,1fr)}.doc .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .sysmig{grid-template-columns:minmax(0,1fr)}.sysarr{transform:rotate(90deg);height:30px}
 }
 /* zespół na węższym ekranie: obszar key usera w drugiej linii, na telefonie – osoba jako karta */
 @container (max-width:840px){
@@ -908,7 +927,7 @@ const PI = {"book-open-text":"<path d=\"M232,56V200H160a32,32,0,0,0-32,32V88a32,
 
 /* ===================== Fit-Gap ERP – rdzeń: konfiguracja, stan, model, ocena, synchronizacja ===================== */
 const D = JSON.parse(document.getElementById('data').textContent);
-const VER = '19.11.2026 16:35';
+const VER = '19.11.2026 16:48';
 const APP = 'fitgap-erp';
 const LS = 'fitgap:v1', LSK = 'fitgap:key', LSU = 'fitgap:ui';
 const $ = (s, r = document) => r.querySelector(s);
@@ -957,7 +976,8 @@ const sysCP = co => (co.tgtCo || DEF.tgtCo) + ' · ' + (co.tgtSys || DEF.tgtSys)
 const KU = D.roles.find(r => /^key user/i.test(r)) || '';
 /* dane z wersji 1.0: skróty spółek CC i CP, domyślna nazwa analizy i nazwy ról w narzędziu */
 const CO_OLD = {CC: DEF.srcCo, CP: DEF.tgtCo}, coRaw = v => CO_OLD[v] || v;
-const NAME_OLD = ['Migracja CC: Symfonia → AX 2012', 'Migracja Construction Chemicals: Symfonia → AX 2012'], SYS_OLD = {Symfonia: DEF.srcSys}, sysRaw = v => SYS_OLD[v] || v;
+const NAME_OLD = ['Migracja CC: Symfonia → AX 2012', 'Migracja Construction Chemicals: Symfonia → AX 2012'],
+  nameRaw = n => { const o = NAME_OLD.find(x => n.endsWith(x)); return o ? n.slice(0, n.length - o.length) + DEF.n : n; }, SYS_OLD = {Symfonia: DEF.srcSys}, sysRaw = v => SYS_OLD[v] || v;
 /* nazwy narzędzi z podpowiedzi wcześniejszych wersji: „Symfonia …” i „AX – …” */
 const ucFirst = s => { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); };
 const toolRaw = t => String(t).replace(/^Symfonia (?!ERP)/, 'Symfonia ERP ').replace(/^AX (?!2012)/, 'AX 2012 ');
@@ -1011,7 +1031,7 @@ function idx() {
 function analyses() {
   const X = idx(), out = [];
   Object.keys(X.an).forEach(k => { const e = X.an[k]; if (!e || e.del) return;
-    out.push(Object.assign({}, DEF, e, {k, n: (NAME_OLD.includes(norm(e.n)) ? DEF.n : norm(e.n)) || 'Analiza bez nazwy', srcCo: norm(coRaw(e.srcCo)) || DEF.srcCo, srcSys: norm(sysRaw(e.srcSys)) || DEF.srcSys, tgtCo: norm(coRaw(e.tgtCo)) || DEF.tgtCo, tgtSys: norm(e.tgtSys) || DEF.tgtSys})); });
+    out.push(Object.assign({}, DEF, e, {k, n: nameRaw(norm(e.n)) || 'Analiza bez nazwy', srcCo: norm(coRaw(e.srcCo)) || DEF.srcCo, srcSys: norm(sysRaw(e.srcSys)) || DEF.srcSys, tgtCo: norm(coRaw(e.tgtCo)) || DEF.tgtCo, tgtSys: norm(e.tgtSys) || DEF.tgtSys})); });
   return out.sort((a, b) => String(a.cr || '').localeCompare(String(b.cr || '')));
 }
 const analysis = cid => analyses().find(c => c.k === cid) || null;
@@ -1355,7 +1375,7 @@ function importJson(text) {
   Object.keys(o.e).forEach(id => { const b = o.e[id], a = S.e[id]; if (!ID_RE.test(id) || !b || !b.ts) return;
     if (a && a.del && !b.del) return;
     if (!a || (b.del && !a.del) || (b.ts || '') > (a.ts || '')) { S.e[id] = noMail(id, b); n++; } });
-  purgeSgid(); save(); render(); toast(`Wczytano dane${o.by ? ' – ' + o.by : ''}. Zaktualizowane wpisy: ${n}.`);
+  purgeSgid(); save(); render(); toast(`Wczytano dane${o.by ? ' – ' + Object.keys(TEAM_OLD).reduce((s, k) => s.replace(' · ' + k, ' · ' + TEAM_OLD[k]), String(o.by)) : ''}. Zaktualizowane wpisy: ${n}.`);
 }
 
 /* ===================== Fit-Gap ERP – komponenty interfejsu ===================== */
@@ -1634,6 +1654,8 @@ function helpHtml() {
 const noAreas = () => `<div class="empty"><b>Najpierw wskaż obszary objęte analizą</b>Procesy, ocenę dopasowania i luki prowadzimy dla obszarów w zakresie.<br><a class="btn pri" href="${href(1, '')}">Przejdź do kroku 1</a></div>`;
 function nextStep(m) { if (!m.inArea.length) return 1; for (let i = 1; i < NS; i++) if (required(m, i, '').length) return i; return NS; }
 const areaFilterChip = m => { const a = V.aid && m.ABY[V.aid]; return a ? `<span class="filt">${tile(a)}${esc(a.n)}<button type="button" data-act="area" data-a="" aria-label="Pokaż wszystkie obszary" title="Pokaż wszystkie obszary">${ic('x')}</button></span>` : ''; };
+/* nazwy systemów bez łamania wiersza w środku („AX 2012”, „Symfonia ERP”) */
+const nb = s => esc(s).replace(/AX 2012/g, 'AX&nbsp;2012').replace(/Symfonia ERP/g, 'Symfonia&nbsp;ERP');
 const sysTags = co => `<span class="src">${esc(sysCC(co))}</span> ${ic('right')} <span class="tgt">${esc(sysCP(co))}</span>`;
 const lastBy = x => x && x.ts ? `<span>Zmiana ${esc(fdt(x.ts))}${x.by ? ' · ' + esc(String(x.by).split(' · ')[0]) : ''}</span>` : '';
 const moreBtn = (key, n, shown) => n > shown || V.open[key] ? `<div class="tmore noprint"><button type="button" class="lnk" data-act="tog" data-k="${key}">${V.open[key] ? 'Zwiń listę' : 'Pokaż wszystkie (' + n + ')'}</button></div>` : '';
@@ -1645,7 +1667,7 @@ function renderStart() {
   const cards = all.map(c => { const m = model(c.k), pr = progress(m, ''), v = verdict(m, ''), last = lastChange(c.k);
     const st = c.sg ? ['ok', 'Zatwierdzona'] : pr.started ? ['acc', 'W toku · ' + pr.pct + '%'] : ['', 'Nie rozpoczęto'];
     return `<a class="cocard an${pr.done ? ' done' : ''}" href="${href(nextStep(m), '', c.k)}" data-key="an-${esc(c.k)}">
-      <div class="h"><span class="tile c-navy">${pic('arrows-left-right')}</span><b>${esc(c.n)}</b></div>
+      <div class="h"><span class="tile c-navy">${pic('arrows-left-right')}</span><b>${nb(c.n)}</b></div>
       <div class="sysl">${sysTags(c)}<span class="tag ${st[0]}">${esc(st[1])}</span></div>
       <div class="bar" role="progressbar" aria-label="Postęp analizy" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pr.pct}"><i style="width:${pr.pct}%"></i></div>
       <div class="kv"><span><b>${m.inArea.length}</b>obszary</span><span><b>${v.tot ? v.done + '/' + v.tot : '–'}</b>ocenione wymagania</span><span><b>${v.fi != null ? fpct(v.fi) : '–'}</b>dopasowanie</span></div>
@@ -1657,24 +1679,29 @@ function renderStart() {
   let overview = '';
   if (started.length) {
     const rows = started.map(({c, m}) => { const v = verdict(m, ''), pr = progress(m, '');
-      return `<tr class="click" data-act="go" data-href="${href(nextStep(m), '', c.k)}"><td class="nm">${esc(c.n)}<span class="sub">${esc(sysCC(c))} → ${esc(sysCP(c))}</span></td><td class="n">${m.inArea.length}</td><td class="n">${v.done}/${v.tot}</td><td class="n">${v.fi != null ? fpct(v.fi) : '–'}</td><td class="n">${v.gaps.length}</td><td class="n">${v.crit.length}</td><td class="n">${v.chg.length}</td><td class="n">${v.rkCrit.length + v.rkHi.length}</td><td>${VERDBY[c.rec] ? `<span class="tag ${c.rec === 'go' ? 'ok' : c.rec === 'cond' ? 'warn' : 'err'}">${esc(VERDBY[c.rec].n)}</span>` : `<span class="tag acc">${pr.pct}%</span>`}</td></tr>`; }).join('');
+      return `<tr class="click" data-act="go" data-href="${href(nextStep(m), '', c.k)}"><td class="nm">${nb(c.n)}<span class="sub">${nb(c.srcSys)} → ${nb(c.tgtSys)}</span></td><td class="n">${m.inArea.length}</td><td class="n">${v.done}/${v.tot}</td><td class="n">${v.fi != null ? fpct(v.fi) : '–'}</td><td class="n">${v.gaps.length}</td><td class="n">${v.crit.length}</td><td class="n">${v.chg.length}</td><td class="n">${v.rkCrit.length + v.rkHi.length}</td><td>${VERDBY[c.rec] ? `<span class="tag ${c.rec === 'go' ? 'ok' : c.rec === 'cond' ? 'warn' : 'err'}">${esc(VERDBY[c.rec].n)}</span>` : `<span class="tag acc">${pr.pct}%</span>`}</td></tr>`; }).join('');
     overview = `<div class="card"><div class="cardb"><h2>Przegląd zbiorczy</h2><p class="blk">Analizy w toku. Kliknij wiersz, aby przejść do analizy.</p>
-      <div class="tblwrap"><table class="ov"><thead><tr><th>Analiza</th><th class="n">Obszary</th><th class="n">Ocenione wymagania</th><th class="n">Indeks dopasowania</th><th class="n">Luki</th><th class="n">Krytyczne</th><th class="n">Zmiany w ${esc(DEF.srcCo)}</th><th class="n">Ryzyka wys./kryt.</th><th>Rekomendacja</th></tr></thead><tbody>${rows}</tbody></table></div></div></div>`;
+      <div class="tblwrap"><table class="ov sum"><thead><tr><th>Analiza</th><th class="n">Obszary</th><th class="n">Ocenione wymagania</th><th class="n">Indeks dopasowania</th><th class="n">Luki</th><th class="n">Luki krytyczne</th><th class="n">Zmiany procesowe</th><th class="n">Ryzyka wysokie i krytyczne</th><th>Rekomendacja</th></tr></thead><tbody>${rows}</tbody></table></div></div></div>`;
   }
-  return `<div class="card"><div class="hero">
-      <div><h1>Analiza Fit-Gap ERP</h1>
-        <p>Aplikacja wspiera proces oceny możliwości migracji z systemu ${esc(DEF.srcSys)} do ${esc(DEF.tgtSys)} poprzez porównanie procesów biznesowych ${esc(DEF.srcCo)} i ${esc(DEF.tgtCo)}. Wspólnie z ekspertami obu systemów identyfikuje różnice procesowe, ryzyka, wymagane dostosowania oraz potencjalne korzyści biznesowe wynikające z wdrożenia wspólnego rozwiązania.</p>
-        <ol class="method">${method.map((x, i) => `<li><span class="k">${i + 1}</span><span><b>${esc(x[0])}</b>${esc(x[1])}</span></li>`).join('')}</ol></div>
-      <div class="demo" aria-label="Metodyka oceny dopasowania procesów"><h2>Metodyka oceny dopasowania procesów</h2>
-        <p>Punktem odniesienia dla oceny jest standard procesowy i konfiguracja systemu AX 2012 funkcjonujące w ${esc(DEF.tgtCo)}. Analiza polega na porównaniu rzeczywistych procesów i sposobu pracy ${esc(DEF.srcCo)} w systemie ${esc(DEF.srcSys)} (stan obecny – AS-IS) z rozwiązaniami stosowanymi w ${esc(DEF.tgtCo)} (model referencyjny – TO-BE).</p>
-        <div class="sysmig"><div class="sysbox s"><small>${esc(DEF.srcCo)}</small><b>AS-IS – ${esc(DEF.srcSys)}</b><span>Aktualne procesy biznesowe, wymagania i praktyki operacyjne.</span></div><div class="sysarr">${ic('right')}</div><div class="sysbox t"><small>${esc(DEF.tgtCo)}</small><b>Model referencyjny – AX 2012</b><span>Obowiązująca konfiguracja systemu, procesy i standardy operacyjne ${esc(DEF.tgtCo)}.</span></div></div>
-        <p>Każde wymaganie biznesowe ${esc(DEF.srcCo)} podlega indywidualnej ocenie według następującej skali:</p>
-        <h3 class="fn">Kategorie oceny dopasowania</h3>
-        <ul class="scale5">${FIT.map(f => `<li class="${f.k}"><i aria-hidden="true"></i><span><b>${esc(f.l)}</b> – ${esc(f.d)}</span></li>`).join('')}</ul></div>
-    </div></div>
+  const flow = method.map((x, i) => `<li><span class="k">${i + 1}</span><b>${esc(x[0])}</b><span>${esc(x[1])}</span></li>`).join('');
+  const cats = FIT.map(f => `<li class="${f.k}"><b><i aria-hidden="true"></i>${esc(f.l)}</b><span>${nb(ucFirst(f.d))}</span></li>`).join('');
+  return `<div class="card hero2"><div class="hero">
+      <div class="ht"><h1>Analiza Fit-Gap ERP</h1>
+        <p>${nb('Aplikacja wspiera proces oceny możliwości migracji z systemu ' + DEF.srcSys + ' do ' + DEF.tgtSys + ' poprzez porównanie procesów biznesowych ' + DEF.srcCo + ' i ' + DEF.tgtCo + '. Wspólnie z ekspertami obu systemów identyfikuje różnice procesowe, ryzyka, wymagane dostosowania oraz potencjalne korzyści biznesowe wynikające z wdrożenia wspólnego rozwiązania.')}</p>
+        <a class="lnk more" href="#metodyka" data-act="to-met">Metodyka oceny dopasowania procesów ${ic('down')}</a></div>
+      <div class="sysmig" role="img" aria-label="${esc(DEF.srcCo)}: AS-IS – ${esc(DEF.srcSys)}; ${esc(DEF.tgtCo)}: model referencyjny – AX 2012">
+        <div class="sysbox s"><small>${esc(DEF.srcCo)}</small><b>${nb('AS-IS – ' + DEF.srcSys)}</b><span>Aktualne procesy biznesowe, wymagania i praktyki operacyjne.</span></div>
+        <div class="sysarr">${ic('right')}</div>
+        <div class="sysbox t"><small>${esc(DEF.tgtCo)}</small><b>Model referencyjny – AX&nbsp;2012</b><span>Obowiązująca konfiguracja systemu, procesy i standardy operacyjne ${esc(DEF.tgtCo)}.</span></div></div>
+    </div>
+    <div class="flowb"><h2>Przebieg analizy</h2><ol class="flow">${flow}</ol></div></div>
     <div class="card"><div class="cardb"><h2>${all.length ? 'Wybierz analizę' : 'Rozpocznij pierwszą analizę'}</h2><p class="blk">Każda analiza dotyczy jednej spółki przenoszonej do systemu docelowego. Zacznij od zakresu i zespołu, potem przejdź kolejne kroki analizy.</p>
       <div class="cogrid">${cards}${add}</div></div></div>
-    ${overview}`;
+    ${overview}
+    <div class="card" id="metodyka"><div class="cardb met"><h2>Metodyka oceny dopasowania procesów</h2>
+      <div class="mtext"><p>${nb('Punktem odniesienia dla oceny jest standard procesowy i konfiguracja systemu AX 2012 funkcjonujące w ' + DEF.tgtCo + '. Analiza polega na porównaniu rzeczywistych procesów i sposobu pracy ' + DEF.srcCo + ' w systemie ' + DEF.srcSys + ' (stan obecny – AS-IS) z rozwiązaniami stosowanymi w ' + DEF.tgtCo + ' (model referencyjny – TO-BE).')}</p>
+        <p>Każde wymaganie biznesowe ${esc(DEF.srcCo)} podlega indywidualnej ocenie według następującej skali:</p></div>
+      <h3>Kategorie oceny dopasowania</h3><ul class="cats">${cats}</ul></div></div>`;
 }
 
 /* ---------- krok 1: zakres i zespół ---------- */
@@ -2474,6 +2501,7 @@ document.addEventListener('click', ev => {
     case 'goto': if (d.r4) V.r4 = d.r4; else if (+d.step === 4) V.r4 = 'gap'; if (+d.step === 4) V.f4 = {res: '', pri: '', crit: false}; if (d.q) V.fq = d.q; V.jump = d.t || null; go(href(+d.step, d.a || '')); break;
     case 'addan': openModal('addan'); break;
     case 'area': go(href(V.step, d.a || '')); break;
+    case 'to-met': ev.preventDefault(); { const x = $('#metodyka'); if (x) x.scrollIntoView({behavior: 'smooth', block: 'start'}); } break;
     case 'an-del': deleteAnalysis(); break;
     /* krok 1 */
     case 'os-add': { const k = newId(); put(ID.os(V.cid, k), {n: '', cr: now()}); render(); focusSel(`#os-${CSS.escape(k)} input`); break; }

@@ -2,6 +2,8 @@
 const noAreas = () => `<div class="empty"><b>Najpierw wskaż obszary objęte analizą</b>Procesy, ocenę dopasowania i luki prowadzimy dla obszarów w zakresie.<br><a class="btn pri" href="${href(1, '')}">Przejdź do kroku 1</a></div>`;
 function nextStep(m) { if (!m.inArea.length) return 1; for (let i = 1; i < NS; i++) if (required(m, i, '').length) return i; return NS; }
 const areaFilterChip = m => { const a = V.aid && m.ABY[V.aid]; return a ? `<span class="filt">${tile(a)}${esc(a.n)}<button type="button" data-act="area" data-a="" aria-label="Pokaż wszystkie obszary" title="Pokaż wszystkie obszary">${ic('x')}</button></span>` : ''; };
+/* nazwy systemów bez łamania wiersza w środku („AX 2012”, „Symfonia ERP”) */
+const nb = s => esc(s).replace(/AX 2012/g, 'AX&nbsp;2012').replace(/Symfonia ERP/g, 'Symfonia&nbsp;ERP');
 const sysTags = co => `<span class="src">${esc(sysCC(co))}</span> ${ic('right')} <span class="tgt">${esc(sysCP(co))}</span>`;
 const lastBy = x => x && x.ts ? `<span>Zmiana ${esc(fdt(x.ts))}${x.by ? ' · ' + esc(String(x.by).split(' · ')[0]) : ''}</span>` : '';
 const moreBtn = (key, n, shown) => n > shown || V.open[key] ? `<div class="tmore noprint"><button type="button" class="lnk" data-act="tog" data-k="${key}">${V.open[key] ? 'Zwiń listę' : 'Pokaż wszystkie (' + n + ')'}</button></div>` : '';
@@ -13,7 +15,7 @@ function renderStart() {
   const cards = all.map(c => { const m = model(c.k), pr = progress(m, ''), v = verdict(m, ''), last = lastChange(c.k);
     const st = c.sg ? ['ok', 'Zatwierdzona'] : pr.started ? ['acc', 'W toku · ' + pr.pct + '%'] : ['', 'Nie rozpoczęto'];
     return `<a class="cocard an${pr.done ? ' done' : ''}" href="${href(nextStep(m), '', c.k)}" data-key="an-${esc(c.k)}">
-      <div class="h"><span class="tile c-navy">${pic('arrows-left-right')}</span><b>${esc(c.n)}</b></div>
+      <div class="h"><span class="tile c-navy">${pic('arrows-left-right')}</span><b>${nb(c.n)}</b></div>
       <div class="sysl">${sysTags(c)}<span class="tag ${st[0]}">${esc(st[1])}</span></div>
       <div class="bar" role="progressbar" aria-label="Postęp analizy" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pr.pct}"><i style="width:${pr.pct}%"></i></div>
       <div class="kv"><span><b>${m.inArea.length}</b>obszary</span><span><b>${v.tot ? v.done + '/' + v.tot : '–'}</b>ocenione wymagania</span><span><b>${v.fi != null ? fpct(v.fi) : '–'}</b>dopasowanie</span></div>
@@ -25,24 +27,29 @@ function renderStart() {
   let overview = '';
   if (started.length) {
     const rows = started.map(({c, m}) => { const v = verdict(m, ''), pr = progress(m, '');
-      return `<tr class="click" data-act="go" data-href="${href(nextStep(m), '', c.k)}"><td class="nm">${esc(c.n)}<span class="sub">${esc(sysCC(c))} → ${esc(sysCP(c))}</span></td><td class="n">${m.inArea.length}</td><td class="n">${v.done}/${v.tot}</td><td class="n">${v.fi != null ? fpct(v.fi) : '–'}</td><td class="n">${v.gaps.length}</td><td class="n">${v.crit.length}</td><td class="n">${v.chg.length}</td><td class="n">${v.rkCrit.length + v.rkHi.length}</td><td>${VERDBY[c.rec] ? `<span class="tag ${c.rec === 'go' ? 'ok' : c.rec === 'cond' ? 'warn' : 'err'}">${esc(VERDBY[c.rec].n)}</span>` : `<span class="tag acc">${pr.pct}%</span>`}</td></tr>`; }).join('');
+      return `<tr class="click" data-act="go" data-href="${href(nextStep(m), '', c.k)}"><td class="nm">${nb(c.n)}<span class="sub">${nb(c.srcSys)} → ${nb(c.tgtSys)}</span></td><td class="n">${m.inArea.length}</td><td class="n">${v.done}/${v.tot}</td><td class="n">${v.fi != null ? fpct(v.fi) : '–'}</td><td class="n">${v.gaps.length}</td><td class="n">${v.crit.length}</td><td class="n">${v.chg.length}</td><td class="n">${v.rkCrit.length + v.rkHi.length}</td><td>${VERDBY[c.rec] ? `<span class="tag ${c.rec === 'go' ? 'ok' : c.rec === 'cond' ? 'warn' : 'err'}">${esc(VERDBY[c.rec].n)}</span>` : `<span class="tag acc">${pr.pct}%</span>`}</td></tr>`; }).join('');
     overview = `<div class="card"><div class="cardb"><h2>Przegląd zbiorczy</h2><p class="blk">Analizy w toku. Kliknij wiersz, aby przejść do analizy.</p>
-      <div class="tblwrap"><table class="ov"><thead><tr><th>Analiza</th><th class="n">Obszary</th><th class="n">Ocenione wymagania</th><th class="n">Indeks dopasowania</th><th class="n">Luki</th><th class="n">Krytyczne</th><th class="n">Zmiany w ${esc(DEF.srcCo)}</th><th class="n">Ryzyka wys./kryt.</th><th>Rekomendacja</th></tr></thead><tbody>${rows}</tbody></table></div></div></div>`;
+      <div class="tblwrap"><table class="ov sum"><thead><tr><th>Analiza</th><th class="n">Obszary</th><th class="n">Ocenione wymagania</th><th class="n">Indeks dopasowania</th><th class="n">Luki</th><th class="n">Luki krytyczne</th><th class="n">Zmiany procesowe</th><th class="n">Ryzyka wysokie i krytyczne</th><th>Rekomendacja</th></tr></thead><tbody>${rows}</tbody></table></div></div></div>`;
   }
-  return `<div class="card"><div class="hero">
-      <div><h1>Analiza Fit-Gap ERP</h1>
-        <p>Aplikacja wspiera proces oceny możliwości migracji z systemu ${esc(DEF.srcSys)} do ${esc(DEF.tgtSys)} poprzez porównanie procesów biznesowych ${esc(DEF.srcCo)} i ${esc(DEF.tgtCo)}. Wspólnie z ekspertami obu systemów identyfikuje różnice procesowe, ryzyka, wymagane dostosowania oraz potencjalne korzyści biznesowe wynikające z wdrożenia wspólnego rozwiązania.</p>
-        <ol class="method">${method.map((x, i) => `<li><span class="k">${i + 1}</span><span><b>${esc(x[0])}</b>${esc(x[1])}</span></li>`).join('')}</ol></div>
-      <div class="demo" aria-label="Metodyka oceny dopasowania procesów"><h2>Metodyka oceny dopasowania procesów</h2>
-        <p>Punktem odniesienia dla oceny jest standard procesowy i konfiguracja systemu AX 2012 funkcjonujące w ${esc(DEF.tgtCo)}. Analiza polega na porównaniu rzeczywistych procesów i sposobu pracy ${esc(DEF.srcCo)} w systemie ${esc(DEF.srcSys)} (stan obecny – AS-IS) z rozwiązaniami stosowanymi w ${esc(DEF.tgtCo)} (model referencyjny – TO-BE).</p>
-        <div class="sysmig"><div class="sysbox s"><small>${esc(DEF.srcCo)}</small><b>AS-IS – ${esc(DEF.srcSys)}</b><span>Aktualne procesy biznesowe, wymagania i praktyki operacyjne.</span></div><div class="sysarr">${ic('right')}</div><div class="sysbox t"><small>${esc(DEF.tgtCo)}</small><b>Model referencyjny – AX 2012</b><span>Obowiązująca konfiguracja systemu, procesy i standardy operacyjne ${esc(DEF.tgtCo)}.</span></div></div>
-        <p>Każde wymaganie biznesowe ${esc(DEF.srcCo)} podlega indywidualnej ocenie według następującej skali:</p>
-        <h3 class="fn">Kategorie oceny dopasowania</h3>
-        <ul class="scale5">${FIT.map(f => `<li class="${f.k}"><i aria-hidden="true"></i><span><b>${esc(f.l)}</b> – ${esc(f.d)}</span></li>`).join('')}</ul></div>
-    </div></div>
+  const flow = method.map((x, i) => `<li><span class="k">${i + 1}</span><b>${esc(x[0])}</b><span>${esc(x[1])}</span></li>`).join('');
+  const cats = FIT.map(f => `<li class="${f.k}"><b><i aria-hidden="true"></i>${esc(f.l)}</b><span>${nb(ucFirst(f.d))}</span></li>`).join('');
+  return `<div class="card hero2"><div class="hero">
+      <div class="ht"><h1>Analiza Fit-Gap ERP</h1>
+        <p>${nb('Aplikacja wspiera proces oceny możliwości migracji z systemu ' + DEF.srcSys + ' do ' + DEF.tgtSys + ' poprzez porównanie procesów biznesowych ' + DEF.srcCo + ' i ' + DEF.tgtCo + '. Wspólnie z ekspertami obu systemów identyfikuje różnice procesowe, ryzyka, wymagane dostosowania oraz potencjalne korzyści biznesowe wynikające z wdrożenia wspólnego rozwiązania.')}</p>
+        <a class="lnk more" href="#metodyka" data-act="to-met">Metodyka oceny dopasowania procesów ${ic('down')}</a></div>
+      <div class="sysmig" role="img" aria-label="${esc(DEF.srcCo)}: AS-IS – ${esc(DEF.srcSys)}; ${esc(DEF.tgtCo)}: model referencyjny – AX 2012">
+        <div class="sysbox s"><small>${esc(DEF.srcCo)}</small><b>${nb('AS-IS – ' + DEF.srcSys)}</b><span>Aktualne procesy biznesowe, wymagania i praktyki operacyjne.</span></div>
+        <div class="sysarr">${ic('right')}</div>
+        <div class="sysbox t"><small>${esc(DEF.tgtCo)}</small><b>Model referencyjny – AX&nbsp;2012</b><span>Obowiązująca konfiguracja systemu, procesy i standardy operacyjne ${esc(DEF.tgtCo)}.</span></div></div>
+    </div>
+    <div class="flowb"><h2>Przebieg analizy</h2><ol class="flow">${flow}</ol></div></div>
     <div class="card"><div class="cardb"><h2>${all.length ? 'Wybierz analizę' : 'Rozpocznij pierwszą analizę'}</h2><p class="blk">Każda analiza dotyczy jednej spółki przenoszonej do systemu docelowego. Zacznij od zakresu i zespołu, potem przejdź kolejne kroki analizy.</p>
       <div class="cogrid">${cards}${add}</div></div></div>
-    ${overview}`;
+    ${overview}
+    <div class="card" id="metodyka"><div class="cardb met"><h2>Metodyka oceny dopasowania procesów</h2>
+      <div class="mtext"><p>${nb('Punktem odniesienia dla oceny jest standard procesowy i konfiguracja systemu AX 2012 funkcjonujące w ' + DEF.tgtCo + '. Analiza polega na porównaniu rzeczywistych procesów i sposobu pracy ' + DEF.srcCo + ' w systemie ' + DEF.srcSys + ' (stan obecny – AS-IS) z rozwiązaniami stosowanymi w ' + DEF.tgtCo + ' (model referencyjny – TO-BE).')}</p>
+        <p>Każde wymaganie biznesowe ${esc(DEF.srcCo)} podlega indywidualnej ocenie według następującej skali:</p></div>
+      <h3>Kategorie oceny dopasowania</h3><ul class="cats">${cats}</ul></div></div>`;
 }
 
 /* ---------- krok 1: zakres i zespół ---------- */

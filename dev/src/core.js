@@ -49,7 +49,8 @@ const sysCP = co => (co.tgtCo || DEF.tgtCo) + ' · ' + (co.tgtSys || DEF.tgtSys)
 const KU = D.roles.find(r => /^key user/i.test(r)) || '';
 /* dane z wersji 1.0: skróty spółek CC i CP, domyślna nazwa analizy i nazwy ról w narzędziu */
 const CO_OLD = {CC: DEF.srcCo, CP: DEF.tgtCo}, coRaw = v => CO_OLD[v] || v;
-const NAME_OLD = ['Migracja CC: Symfonia → AX 2012', 'Migracja Construction Chemicals: Symfonia → AX 2012'], SYS_OLD = {Symfonia: DEF.srcSys}, sysRaw = v => SYS_OLD[v] || v;
+const NAME_OLD = ['Migracja CC: Symfonia → AX 2012', 'Migracja Construction Chemicals: Symfonia → AX 2012'],
+  nameRaw = n => { const o = NAME_OLD.find(x => n.endsWith(x)); return o ? n.slice(0, n.length - o.length) + DEF.n : n; }, SYS_OLD = {Symfonia: DEF.srcSys}, sysRaw = v => SYS_OLD[v] || v;
 /* nazwy narzędzi z podpowiedzi wcześniejszych wersji: „Symfonia …” i „AX – …” */
 const ucFirst = s => { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); };
 const toolRaw = t => String(t).replace(/^Symfonia (?!ERP)/, 'Symfonia ERP ').replace(/^AX (?!2012)/, 'AX 2012 ');
@@ -103,7 +104,7 @@ function idx() {
 function analyses() {
   const X = idx(), out = [];
   Object.keys(X.an).forEach(k => { const e = X.an[k]; if (!e || e.del) return;
-    out.push(Object.assign({}, DEF, e, {k, n: (NAME_OLD.includes(norm(e.n)) ? DEF.n : norm(e.n)) || 'Analiza bez nazwy', srcCo: norm(coRaw(e.srcCo)) || DEF.srcCo, srcSys: norm(sysRaw(e.srcSys)) || DEF.srcSys, tgtCo: norm(coRaw(e.tgtCo)) || DEF.tgtCo, tgtSys: norm(e.tgtSys) || DEF.tgtSys})); });
+    out.push(Object.assign({}, DEF, e, {k, n: nameRaw(norm(e.n)) || 'Analiza bez nazwy', srcCo: norm(coRaw(e.srcCo)) || DEF.srcCo, srcSys: norm(sysRaw(e.srcSys)) || DEF.srcSys, tgtCo: norm(coRaw(e.tgtCo)) || DEF.tgtCo, tgtSys: norm(e.tgtSys) || DEF.tgtSys})); });
   return out.sort((a, b) => String(a.cr || '').localeCompare(String(b.cr || '')));
 }
 const analysis = cid => analyses().find(c => c.k === cid) || null;
@@ -447,5 +448,5 @@ function importJson(text) {
   Object.keys(o.e).forEach(id => { const b = o.e[id], a = S.e[id]; if (!ID_RE.test(id) || !b || !b.ts) return;
     if (a && a.del && !b.del) return;
     if (!a || (b.del && !a.del) || (b.ts || '') > (a.ts || '')) { S.e[id] = noMail(id, b); n++; } });
-  purgeSgid(); save(); render(); toast(`Wczytano dane${o.by ? ' – ' + o.by : ''}. Zaktualizowane wpisy: ${n}.`);
+  purgeSgid(); save(); render(); toast(`Wczytano dane${o.by ? ' – ' + Object.keys(TEAM_OLD).reduce((s, k) => s.replace(' · ' + k, ' · ' + TEAM_OLD[k]), String(o.by)) : ''}. Zaktualizowane wpisy: ${n}.`);
 }
