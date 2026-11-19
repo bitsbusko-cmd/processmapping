@@ -268,18 +268,18 @@ p.blk{margin:0 0 12px;color:var(--muted);font-size:.933rem;max-width:80ch}
 .mig .arr{display:grid;place-items:center}
 .mig .arr i{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--paper);border:1px solid var(--line);color:var(--muted)}
 .mig .arr .ic{width:16px;height:16px;vertical-align:0}
-.st-met{border-top:1px solid var(--line)}
-.st-met>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 36px;cursor:pointer;list-style:none}
-.st-met>summary::-webkit-details-marker{display:none}
-.st-met>summary:hover{background:var(--hover)}
-.st-met>summary:focus-visible{outline-offset:-3px;border-radius:0}
-.st-met>summary h2{margin:0}
-.st-met .tgl{display:inline-flex;align-items:center;gap:6px;flex:none;color:var(--acc);font-size:.867rem;font-weight:600}
-.st-met .tgl .ic{width:18px;height:18px;transition:transform .2s}
-.st-met[open] .tgl .ic{transform:rotate(180deg)}
-.st-met[open] .tgl .c,.st-met:not([open]) .tgl .o{display:none}
-.st-metb{padding:0 36px 34px}
-.st-met h2,.st-flow h2{font-size:1.2rem;margin:0 0 10px}
+/* sekcje zwijane w karcie nagłówka: metodyka oceny i przebieg analizy */
+.st-coll{border-top:1px solid var(--line)}
+.st-coll>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 36px;cursor:pointer;list-style:none}
+.st-coll>summary::-webkit-details-marker{display:none}
+.st-coll>summary:hover{background:var(--hover)}
+.st-coll>summary:focus-visible{outline-offset:-3px;border-radius:0}
+.st-coll>summary h2{font-size:1.2rem;margin:0}
+.st-coll .tgl{display:inline-flex;align-items:center;gap:6px;flex:none;color:var(--acc);font-size:.867rem;font-weight:600}
+.st-coll .tgl .ic{width:18px;height:18px;transition:transform .2s}
+.st-coll[open] .tgl .ic{transform:rotate(180deg)}
+.st-coll[open] .tgl .c,.st-coll:not([open]) .tgl .o{display:none}
+.st-collb{padding:0 36px 34px}
 .st-met .mtext{max-width:92ch;margin:0 0 24px}
 .st-met .mtext p{margin:0 0 8px;color:var(--ink2);line-height:1.62}
 .st-met h3{font-size:.773rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
@@ -289,9 +289,8 @@ p.blk{margin:0 0 12px;color:var(--muted);font-size:.933rem;max-width:80ch}
 .cats .bdg{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--paper);color:var(--c);box-shadow:inset 0 0 0 1px var(--line),0 1px 2px rgba(21,35,58,.06);margin-bottom:8px}
 .cats .bdg .ic{width:19px;height:19px;stroke-width:2.4;vertical-align:0}
 .cats b{font-size:.933rem;line-height:1.3;color:var(--ink)}
-.st-flow{padding:28px 36px 34px;border-top:1px solid var(--line)}
 .cardb.st-sec{padding:26px 36px 30px}
-.flow{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:16px;position:relative}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:16px;position:relative}
 .flow::before{content:"";position:absolute;left:14px;right:calc(100% / 7 - 14px);top:13px;height:2px;background:var(--line)}
 .flow li{position:relative;display:flex;flex-direction:column;gap:3px;font-size:.8rem;line-height:1.45;color:var(--muted)}
 .flow .k{width:28px;height:28px;border-radius:50%;background:var(--acc-bg);color:var(--acc);border:1.5px solid var(--acc-line);font:700 .8rem/25px var(--f);text-align:center;margin:0 0 10px;box-shadow:0 0 0 5px var(--paper)}
@@ -311,7 +310,7 @@ table.ov.sum .tag{line-height:1.35}
 @media screen and (max-width:900px){
   .st-top{grid-template-columns:minmax(0,1fr);gap:26px;padding:26px 20px 24px}
   .mig{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr);grid-template-rows:auto}.mig .arr i{transform:none}
-  .st-flow{padding:24px 20px 26px}.st-met>summary{padding:20px}.st-metb{padding:0 20px 26px}.cardb.st-sec{padding:20px 20px 24px}
+  .st-coll>summary{padding:20px}.st-collb{padding:0 20px 26px}.cardb.st-sec{padding:20px 20px 24px}
   .cats li{grid-template-columns:36px minmax(0,1fr);row-gap:3px;align-items:start;background:linear-gradient(90deg,var(--cb) 0,var(--paper) 70%)}.cats li .d{grid-column:2}
 }
 @media screen and (max-width:560px){
