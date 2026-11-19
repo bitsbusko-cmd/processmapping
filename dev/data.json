@@ -12,31 +12,36 @@
    "k": "F",
    "n": "Fit",
    "l": "Fit (pełne dopasowanie)",
-   "d": "standard AX 2012 stosowany w Construction Products w pełni obsługuje dane wymaganie. Nie są wymagane dodatkowe zmiany systemowe ani procesowe."
+   "d": "standard AX 2012 stosowany w Construction Products w pełni obsługuje dane wymaganie. Nie są wymagane dodatkowe zmiany systemowe ani procesowe.",
+   "u": "standard docelowego systemu ERP stosowany w docelowej jednostce organizacyjnej w pełni obsługuje dane wymaganie. Nie są wymagane dodatkowe zmiany systemowe ani procesowe."
   },
   {
    "k": "P",
    "n": "Częściowe",
    "l": "Częściowe dopasowanie",
-   "d": "wymaganie może zostać obsłużone w AX 2012 po wprowadzeniu zmian konfiguracyjnych, uzupełnieniu danych lub niewielkim dostosowaniu sposobu realizacji procesu."
+   "d": "wymaganie może zostać obsłużone w AX 2012 po wprowadzeniu zmian konfiguracyjnych, uzupełnieniu danych lub niewielkim dostosowaniu sposobu realizacji procesu.",
+   "u": "wymaganie może zostać obsłużone w docelowym systemie ERP po wprowadzeniu zmian konfiguracyjnych, uzupełnieniu danych lub niewielkim dostosowaniu sposobu realizacji procesu."
   },
   {
    "k": "G",
    "n": "Luka",
    "l": "Luka (brak dopasowania)",
-   "d": "obecny standard AX 2012 nie zapewnia obsługi danego wymagania. Konieczne jest rozważenie zmiany procesu biznesowego, rozwoju systemu, wdrożenia integracji lub zastosowania rozwiązania alternatywnego."
+   "d": "obecny standard AX 2012 nie zapewnia obsługi danego wymagania. Konieczne jest rozważenie zmiany procesu biznesowego, rozwoju systemu, wdrożenia integracji lub zastosowania rozwiązania alternatywnego.",
+   "u": "obecny standard docelowego systemu ERP nie zapewnia obsługi danego wymagania. Konieczne jest rozważenie zmiany procesu biznesowego, rozwoju systemu, wdrożenia integracji lub zastosowania rozwiązania alternatywnego."
   },
   {
    "k": "N",
    "n": "N/D",
    "l": "N/D (nie dotyczy)",
-   "d": "wymaganie nie występuje w procesach biznesowych Construction Chemicals lub nie ma zastosowania w analizowanym obszarze."
+   "d": "wymaganie nie występuje w procesach biznesowych Construction Chemicals lub nie ma zastosowania w analizowanym obszarze.",
+   "u": "wymaganie nie występuje w procesach biznesowych źródłowej jednostki organizacyjnej lub nie ma zastosowania w analizowanym obszarze."
   },
   {
    "k": "O",
    "n": "Do wyjaśnienia",
    "l": "Do wyjaśnienia",
-   "d": "dostępne informacje są niewystarczające do jednoznacznej oceny. Wymaganie pozostaje otwarte do dalszej analizy i uzgodnienia z ekspertami obu spółek."
+   "d": "dostępne informacje są niewystarczające do jednoznacznej oceny. Wymaganie pozostaje otwarte do dalszej analizy i uzgodnienia z ekspertami obu spółek.",
+   "u": "dostępne informacje są niewystarczające do jednoznacznej oceny. Wymaganie pozostaje otwarte do dalszej analizy i uzgodnienia z ekspertami obu jednostek organizacyjnych."
   }
  ],
  "res": [

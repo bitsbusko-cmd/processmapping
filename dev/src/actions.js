@@ -147,7 +147,6 @@ document.addEventListener('click', ev => {
     case 'goto': if (d.r4) V.r4 = d.r4; else if (+d.step === 4) V.r4 = 'gap'; if (+d.step === 4) V.f4 = {res: '', pri: '', crit: false}; if (d.q) V.fq = d.q; V.jump = d.t || null; go(href(+d.step, d.a || '')); break;
     case 'addan': openModal('addan'); break;
     case 'area': go(href(V.step, d.a || '')); break;
-    case 'to-met': ev.preventDefault(); { const x = $('#metodyka'); if (x) x.scrollIntoView({behavior: 'smooth', block: 'start'}); } break;
     case 'an-del': deleteAnalysis(); break;
     /* krok 1 */
     case 'os-add': { const k = newId(); put(ID.os(V.cid, k), {n: '', cr: now()}); render(); focusSel(`#os-${CSS.escape(k)} input`); break; }

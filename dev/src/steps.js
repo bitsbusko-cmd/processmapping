@@ -10,6 +10,8 @@ const moreBtn = (key, n, shown) => n > shown || V.open[key] ? `<div class="tmore
 const cap = (key, list, n) => V.open[key] ? list : list.slice(0, n);
 
 /* ---------- strona startowa ---------- */
+const CATIC = {F: '<path d="M19 7 9.5 16.5 5 12"/>', P: '<circle cx="12" cy="12" r="7"/><path d="M12 5a7 7 0 0 1 0 14z" fill="currentColor" stroke="none"/>',
+  G: '<path d="M17 7 7 17M7 7l10 10"/>', N: '<path d="M6.5 12h11"/>', O: '<path d="M9.3 9.2a2.8 2.8 0 1 1 3.9 2.6c-.7.3-1.2 1-1.2 1.7v.6"/><path d="M12 17.6h.01"/>'};
 function renderStart() {
   const all = analyses();
   const cards = all.map(c => { const m = model(c.k), pr = progress(m, ''), v = verdict(m, ''), last = lastChange(c.k);
@@ -21,35 +23,37 @@ function renderStart() {
       <div class="kv"><span><b>${m.inArea.length}</b>obszary</span><span><b>${v.tot ? v.done + '/' + v.tot : '–'}</b>ocenione wymagania</span><span><b>${v.fi != null ? fpct(v.fi) : '–'}</b>dopasowanie</span></div>
       <div class="ft"><span>${last ? 'Zmiana ' + esc(fdt(last.ts)) + (last.by ? ' · ' + esc(String(last.by).split(' · ')[0]) : '') : 'Brak danych'}</span><span class="lnk">${pr.started ? 'Kontynuuj' : 'Rozpocznij'}</span></div></a>`; }).join('');
   const add = `<button type="button" class="cocard add" data-act="addan" data-key="an-add">${ic('plus')}Nowa analiza fit-gap</button>`;
-  const method = [['Zakres i zespół', 'obszary, eksperci obu stron, uczestnicy, agenda i pytania'], ['Procesy AS-IS', 'procesy, właściciele, narzędzia, wolumeny'], ['Ocena fit-gap', 'praktyka obu spółek i ocena dopasowania'],
-    ['Luki i zmiany', 'rozwiązania, pracochłonność, zmiany w ' + DEF.srcCo], ['Ryzyka', 'ocena, właściciele i działania'], ['Wartość dodana', 'korzyści i szacunek nakładów'], ['Wynik', 'rekomendacja, akceptacje i raport końcowy']];
+  const method = [['Zakres i zespół', 'obszary, eksperci obu stron, uczestnicy, agenda i pytania'], ['Procesy AS-IS', 'procesy, właściciele, narzędzia, wolumeny'], ['Ocena fit-gap', 'praktyka obu jednostek i ocena dopasowania'],
+    ['Luki i zmiany', 'rozwiązania, pracochłonność, zmiany w źródłowej jednostce organizacyjnej'], ['Ryzyka', 'ocena, właściciele i działania'], ['Wartość dodana', 'korzyści i szacunek nakładów'], ['Wynik', 'rekomendacja, akceptacje i raport końcowy']];
   const started = all.map(c => ({c, m: model(c.k)})).filter(x => progress(x.m, '').started);
   let overview = '';
   if (started.length) {
     const rows = started.map(({c, m}) => { const v = verdict(m, ''), pr = progress(m, '');
       return `<tr class="click" data-act="go" data-href="${href(nextStep(m), '', c.k)}"><td class="nm">${nb(c.n)}<span class="sub">${nb(c.srcSys)} → ${nb(c.tgtSys)}</span></td><td class="n">${m.inArea.length}</td><td class="n">${v.done}/${v.tot}</td><td class="n">${v.fi != null ? fpct(v.fi) : '–'}</td><td class="n">${v.gaps.length}</td><td class="n">${v.crit.length}</td><td class="n">${v.chg.length}</td><td class="n">${v.rkCrit.length + v.rkHi.length}</td><td>${VERDBY[c.rec] ? `<span class="tag ${c.rec === 'go' ? 'ok' : c.rec === 'cond' ? 'warn' : 'err'}">${esc(VERDBY[c.rec].n)}</span>` : `<span class="tag acc">${pr.pct}%</span>`}</td></tr>`; }).join('');
-    overview = `<div class="card"><div class="cardb"><h2>Przegląd zbiorczy</h2><p class="blk">Analizy w toku. Kliknij wiersz, aby przejść do analizy.</p>
+    overview = `<div class="card"><div class="cardb st-sec"><h2>Przegląd zbiorczy</h2><p class="blk">Analizy w toku. Kliknij wiersz, aby przejść do analizy.</p>
       <div class="tblwrap"><table class="ov sum"><thead><tr><th>Analiza</th><th class="n">Obszary</th><th class="n">Ocenione wymagania</th><th class="n">Indeks dopasowania</th><th class="n">Luki</th><th class="n">Luki krytyczne</th><th class="n">Zmiany procesowe</th><th class="n">Ryzyka wysokie i krytyczne</th><th>Rekomendacja</th></tr></thead><tbody>${rows}</tbody></table></div></div></div>`;
   }
   const flow = method.map((x, i) => `<li><span class="k">${i + 1}</span><b>${esc(x[0])}</b><span>${esc(x[1])}</span></li>`).join('');
-  const cats = FIT.map(f => `<li class="${f.k}"><b><i aria-hidden="true"></i>${esc(f.l)}</b><span>${nb(ucFirst(f.d))}</span></li>`).join('');
-  return `<div class="card hero2"><div class="hero">
-      <div class="ht"><h1>Analiza Fit-Gap ERP</h1>
-        <p>${nb('Aplikacja wspiera proces oceny możliwości migracji z systemu ' + DEF.srcSys + ' do ' + DEF.tgtSys + ' poprzez porównanie procesów biznesowych ' + DEF.srcCo + ' i ' + DEF.tgtCo + '. Wspólnie z ekspertami obu systemów identyfikuje różnice procesowe, ryzyka, wymagane dostosowania oraz potencjalne korzyści biznesowe wynikające z wdrożenia wspólnego rozwiązania.')}</p>
-        <a class="lnk more" href="#metodyka" data-act="to-met">Metodyka oceny dopasowania procesów ${ic('down')}</a></div>
-      <div class="sysmig" role="img" aria-label="${esc(DEF.srcCo)}: AS-IS – ${esc(DEF.srcSys)}; ${esc(DEF.tgtCo)}: model referencyjny – AX 2012">
-        <div class="sysbox s"><small>${esc(DEF.srcCo)}</small><b>${nb('AS-IS – ' + DEF.srcSys)}</b><span>Aktualne procesy biznesowe, wymagania i praktyki operacyjne.</span></div>
-        <div class="sysarr">${ic('right')}</div>
-        <div class="sysbox t"><small>${esc(DEF.tgtCo)}</small><b>Model referencyjny – AX&nbsp;2012</b><span>Obowiązująca konfiguracja systemu, procesy i standardy operacyjne ${esc(DEF.tgtCo)}.</span></div></div>
+  const cats = FIT.map(f => `<li class="${f.k}"><span class="bdg" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24">${CATIC[f.k] || ''}</svg></span><b>${esc(f.l)}</b><span class="d">${esc(ucFirst(f.u || f.d))}</span></li>`).join('');
+  return `<div class="card sthero">
+    <div class="st-top">
+      <div class="st-int"><h1>Analiza Fit-Gap ERP</h1>
+        <p>Aplikacja wspiera proces oceny możliwości migracji ze źródłowego do docelowego systemu ERP poprzez porównanie procesów biznesowych źródłowej i docelowej jednostki organizacyjnej. Wspólnie z ekspertami obu systemów identyfikuje różnice procesowe, ryzyka, wymagane dostosowania oraz potencjalne korzyści biznesowe wynikające z wdrożenia wspólnego rozwiązania.</p></div>
+      <div class="mig" role="img" aria-label="Źródłowa jednostka organizacyjna: AS-IS – źródłowy system ERP. Docelowa jednostka organizacyjna: model referencyjny – docelowy system ERP.">
+        <div class="node s"><span class="tile">${pic('buildings')}</span><small>Źródłowa jednostka organizacyjna</small><b>AS-IS – źródłowy system&nbsp;ERP</b><span>Aktualne procesy biznesowe, wymagania i praktyki operacyjne.</span></div>
+        <div class="arr"><i>${ic('right')}</i></div>
+        <div class="node t"><span class="tile">${pic('seal-check')}</span><small>Docelowa jednostka organizacyjna</small><b>Model referencyjny – docelowy system&nbsp;ERP</b><span>Obowiązująca konfiguracja systemu, procesy i standardy operacyjne docelowej jednostki organizacyjnej.</span></div>
+      </div>
     </div>
-    <div class="flowb"><h2>Przebieg analizy</h2><ol class="flow">${flow}</ol></div></div>
-    <div class="card"><div class="cardb"><h2>${all.length ? 'Wybierz analizę' : 'Rozpocznij pierwszą analizę'}</h2><p class="blk">Każda analiza dotyczy jednej spółki przenoszonej do systemu docelowego. Zacznij od zakresu i zespołu, potem przejdź kolejne kroki analizy.</p>
-      <div class="cogrid">${cards}${add}</div></div></div>
-    ${overview}
-    <div class="card" id="metodyka"><div class="cardb met"><h2>Metodyka oceny dopasowania procesów</h2>
-      <div class="mtext"><p>${nb('Punktem odniesienia dla oceny jest standard procesowy i konfiguracja systemu AX 2012 funkcjonujące w ' + DEF.tgtCo + '. Analiza polega na porównaniu rzeczywistych procesów i sposobu pracy ' + DEF.srcCo + ' w systemie ' + DEF.srcSys + ' (stan obecny – AS-IS) z rozwiązaniami stosowanymi w ' + DEF.tgtCo + ' (model referencyjny – TO-BE).')}</p>
-        <p>Każde wymaganie biznesowe ${esc(DEF.srcCo)} podlega indywidualnej ocenie według następującej skali:</p></div>
-      <h3>Kategorie oceny dopasowania</h3><ul class="cats">${cats}</ul></div></div>`;
+    <div class="st-met"><h2>Metodyka oceny dopasowania procesów</h2>
+      <div class="mtext"><p>Punktem odniesienia dla oceny jest standard procesowy i konfiguracja docelowego systemu ERP funkcjonujące w docelowej jednostce organizacyjnej. Analiza polega na porównaniu rzeczywistych procesów i sposobu pracy źródłowej jednostki organizacyjnej w źródłowym systemie ERP (stan obecny – AS-IS) z rozwiązaniami stosowanymi w docelowej jednostce organizacyjnej (model referencyjny – TO-BE).</p>
+        <p>Każde wymaganie biznesowe źródłowej jednostki organizacyjnej podlega indywidualnej ocenie według następującej skali:</p></div>
+      <h3>Kategorie oceny dopasowania</h3><ul class="cats">${cats}</ul></div>
+  </div>
+  <div class="card"><div class="cardb st-flow"><h2>Przebieg analizy</h2><ol class="flow">${flow}</ol></div></div>
+  <div class="card"><div class="cardb st-sec"><h2>${all.length ? 'Wybierz analizę' : 'Rozpocznij pierwszą analizę'}</h2><p class="blk">Każda analiza dotyczy jednej jednostki organizacyjnej przenoszonej do docelowego systemu ERP. Zacznij od zakresu i zespołu, potem przejdź kolejne kroki analizy.</p>
+    <div class="cogrid">${cards}${add}</div></div></div>
+  ${overview}`;
 }
 
 /* ---------- krok 1: zakres i zespół ---------- */
