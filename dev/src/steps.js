@@ -45,10 +45,10 @@ function renderStart() {
         <div class="node t"><span class="tile">${pic('seal-check')}</span><small>Docelowa jednostka organizacyjna</small><b>Model referencyjny – docelowy system&nbsp;ERP</b><span>Obowiązująca konfiguracja systemu, procesy i standardy operacyjne docelowej jednostki organizacyjnej.</span></div>
       </div>
     </div>
-    <div class="st-met"><h2>Metodyka oceny dopasowania procesów</h2>
-      <div class="mtext"><p>Punktem odniesienia dla oceny jest standard procesowy i konfiguracja docelowego systemu ERP funkcjonujące w docelowej jednostce organizacyjnej. Analiza polega na porównaniu rzeczywistych procesów i sposobu pracy źródłowej jednostki organizacyjnej w źródłowym systemie ERP (stan obecny – AS-IS) z rozwiązaniami stosowanymi w docelowej jednostce organizacyjnej (model referencyjny – TO-BE).</p>
+    <details class="st-met" data-act="pmore" data-p="met"${V.open['pm-met'] ? ' open' : ''}><summary><h2>Metodyka oceny dopasowania procesów</h2><span class="tgl" aria-hidden="true"><span class="c">Rozwiń</span><span class="o">Zwiń</span>${ic('down')}</span></summary>
+      <div class="st-metb"><div class="mtext"><p>Punktem odniesienia dla oceny jest standard procesowy i konfiguracja docelowego systemu ERP funkcjonujące w docelowej jednostce organizacyjnej. Analiza polega na porównaniu rzeczywistych procesów i sposobu pracy źródłowej jednostki organizacyjnej w źródłowym systemie ERP (stan obecny – AS-IS) z rozwiązaniami stosowanymi w docelowej jednostce organizacyjnej (model referencyjny – TO-BE).</p>
         <p>Każde wymaganie biznesowe źródłowej jednostki organizacyjnej podlega indywidualnej ocenie według następującej skali:</p></div>
-      <h3>Kategorie oceny dopasowania</h3><ul class="cats">${cats}</ul></div>
+      <h3>Kategorie oceny dopasowania</h3><ul class="cats">${cats}</ul></div></details>
     <div class="st-flow"><h2>Przebieg analizy</h2><ol class="flow">${flow}</ol></div>
   </div>
   <div class="card"><div class="cardb st-sec"><h2>${all.length ? 'Wybierz analizę' : 'Rozpocznij pierwszą analizę'}</h2><p class="blk">Każda analiza dotyczy jednej jednostki organizacyjnej przenoszonej do docelowego systemu ERP. Zacznij od zakresu i zespołu, potem przejdź kolejne kroki analizy.</p>
