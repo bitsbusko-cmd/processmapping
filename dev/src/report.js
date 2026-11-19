@@ -60,7 +60,7 @@ async function exportXlsx(cid) {
   const wb = new X.Workbook(); wb.creator = S.who || 'Analiza Fit-Gap ERP'; wb.created = new Date();
   /* 1. Podsumowanie */
   let sh = xsheet(wb, 'Podsumowanie', 'Podsumowanie analizy fit-gap', [
-    ['Obszar', G1, [['Obszar', 30], ['Zakres', 13], ['Ekspert ' + co.srcCo, 20], ['Ekspert ' + co.tgtCo, 20]]],
+    ['Obszar', G1, [['Obszar', 30], ['Zakres', 13], ['Lider procesu ' + co.srcCo, 24], ['Lider procesu ' + co.tgtCo, 24]]],
     ['Wymagania', G2, [['Procesy', 9], ['Wymagania', 11], ['Ocenione', 10], ['Fit', 7], ['Częściowe', 10], ['Luka', 7], ['N/D', 7], ['Do wyjaśnienia', 11], ['Indeks dopasowania', 12]]],
     ['Luki i ryzyka', G3, [['Luki krytyczne', 10], ['Pracochłonność luk (md)', 13], ['Zmiany procesowe ' + co.srcCo, 13], ['Ryzyka wysokie i krytyczne', 12]]],
     ['Status', G5, [['Potwierdzenie wyników', 26]]]], 1);
@@ -77,7 +77,7 @@ async function exportXlsx(cid) {
     ['Propozycja narzędzia', prop ? prop.n : 'za mało danych do rekomendacji'], ['Rekomendacja zespołu', rec ? rec.n : 'nie wpisano'], ['Uzasadnienie', co.recJ], ['Warunki migracji', co.recC], ['Następne kroki', co.next],
     ['Zatwierdzenie', co.sg ? co.sg + ', ' + fd(co.sgAt) : 'niezatwierdzone']]);
   /* 2. Zespół */
-  sh = xsheet(wb, 'Zespół', 'Zespół i uczestnicy', [['Osoba', G1, [['Imię i nazwisko', 26], ['Zespół', 22], ['Rola', 24], ['Obszary key usera', 36]]], ['Udział', G2, [['Ekspert obszarów', 36], ['Uczestnik obszarów', 36]]]], 1);
+  sh = xsheet(wb, 'Zespół', 'Zespół i uczestnicy', [['Osoba', G1, [['Imię i nazwisko', 26], ['Zespół', 22], ['Rola', 24], ['Obszary key usera', 36]]], ['Udział', G2, [['Lider procesu w obszarach', 36], ['Uczestnik obszarów', 36]]]], 1);
   m.people.forEach(p => xrow(sh, [p.n, p.co || '', p.role || '', p.kas.map(x => x.n).join('\n'), m.inArea.filter(a => a.xcc === p.k || a.xcp === p.k).map(a => a.n).join(', '), m.inArea.filter(a => a.us.includes(p.k)).map(a => a.n).join(', ')], (c, ci) => { if (ci === 1) xbold(c); }));
   xend(sh, 'Brak osób.');
   /* 3. Procesy AS-IS */

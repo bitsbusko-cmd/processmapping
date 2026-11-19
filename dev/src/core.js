@@ -54,12 +54,18 @@ const NAME_OLD = ['Migracja CC: Symfonia → AX 2012', 'Migracja Construction Ch
 /* nazwy narzędzi z podpowiedzi wcześniejszych wersji: „Symfonia …” i „AX – …” */
 const ucFirst = s => { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); };
 const toolRaw = t => String(t).replace(/^Symfonia (?!ERP)/, 'Symfonia ERP ').replace(/^AX (?!2012)/, 'AX 2012 ');
-const TEAM_OLD = {'Zespół analizy': TEAMS[0].n, 'Ekspert CC': TEAMS[1].n, 'Ekspert CP': TEAMS[2].n};
+/* zespół użytkownika: lider procesu wskazuje swoją jednostkę organizacyjną; dawne nazwy zespołów → nowe */
+const LIDER = (TEAMS.find(t => t.unit) || {}).n || '';
+const TEAM_OLD = {'Zespół analizy': [TEAMS[0].n], 'Ekspert CC': [LIDER, DEF.srcCo], 'Ekspert CP': [LIDER, DEF.tgtCo],
+  'Ekspert Construction Chemicals': [LIDER, DEF.srcCo], 'Ekspert Construction Products': [LIDER, DEF.tgtCo]};
+const teamLbl = (t, u) => t === LIDER && u ? t + ' – ' + u : t || '';
+const byRaw = s => String(s || '').replace(/ · ([^·]+)$/, (x, t) => TEAM_OLD[t] ? ' · ' + teamLbl(TEAM_OLD[t][0], TEAM_OLD[t][1]) : x);
+const ROLE_OLD = {'Key user / ekspert procesu': 'Key user / Lider procesu'}, roleRaw = v => ROLE_OLD[v] || v;
 
 /* ---------- stan ---------- */
 let S = {who: '', name: '', team: '', e: {}};
 try { const o = JSON.parse(store.get(LS) || 'null'); if (o && o.e && typeof o.e === 'object') S = o; } catch (e) {}
-if (TEAM_OLD[S.team]) { S.team = TEAM_OLD[S.team]; S.who = S.name + ' · ' + S.team; }
+if (TEAM_OLD[S.team]) { const o = TEAM_OLD[S.team]; S.team = o[0]; if (o[1]) S.unit = o[1]; S.who = S.name + ' · ' + teamLbl(S.team, S.unit); }
 let UI = {}; try { UI = JSON.parse(store.get(LSU) || '{}') || {}; } catch (e) {}
 const saveUI = () => store.set(LSU, JSON.stringify(UI));
 const V = {cid: null, step: 1, aid: '', miss: 0, menu: false, modal: null, open: {}, r4: 'gap', f4: {res: '', pri: '', crit: false}, focus: !!UI.focus, fq: '', doc: '', docA: '', jump: null, allAn: false, ms: ''};
@@ -68,15 +74,16 @@ const saveLocal = () => store.set(LS, JSON.stringify(S));
 /* RODO: narzędzie nie przechowuje adresów e-mail ani numerów SGID – osoby opisuje imię i nazwisko */
 const noMail = (id, v) => { if (v && typeof v === 'object' && 'em' in v) { v = Object.assign({}, v); delete v.em; } return v; };
 const save = () => { REV++; saveLocal(); if (SH.on && SH.ok) pushSoon(); };
-const known = () => !!(S.name && TEAMS.some(t => t.n === S.team));
-const mySide = () => S.team === TEAMS[1].n ? 'cc' : S.team === TEAMS[2].n ? 'cp' : '';
+const known = () => !!(S.name && TEAMS.some(t => t.n === S.team) && (S.team !== LIDER || S.unit));
+/* kolumna lidera procesu w ocenie fit-gap: jednostka użytkownika to spółka przenoszona albo docelowa analizy */
+const mySide = co => S.team !== LIDER || !co ? '' : S.unit === co.srcCo ? 'cc' : S.unit === co.tgtCo ? 'cp' : '';
 
 /* ---------- wpisy: każdy obiekt to osobny rekord (ostatni zapis wygrywa, usunięcie to trwały znacznik) ---------- */
 const ID_RE = /^(an|ar|pr|rq|os|rk|bn|sg)\|[A-Za-z0-9_-]{1,40}(\|[A-Za-z0-9_-]{1,60})?$/;
 const ID = {an: c => 'an|' + c, ar: (c, a) => 'ar|' + c + '|' + a, pr: (c, p) => 'pr|' + c + '|' + p, rq: (c, q) => 'rq|' + c + '|' + q,
   os: (c, o) => 'os|' + c + '|' + o, rk: (c, k) => 'rk|' + c + '|' + k, bn: (c, b) => 'bn|' + c + '|' + b, sg: (c, k) => 'sg|' + c + '|' + k};
 const ent = id => { const x = S.e[id]; return x && !x.del ? x : null; };
-/* znaczniki czasu pól (_t) pozwalają scalić równoległe zmiany różnych pól tego samego rekordu, np. odpowiedzi ekspertów obu spółek */
+/* znaczniki czasu pól (_t) pozwalają scalić równoległe zmiany różnych pól tego samego rekordu, np. odpowiedzi liderów procesu obu spółek */
 function put(id, patch) { const o = ent(id) || {}, x = Object.assign({}, o, patch), t = now(); x.ts = t; x.by = S.who || ''; x._t = Object.assign({}, o._t); Object.keys(patch).forEach(f => { x._t[f] = t; }); S.e[id] = x; save(); return x; }
 function drop(id) { if (S.e[id] && S.e[id].del) return; S.e[id] = {del: true, ts: now()}; save(); }
 /* SGID z wersji 1.0: usuwamy z zapisanych osób – nowszy wpis bez numeru zastępuje też wpis we wspólnej bazie */
@@ -108,6 +115,8 @@ function analyses() {
   return out.sort((a, b) => String(a.cr || '').localeCompare(String(b.cr || '')));
 }
 const analysis = cid => analyses().find(c => c.k === cid) || null;
+const orgUnits = cur => { const u = [], add = x => { x = norm(x); if (x && !u.includes(x)) u.push(x); };
+  analyses().forEach(c => { add(c.srcCo); add(c.tgtCo); }); if (!u.length) { add(DEF.srcCo); add(DEF.tgtCo); } add(cur); return u; };
 
 /* ---------- model analizy: obszary, procesy, wymagania, luki, ryzyka, korzyści ---------- */
 const MC = {};
@@ -120,7 +129,7 @@ function build(cid) {
   const byCr = (a, b) => String(a.cr || '').localeCompare(String(b.cr || ''));
   /* osoby (zespół i uczestnicy) */
   const people = Object.keys(osE).map(k => Object.assign({}, osE[k], {k})).sort(byCr);
-  people.forEach(p => { p.n = norm(p.n); p.co = D.coTypes.includes(coRaw(p.co)) ? coRaw(p.co) : ''; p.role = D.roles.includes(p.role) ? p.role : ''; p.ku = !!KU && p.role === KU; });
+  people.forEach(p => { p.n = norm(p.n); p.co = D.coTypes.includes(coRaw(p.co)) ? coRaw(p.co) : ''; p.role = D.roles.includes(roleRaw(p.role)) ? roleRaw(p.role) : ''; p.ku = !!KU && p.role === KU; });
   const OBY = {}; people.forEach(p => { OBY[p.k] = p; });
   /* obszary */
   const areas = AREAS.map((a, i) => Object.assign({}, a, arE[a.k] || {}, {k: a.k, i: a.i, c: a.c, cd: a.cd, std: true, ord: i}));
@@ -219,8 +228,8 @@ function required(m, step, aid) {
     if (und.length) add('Obszary bez decyzji „W zakresie / Kolejny etap / Poza zakresem”: ' + und.length, `#area-${und[0].k} .seg button`, 'und');
     else if (!m.inArea.length) add('Co najmniej jeden obszar w zakresie analizy', `#area-${m.areas[0].k} .seg button`);
     (aid ? m.inArea.filter(a => a.k === aid) : m.inArea).forEach(a => { const ai = ID.ar(m.cid, a.k);
-      if (!a.ecc) add(a.n + ': ekspert ' + m.co.srcCo + ' (' + m.co.srcSys + ')', fsel(ai, 'xcc'), ai + '#xcc');
-      if (!a.ecp) add(a.n + ': ekspert ' + m.co.tgtCo + ' (' + m.co.tgtSys + ')', fsel(ai, 'xcp'), ai + '#xcp'); });
+      if (!a.ecc) add(a.n + ': lider procesu ' + m.co.srcCo + ' (' + m.co.srcSys + ')', fsel(ai, 'xcc'), ai + '#xcc');
+      if (!a.ecp) add(a.n + ': lider procesu ' + m.co.tgtCo + ' (' + m.co.tgtSys + ')', fsel(ai, 'xcp'), ai + '#xcp'); });
     return out;
   }
   const s = slice(m, aid);
@@ -302,7 +311,7 @@ function issues(m, aid) {
   if (!aid) { add(1, '', 'Nie wskazano obszarów objętych analizą', m.inArea.length ? 0 : 1); add(1, '', 'Obszary bez decyzji o zakresie', m.areas.filter(a => !a.on).length); }
   s.areas.forEach(a => {
     const pr = s.procs.filter(p => p.a === a.k), act = pr.filter(p => p.act), rs = s.reqs.filter(r => r.a === a.k), nm = a.n;
-    add(1, a.k, nm + ': brak eksperta ' + m.co.srcCo + ' lub ' + m.co.tgtCo, a.ecc && a.ecp ? 0 : 1);
+    add(1, a.k, nm + ': brak lidera procesu ' + m.co.srcCo + ' lub ' + m.co.tgtCo, a.ecc && a.ecp ? 0 : 1);
     add(2, a.k, nm + ': procesy bez decyzji „dotyczy / nie dotyczy”', pr.filter(p => p.on !== 'Y' && p.on !== 'N').length);
     add(2, a.k, nm + ': procesy bez właściciela w ' + m.co.srcCo, act.filter(p => !norm(p.occ)).length);
     add(3, a.k, nm + ': wymagania bez oceny dopasowania', rs.filter(r => !r.st).length);
@@ -312,7 +321,7 @@ function issues(m, aid) {
     add(4, a.k, nm + ': luki krytyczne bez zaakceptowanego rozwiązania', rs.filter(r => r.crit && r.dec !== 'A').length);
     add(5, a.k, nm + ': brak przeglądu ryzyk', groupOk(m, s, a.k) ? 0 : 1);
     add(5, a.k, nm + ': ryzyka wysokie i krytyczne bez właściciela lub działania', s.risks.filter(r => r.a === a.k && r.lv >= 2 && r.st !== 'Z' && (!norm(r.ow) || (!norm(r.ac) && String(r.tr) !== '1'))).length);
-    add(7, a.k, nm + ': wyniki niepotwierdzone przez ekspertów obszaru', a.sg ? 0 : 1);
+    add(7, a.k, nm + ': wyniki niepotwierdzone przez liderów procesu', a.sg ? 0 : 1);
   });
   if (!aid) {
     add(5, '', 'Ryzyka całego przedsięwzięcia: brak przeglądu', groupOk(m, s, GLOBAL) ? 0 : 1);
@@ -448,5 +457,5 @@ function importJson(text) {
   Object.keys(o.e).forEach(id => { const b = o.e[id], a = S.e[id]; if (!ID_RE.test(id) || !b || !b.ts) return;
     if (a && a.del && !b.del) return;
     if (!a || (b.del && !a.del) || (b.ts || '') > (a.ts || '')) { S.e[id] = noMail(id, b); n++; } });
-  purgeSgid(); save(); render(); toast(`Wczytano dane${o.by ? ' – ' + Object.keys(TEAM_OLD).reduce((s, k) => s.replace(' · ' + k, ' · ' + TEAM_OLD[k]), String(o.by)) : ''}. Zaktualizowane wpisy: ${n}.`);
+  purgeSgid(); save(); render(); toast(`Wczytano dane${o.by ? ' – ' + byRaw(o.by) : ''}. Zaktualizowane wpisy: ${n}.`);
 }

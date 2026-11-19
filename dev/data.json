@@ -40,8 +40,8 @@
    "k": "O",
    "n": "Do wyjaśnienia",
    "l": "Do wyjaśnienia",
-   "d": "dostępne informacje są niewystarczające do jednoznacznej oceny. Wymaganie pozostaje otwarte do dalszej analizy i uzgodnienia z ekspertami obu spółek.",
-   "u": "dostępne informacje są niewystarczające do jednoznacznej oceny. Wymaganie pozostaje otwarte do dalszej analizy i uzgodnienia z ekspertami obu jednostek organizacyjnych."
+   "d": "dostępne informacje są niewystarczające do jednoznacznej oceny. Wymaganie pozostaje otwarte do dalszej analizy i uzgodnienia z liderami procesu obu spółek.",
+   "u": "dostępne informacje są niewystarczające do jednoznacznej oceny. Wymaganie pozostaje otwarte do dalszej analizy i uzgodnienia z liderami procesu obu jednostek organizacyjnych."
   }
  ],
  "res": [
@@ -211,7 +211,7 @@
  "roles": [
   "Sponsor",
   "Lider analizy",
-  "Key user / ekspert procesu",
+  "Key user / Lider procesu",
   "Konsultant"
  ],
  "teams": [
@@ -220,12 +220,9 @@
    "d": ""
   },
   {
-   "n": "Ekspert Construction Chemicals",
-   "d": "Symfonia ERP i procesy Construction Chemicals"
-  },
-  {
-   "n": "Ekspert Construction Products",
-   "d": "AX 2012 i procesy Construction Products"
+   "n": "Lider procesu",
+   "d": "",
+   "unit": true
   },
   {
    "n": "FSSC",

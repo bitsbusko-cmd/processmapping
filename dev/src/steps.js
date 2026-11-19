@@ -23,7 +23,7 @@ function renderStart() {
       <div class="kv"><span><b>${m.inArea.length}</b>obszary</span><span><b>${v.tot ? v.done + '/' + v.tot : '–'}</b>ocenione wymagania</span><span><b>${v.fi != null ? fpct(v.fi) : '–'}</b>dopasowanie</span></div>
       <div class="ft"><span>${last ? 'Zmiana ' + esc(fdt(last.ts)) + (last.by ? ' · ' + esc(String(last.by).split(' · ')[0]) : '') : 'Brak danych'}</span><span class="lnk">${pr.started ? 'Kontynuuj' : 'Rozpocznij'}</span></div></a>`; }).join('');
   const add = `<button type="button" class="cocard add" data-act="addan" data-key="an-add">${ic('plus')}Nowa analiza fit-gap</button>`;
-  const method = [['Zakres i zespół', 'obszary, eksperci obu stron, uczestnicy, agenda i pytania'], ['Procesy AS-IS', 'procesy, właściciele, narzędzia, wolumeny'], ['Ocena fit-gap', 'praktyka obu jednostek i ocena dopasowania'],
+  const method = [['Zakres i zespół', 'obszary, liderzy procesu obu stron, uczestnicy, agenda i pytania'], ['Procesy AS-IS', 'procesy, właściciele, narzędzia, wolumeny'], ['Ocena fit-gap', 'praktyka obu jednostek i ocena dopasowania'],
     ['Luki i zmiany', 'rozwiązania, pracochłonność, zmiany w źródłowej jednostce organizacyjnej'], ['Ryzyka', 'ocena, właściciele i działania'], ['Wartość dodana', 'korzyści i szacunek nakładów'], ['Wynik', 'rekomendacja, akceptacje i raport końcowy']];
   const started = all.map(c => ({c, m: model(c.k)})).filter(x => progress(x.m, '').started);
   let overview = '';
@@ -49,8 +49,8 @@ function renderStart() {
       <div class="mtext"><p>Punktem odniesienia dla oceny jest standard procesowy i konfiguracja docelowego systemu ERP funkcjonujące w docelowej jednostce organizacyjnej. Analiza polega na porównaniu rzeczywistych procesów i sposobu pracy źródłowej jednostki organizacyjnej w źródłowym systemie ERP (stan obecny – AS-IS) z rozwiązaniami stosowanymi w docelowej jednostce organizacyjnej (model referencyjny – TO-BE).</p>
         <p>Każde wymaganie biznesowe źródłowej jednostki organizacyjnej podlega indywidualnej ocenie według następującej skali:</p></div>
       <h3>Kategorie oceny dopasowania</h3><ul class="cats">${cats}</ul></div>
+    <div class="st-flow"><h2>Przebieg analizy</h2><ol class="flow">${flow}</ol></div>
   </div>
-  <div class="card"><div class="cardb st-flow"><h2>Przebieg analizy</h2><ol class="flow">${flow}</ol></div></div>
   <div class="card"><div class="cardb st-sec"><h2>${all.length ? 'Wybierz analizę' : 'Rozpocznij pierwszą analizę'}</h2><p class="blk">Każda analiza dotyczy jednej jednostki organizacyjnej przenoszonej do docelowego systemu ERP. Zacznij od zakresu i zespołu, potem przejdź kolejne kroki analizy.</p>
     <div class="cogrid">${cards}${add}</div></div></div>
   ${overview}`;
@@ -78,7 +78,7 @@ function step1(m) {
       <td class="ka">${p.ku ? kuSel(m, p) : ''}</td>
       <td class="act"><button type="button" class="btn icon sm ghost" data-act="os-del" data-o="${esc(p.k)}" aria-label="Usuń osobę ${esc(p.n)}" title="Usuń osobę">${ic('trash')}</button></td></tr>`; }).join('');
   const pplSec = `<section class="sec" id="team"><div class="sech"><h2>${pic('users-three')}Zespół i uczestnicy</h2><div class="acts"><span>${esc(plural(m.people.length, F_PER))}</span></div></div>
-    <div class="secb"><p class="blk">Dodaj osoby, które biorą udział w analizie: ekspertów obu spółek (${esc(c.srcCo)} i ${esc(c.tgtCo)}), osoby z FSSC i zespół prowadzący. Key userom przypisz obszary, za które odpowiadają. Narzędzie nie zbiera adresów e-mail.</p>
+    <div class="secb"><p class="blk">Dodaj osoby, które biorą udział w analizie: liderów procesu obu spółek (${esc(c.srcCo)} i ${esc(c.tgtCo)}), osoby z FSSC i zespół prowadzący. Key userom przypisz obszary, za które odpowiadają. Narzędzie nie zbiera adresów e-mail.</p>
     ${m.people.length ? `<table class="ptab"><colgroup><col class="cn"><col class="cc"><col class="cr"><col><col class="cx"></colgroup><thead><tr><th>Imię i nazwisko<span class="rq">*</span></th><th>Zespół<span class="rq">*</span></th><th>Rola<span class="rq">*</span></th><th>Obszar<span class="rq">*</span> <small>(key user)</small></th><th></th></tr></thead><tbody>${ppl}</tbody></table>` : ''}
     <div style="margin-top:10px"><button type="button" class="btn dash" data-act="os-add">${ic('plus')}Dodaj osobę</button></div></div></section>`;
   const und = m.areas.filter(a => !a.on).length;
@@ -87,8 +87,8 @@ function step1(m) {
     : `<div data-key="area-addbtn"><button type="button" class="btn dash" data-act="area-addtog">${ic('plus')}Dodaj obszar specyficzny dla ${esc(c.srcCo)}</button></div>`;
   return coSec + pplSec + `<section class="sec"><div class="sech"><h2>${pic('squares-four')}Obszary analizy</h2><div class="acts"><span>w zakresie: ${m.inArea.length} · kolejny etap: ${m.later.length} · bez decyzji: ${und}</span>
       ${und ? `<button type="button" class="btn sm" data-act="area-rest">Pozostałe – kolejny etap (${und})</button>` : ''}</div></div>
-    <div class="secb"><p class="blk">Wskaż obszary analizowane teraz, obszary na kolejny etap i obszary poza zakresem. Dla każdego obszaru w zakresie wybierz eksperta ${esc(c.srcCo)}, eksperta ${esc(c.tgtCo)} i uczestników. Agendę i pytania obszaru zapiszesz jako PDF i wyślesz uczestnikom w załączniku e-maila.</p>
-    ${m.people.length ? '' : `<div class="note warn">${ic('warn')}<p>Najpierw dodaj osoby w sekcji „Zespół i uczestnicy” – ekspertów i uczestników obszarów wybierasz z tej listy.</p></div>`}
+    <div class="secb"><p class="blk">Wskaż obszary analizowane teraz, obszary na kolejny etap i obszary poza zakresem. Dla każdego obszaru w zakresie wybierz lidera procesu ${esc(c.srcCo)}, lidera procesu ${esc(c.tgtCo)} i uczestników. Agendę i pytania obszaru zapiszesz jako PDF i wyślesz uczestnikom w załączniku e-maila.</p>
+    ${m.people.length ? '' : `<div class="note warn">${ic('warn')}<p>Najpierw dodaj osoby w sekcji „Zespół i uczestnicy” – liderów procesu i uczestników obszarów wybierasz z tej listy.</p></div>`}
     <div class="agrid">${cards}</div><div style="margin-top:12px">${add}</div></div></section>`;
 }
 /* obszar key usera: lista rozwijana obszarów z wyborem wielokrotnym, w tym samym wierszu co pozostałe pola osoby */
@@ -108,8 +108,8 @@ function areaCard(m, a) {
     const kuA = new Set(a.kus.map(p => p.k));
     const chips = m.people.map(p => `<button type="button" class="chipbtn" data-act="us-tog" data-a="${esc(a.k)}" data-o="${esc(p.k)}" aria-pressed="${a.us.includes(p.k)}">${esc(p.n || 'bez nazwy')} <small>${esc([p.co, kuA.has(p.k) ? 'key user' : ''].filter(Boolean).join(' · '))}</small></button>`).join('');
     body = `<div class="af">
-      ${fld(rq('Ekspert ' + esc(c.srcCo) + ' – ' + esc(c.srcSys)), selF(id, 'xcc', a.ecc ? a.xcc : '', opts, {empty: m.people.length ? '– wybierz osobę –' : '– najpierw dodaj osoby –', req: 1, label: 'Ekspert ' + c.srcCo}), 'cc')}
-      ${fld(rq('Ekspert ' + esc(c.tgtCo) + ' – ' + esc(c.tgtSys)), selF(id, 'xcp', a.ecp ? a.xcp : '', opts, {empty: m.people.length ? '– wybierz osobę –' : '– najpierw dodaj osoby –', req: 1, label: 'Ekspert ' + c.tgtCo}), 'cp')}</div>
+      ${fld(rq('Lider procesu ' + esc(c.srcCo) + ' – ' + esc(c.srcSys)), selF(id, 'xcc', a.ecc ? a.xcc : '', opts, {empty: m.people.length ? '– wybierz osobę –' : '– najpierw dodaj osoby –', req: 1, label: 'Lider procesu ' + c.srcCo}), 'cc')}
+      ${fld(rq('Lider procesu ' + esc(c.tgtCo) + ' – ' + esc(c.tgtSys)), selF(id, 'xcp', a.ecp ? a.xcp : '', opts, {empty: m.people.length ? '– wybierz osobę –' : '– najpierw dodaj osoby –', req: 1, label: 'Lider procesu ' + c.tgtCo}), 'cp')}</div>
       <div class="parts"><div class="ph2"><span>Uczestnicy${a.us.length ? ` <small>(${a.us.length})</small>` : ''}</span><a class="btn sm" href="${hrefDoc(m.cid, a.k)}" title="Dokument do wysłania uczestnikom w załączniku e-maila">${ic('doc')}Agenda i pytania</a></div>
         ${m.people.length ? `<div class="pchips" role="group" aria-label="Uczestnicy – ${esc(a.n)}">${chips}</div>` : ''}</div>`;
   }
@@ -126,7 +126,7 @@ function step2(m) {
     const pr = m.procs.filter(p => p.a === a.k), und = pr.filter(p => p.on !== 'Y' && p.on !== 'N').length, yes = pr.filter(p => p.on === 'Y').length;
     const add = V.open['np-' + a.k] ? `<div class="prow" data-key="np-${esc(a.k)}"><div class="addbox" style="grid-column:1/-1"><div class="row">${fld('Nazwa procesu', `<input class="inp" id="np-n-${esc(a.k)}" maxlength="160" placeholder="Proces specyficzny dla ${esc(c.srcCo)}" autocomplete="off">`)}${fld('Opis <small>(opcjonalnie)</small>', `<input class="inp" id="np-d-${esc(a.k)}" maxlength="500" placeholder="Co obejmuje" autocomplete="off">`)}<button type="button" class="btn pri" data-act="proc-add" data-a="${esc(a.k)}">${ic('plus')}Dodaj</button><button type="button" class="btn ghost" data-act="np-tog" data-a="${esc(a.k)}">Anuluj</button></div></div></div>`
       : `<div class="prow" data-key="npb-${esc(a.k)}"><div><button type="button" class="btn sm dash" data-act="np-tog" data-a="${esc(a.k)}">${ic('plus')}Dodaj proces specyficzny dla ${esc(c.srcCo)}</button></div></div>`;
-    return `<section class="sec" data-key="s2-${esc(a.k)}"><div class="sech"><h2>${tile(a, 's')}${esc(a.n)}<span class="who">${esc([a.ecc ? a.ecc.n : '', a.ecp ? a.ecp.n : ''].filter(Boolean).join(' · ') || 'brak ekspertów')}</span></h2><div class="acts"><span>dotyczy: ${yes} · bez decyzji: ${und}</span>${und ? `<button type="button" class="btn sm" data-act="proc-all" data-a="${esc(a.k)}">Pozostałe dotyczą (${und})</button>` : ''}</div></div>
+    return `<section class="sec" data-key="s2-${esc(a.k)}"><div class="sech"><h2>${tile(a, 's')}${esc(a.n)}<span class="who">${esc([a.ecc ? a.ecc.n : '', a.ecp ? a.ecp.n : ''].filter(Boolean).join(' · ') || 'brak liderów procesu')}</span></h2><div class="acts"><span>dotyczy: ${yes} · bez decyzji: ${und}</span>${und ? `<button type="button" class="btn sm" data-act="proc-all" data-a="${esc(a.k)}">Pozostałe dotyczą (${und})</button>` : ''}</div></div>
       ${pr.map(p => procRow(m, p)).join('')}${add}</section>`;
   }).join('');
   return lists + `<div class="note">${ic('info')}<p>Katalog procesów jest punktem wyjścia. Zaznacz procesy realizowane w ${esc(c.srcCo)}, dodaj procesy specyficzne i dla każdego wskaż właściciela, narzędzia i skalę. Krótki opis praktyki obu spółek ułatwi ocenę dopasowania, a ocena „wspólny standard / specyfika ${esc(c.srcCo)}” pokaże, gdzie procesy można ujednolicić.</p></div>` + secs;
@@ -169,14 +169,14 @@ function step3(m) {
     <a class="btn sm" href="${hrefDoc(m.cid, a.k)}">${ic('doc')}Agenda i pytania</a>${V.focus ? '' : `<button type="button" class="btn sm" data-act="jump-first">${ic('play')}Pierwsze bez oceny</button>`}</div>`;
   const lists = dl('dl-ppl', m.people.map(p => p.n));
   if (V.focus) return lists + tools + focusView(m, s);
-  return lists + tools + `<div class="note">${ic('info')}<p>Dla każdego pytania zapisz, jak to robi ${esc(m.co.srcCo)} w ${esc(m.co.srcSys)} i jak ${esc(m.co.tgtCo)} w ${esc(m.co.tgtSys)}, a potem oceń dopasowanie. Przy ocenie „Częściowe” lub „Luka” wskaż sposób zamknięcia i priorytet. Ekspert widzi swoją kolumnę wyróżnioną.</p></div>` + act.map(p => procBlock(m, p)).join('');
+  return lists + tools + `<div class="note">${ic('info')}<p>Dla każdego pytania zapisz, jak to robi ${esc(m.co.srcCo)} w ${esc(m.co.srcSys)} i jak ${esc(m.co.tgtCo)} w ${esc(m.co.tgtSys)}, a potem oceń dopasowanie. Przy ocenie „Częściowe” lub „Luka” wskaż sposób zamknięcia i priorytet. Lider procesu widzi wyróżnioną kolumnę swojej jednostki organizacyjnej.</p></div>` + act.map(p => procBlock(m, p)).join('');
 }
 function step3overview(m, s) {
   const tot = cnt(s.reqs), done = s.reqs.filter(r => r.done).length;
   const cards = s.areas.map(a => { const rs = s.reqs.filter(r => r.a === a.k), c = cnt(rs), fi = fitIndex(rs), dn = rs.filter(r => r.done).length, any = rs.filter(r => r.st).length;
     return `<a class="ovcard" href="${href(3, a.k)}" data-key="ov-${esc(a.k)}"><div class="h">${tile(a)}<b>${esc(a.n)}</b></div>${fbarHtml(c, true)}
       <div class="kv"><span><b>${dn}/${rs.length}</b>ocenione</span><span><b>${c.P + c.G}</b>luki</span><span><b>${c.O}</b>do wyjaśnienia</span><span><b>${fi != null ? fpct(fi) : '–'}</b>dopasowanie</span></div>
-      <div class="ft"><span>${esc([a.ecc ? a.ecc.n : '', a.ecp ? a.ecp.n : ''].filter(Boolean).join(' · ') || 'brak ekspertów')}</span><span class="lnk">${any ? (any === rs.length ? 'Przejrzyj' : 'Kontynuuj ocenę') : 'Rozpocznij ocenę'}</span></div></a>`; }).join('');
+      <div class="ft"><span>${esc([a.ecc ? a.ecc.n : '', a.ecp ? a.ecp.n : ''].filter(Boolean).join(' · ') || 'brak liderów procesu')}</span><span class="lnk">${any ? (any === rs.length ? 'Przejrzyj' : 'Kontynuuj ocenę') : 'Rozpocznij ocenę'}</span></div></a>`; }).join('');
   return `<div class="note">${ic('info')}<p>Ocenę prowadzimy osobno dla każdego obszaru. Wybierz obszar – zobaczysz jego procesy i pytania. Ocena ostateczna: ${done} z ${esc(plural(s.reqs.length, F_REQ))}${tot.O ? `, do wyjaśnienia: ${tot.O}` : ''}.</p></div>
     <div style="margin:0 0 14px">${fbarHtml(tot, true)}<div style="margin-top:8px">${fleg()}</div></div><div class="ovgrid">${cards}</div>`;
 }
@@ -191,7 +191,7 @@ function procBlock(m, p) {
 }
 const MINE = '<span class="mineb">Twoja kolumna</span>';
 function qCols(m, r, rows) {
-  const ri = ID.rq(m.cid, r.k), co = m.co, side = mySide(), need = r.gap && MISS.has(ri + '#cc');
+  const ri = ID.rq(m.cid, r.k), co = m.co, side = mySide(co), need = r.gap && MISS.has(ri + '#cc');
   return `<div class="qcols"><label class="qcol cc"><span><span class="src">${esc(co.srcCo)} · ${esc(co.srcSys)}</span>${r.gap ? '<span class="rq" aria-hidden="true">*</span>' : ''}${side === 'cc' ? MINE : ''}</span>${txtF(ri, 'cc', fval(r, 'cc'), {rows, ph: 'Jak to robi ' + co.srcCo + ' dziś?', label: co.srcCo + ' – ' + r.code, req: r.gap, bad: need})}</label>
     <label class="qcol cp"><span><span class="tgt">${esc(co.tgtCo)} · ${esc(co.tgtSys)}</span>${side === 'cp' ? MINE : ''}</span>${txtF(ri, 'cp', fval(r, 'cp'), {rows, ph: 'Jak to robi ' + co.tgtCo + ' w AX 2012?', label: co.tgtCo + ' – ' + r.code})}</label></div>`;
 }
@@ -396,7 +396,7 @@ function step7(m) {
   if (a1) {
     const exp = [a1.ecc ? a1.ecc.n : '', a1.ecp ? a1.ecp.n : ''].filter(Boolean).join(', ');
     sign = a1.sg ? `<div class="sign done"><h3>${ic('checkc')}Wyniki obszaru potwierdzone</h3><p class="sm" style="margin:0">${esc(a1.sg)} · ${esc(fd(a1.sgAt))}</p><div><button type="button" class="btn sm noprint" data-act="unsign" data-a="${esc(a1.k)}">${ic('undo')}Cofnij potwierdzenie</button></div></div>`
-      : `<div class="sign"><h3>Potwierdzenie wyników obszaru</h3><p class="sm muted" style="margin:0">Po omówieniu wyników z ekspertami potwierdź, że odpowiedzi, oceny, luki i zmiany procesowe są zgodne z ustaleniami.</p><div class="sr2 noprint">${fld('Potwierdzają', `<input class="inp" id="sg-nm" value="${esc(exp)}" placeholder="Eksperci obszaru" maxlength="160">`)}${fld('Data', `<input class="inp" id="sg-dt" type="date" value="${today()}">`)}<button type="button" class="btn pri" data-act="sign" data-a="${esc(a1.k)}">${ic('check')}Potwierdź wyniki obszaru</button></div></div>`;
+      : `<div class="sign"><h3>Potwierdzenie wyników obszaru</h3><p class="sm muted" style="margin:0">Po omówieniu wyników z liderami procesu potwierdź, że odpowiedzi, oceny, luki i zmiany procesowe są zgodne z ustaleniami.</p><div class="sr2 noprint">${fld('Potwierdzają', `<input class="inp" id="sg-nm" value="${esc(exp)}" placeholder="Liderzy procesu obszaru" maxlength="160">`)}${fld('Data', `<input class="inp" id="sg-dt" type="date" value="${today()}">`)}<button type="button" class="btn pri" data-act="sign" data-a="${esc(a1.k)}">${ic('check')}Potwierdź wyniki obszaru</button></div></div>`;
   } else {
     sign = `<div class="sign${co.sg ? ' done' : ''}"><h3>${co.sg ? ic('checkc') : ''}Zatwierdzenie wyników analizy</h3>
       <div class="alsign">${s.areas.map(a => `<span class="${a.sg ? '' : 'no'}">${ic(a.sg ? 'checkc' : 'clock')}${esc(a.n)}${a.sg ? ' – ' + esc(a.sg) : ' – niepotwierdzony'}</span>`).join('')}</div>
@@ -409,9 +409,9 @@ function step7(m) {
 
 /* ---------- ramka kroku ---------- */
 const STEP_LEAD = [null,
-  'Opisz analizę, dodaj osoby biorące udział, wskaż obszary w zakresie, ekspertów obu stron i uczestników, przygotuj agendę i pytania.',
+  'Opisz analizę, dodaj osoby biorące udział, wskaż obszary w zakresie, liderów procesu obu stron i uczestników, przygotuj agendę i pytania.',
   'Potwierdź procesy realizowane w spółce przenoszonej, ich właścicieli, narzędzia i skalę oraz możliwość wspólnego standardu.',
-  'Razem z ekspertami opisz praktykę obu spółek dla każdego pytania i oceń dopasowanie do szablonu systemu docelowego.',
+  'Razem z liderami procesu opisz praktykę obu spółek dla każdego pytania i oceń dopasowanie do szablonu systemu docelowego.',
   'Uzupełnij rejestr luk: sposób zamknięcia, pracochłonność i decyzję, a dla zmian procesowych – opis i skalę zmiany.',
   'Zbuduj rejestr ryzyk migracji z właścicielami i działaniami. Narzędzie podpowiada ryzyka typowe i wynikające z luk.',
   'Oceń korzyści migracji i oszacuj nakłady – to podstawa oceny, czy migracja jest uzasadniona biznesowo.',

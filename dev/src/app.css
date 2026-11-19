@@ -269,7 +269,7 @@ p.blk{margin:0 0 12px;color:var(--muted);font-size:.933rem;max-width:80ch}
 .mig .arr i{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--paper);border:1px solid var(--line);color:var(--muted)}
 .mig .arr .ic{width:16px;height:16px;vertical-align:0}
 .st-met{padding:30px 36px 34px;border-top:1px solid var(--line)}
-.st-met h2,.cardb.st-flow h2{font-size:1.2rem;margin:0 0 10px}
+.st-met h2,.st-flow h2{font-size:1.2rem;margin:0 0 10px}
 .st-met .mtext{max-width:92ch;margin:0 0 24px}
 .st-met .mtext p{margin:0 0 8px;color:var(--ink2);line-height:1.62}
 .st-met h3{font-size:.773rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
@@ -279,7 +279,7 @@ p.blk{margin:0 0 12px;color:var(--muted);font-size:.933rem;max-width:80ch}
 .cats .bdg{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--paper);color:var(--c);box-shadow:inset 0 0 0 1px var(--line),0 1px 2px rgba(21,35,58,.06);margin-bottom:8px}
 .cats .bdg .ic{width:19px;height:19px;stroke-width:2.4;vertical-align:0}
 .cats b{font-size:.933rem;line-height:1.3;color:var(--ink)}
-.cardb.st-flow{padding:26px 36px 30px}
+.st-flow{padding:28px 36px 34px;border-top:1px solid var(--line)}
 .cardb.st-sec{padding:26px 36px 30px}
 .flow{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:16px;position:relative}
 .flow::before{content:"";position:absolute;left:14px;right:calc(100% / 7 - 14px);top:13px;height:2px;background:var(--line)}
@@ -301,7 +301,7 @@ table.ov.sum .tag{line-height:1.35}
 @media screen and (max-width:900px){
   .st-top{grid-template-columns:minmax(0,1fr);gap:26px;padding:26px 20px 24px}
   .mig{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr);grid-template-rows:auto}.mig .arr i{transform:none}
-  .st-met{padding:24px 20px 26px}.cardb.st-flow,.cardb.st-sec{padding:20px 20px 24px}
+  .st-met,.st-flow{padding:24px 20px 26px}.cardb.st-sec{padding:20px 20px 24px}
   .cats li{grid-template-columns:36px minmax(0,1fr);row-gap:3px;align-items:start;background:linear-gradient(90deg,var(--cb) 0,var(--paper) 70%)}.cats li .d{grid-column:2}
 }
 @media screen and (max-width:560px){
@@ -487,6 +487,7 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 .whobox .fl{display:block;font-weight:600;font-size:.933rem;margin:0 0 6px;padding:0}
 .whobox .inp{height:40px}
 .whobox .note{margin:16px 0 0}
+.whobox .unitf{margin:14px 0 0}
 .cofld{margin-top:14px}
 .msel>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;height:40px;user-select:none}
 .msel>summary::-webkit-details-marker{display:none}

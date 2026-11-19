@@ -85,7 +85,7 @@ function syncChip() {
 const href = (step, aid, cid) => '#c/' + (cid || V.cid) + '/' + step + (aid ? '/' + aid : '');
 const hrefDoc = (cid, aid) => '#c/' + (cid || V.cid) + (aid ? '/agenda/' + aid : '/raport');
 function stepSub(i, x) {
-  if (i === 1) return x.t ? `eksperci: ${x.n}/${x.t}` : 'wybierz obszary';
+  if (i === 1) return x.t ? `liderzy procesu: ${x.n}/${x.t}` : 'wybierz obszary';
   if (i === 4) return x.t ? `uzupełnione: ${x.n}/${x.t}` : 'brak luk';
   if (i === 6) return `ocenione: ${x.n}/${x.t}`;
   if (!x.t) return '–';
@@ -107,7 +107,7 @@ function renderTop() {
     <span class="grow"></span>
     <div class="tools">
       ${syncChip()}
-      ${known() ? `<button type="button" class="btn ghost user" data-act="who" title="${esc(S.who)} – zmień imię lub zespół">${ic('user')}<span class="t">${esc(S.name)} <small>${esc(S.team)}</small></span></button>` : ''}
+      ${known() ? `<button type="button" class="btn ghost user" data-act="who" title="${esc(S.who)} – zmień imię lub zespół">${ic('user')}<span class="t">${esc(S.name)} <small>${esc(teamLbl(S.team, S.unit))}</small></span></button>` : ''}
       ${c ? `<a class="btn pri" href="${hrefDoc(c.k)}">${ic('doc')}<span class="t">Raport końcowy</span></a>` : ''}
       <div class="menu"><button type="button" class="btn icon" data-act="menu" aria-expanded="${V.menu}" aria-label="Dane i ustawienia" title="Dane i ustawienia">${ic('dots')}</button>
         <div class="pop"${V.menu ? '' : ' hidden'}>
@@ -127,7 +127,7 @@ function renderSide() {
   wrap.classList.remove('full');
   const m = model(V.cid), all = progress(m, '');
   const items = m.inArea.map(a => { const pr = progress(m, a.k), cur = V.aid === a.k, exp = [a.ecc ? a.ecc.n : '', a.ecp ? a.ecp.n : ''].filter(Boolean).join(' · ');
-    return `<li data-key="a-${esc(a.k)}"><a href="${href(V.step, a.k)}"${cur ? ' aria-current="true"' : ''}>${tile(a, 's')}<span class="nm">${esc(a.n)}</span><span class="ow${exp ? '' : ' nobody'}">${esc(exp || 'brak ekspertów')}</span><span class="st${a.sg ? ' ok' : ''}" title="${a.sg ? 'Wyniki potwierdzone' : 'Postęp: ' + pr.pct + '%'}">${a.sg ? ic('checkc') : `<span class="ring" style="--p:${pr.pct}" aria-label="Postęp ${pr.pct}%"></span>`}</span></a></li>`; }).join('');
+    return `<li data-key="a-${esc(a.k)}"><a href="${href(V.step, a.k)}"${cur ? ' aria-current="true"' : ''}>${tile(a, 's')}<span class="nm">${esc(a.n)}</span><span class="ow${exp ? '' : ' nobody'}">${esc(exp || 'brak liderów procesu')}</span><span class="st${a.sg ? ' ok' : ''}" title="${a.sg ? 'Wyniki potwierdzone' : 'Postęp: ' + pr.pct + '%'}">${a.sg ? ic('checkc') : `<span class="ring" style="--p:${pr.pct}" aria-label="Postęp ${pr.pct}%"></span>`}</span></a></li>`; }).join('');
   const later = m.later.length, out = m.areas.filter(a => a.on === 'N').length;
   paint(side, `<h2>Obszary</h2><div class="sub">${m.inArea.length ? `W zakresie: ${m.inArea.length} z ${m.areas.length}` : 'Wskaż obszary w kroku 1'}</div>
     <ul class="alist" aria-label="Filtr obszaru">
@@ -205,11 +205,13 @@ function renderModal() {
   if (M.kind === 'who') {
     const req = !known() || needKey(), old = $('#who-form');
     const nm = old ? old.nm.value : S.name || '', tm = old ? (old.querySelector('input[name="team"]:checked') || {}).value : TEAMS.some(t => t.n === S.team) ? S.team : '';
+    const un = old && old.unit ? old.unit.value : S.unit || '';
     m.innerHTML = `<div class="box sm whobox" role="dialog" aria-modal="true" aria-labelledby="m-h"><form id="who-form" novalidate>
       <div class="mh"><h2 id="m-h">Podaj imię i wybierz swój zespół</h2>${req ? '' : `<button type="button" class="btn icon ghost" data-act="close" aria-label="Zamknij">${ic('x')}</button>`}</div>
       <div class="mb">
         <label class="fl" for="who-nm">Imię i nazwisko</label><input id="who-nm" class="inp" name="nm" autocomplete="name" maxlength="60" value="${esc(nm)}" placeholder="np. Anna Kowalska">
-        <fieldset><legend class="fl">Zespół</legend><div class="teams" style="grid-template-columns:repeat(2,minmax(0,1fr))">${TEAMS.map(t => `<label><input type="radio" name="team" value="${esc(t.n)}"${tm === t.n ? ' checked' : ''}><span>${esc(t.n)}${t.d ? `<small style="display:block;font-weight:400;font-size:.75rem;color:var(--muted)">${esc(t.d)}</small>` : ''}</span></label>`).join('')}</div></fieldset>
+        <fieldset><legend class="fl">Zespół</legend><div class="teams">${TEAMS.map(t => `<label><input type="radio" name="team" value="${esc(t.n)}"${tm === t.n ? ' checked' : ''}><span>${esc(t.n)}${t.d ? `<small style="display:block;font-weight:400;font-size:.75rem;color:var(--muted)">${esc(t.d)}</small>` : ''}</span></label>`).join('')}</div></fieldset>
+        <div class="unitf" id="who-unit-f"${tm === LIDER ? '' : ' hidden'}><label class="fl" for="who-unit">Jednostka organizacyjna</label><select id="who-unit" class="inp" name="unit"><option value="">– wybierz jednostkę –</option>${orgUnits(un).map(u => `<option value="${esc(u)}"${un === u ? ' selected' : ''}>${esc(u)}</option>`).join('')}</select></div>
         ${needKey() ? `<label class="fl" for="who-key" style="margin-top:14px">Hasło zespołu</label><input id="who-key" class="inp" name="key" type="password" autocomplete="current-password" maxlength="200">` : ''}
         <div class="note">${ic('info')}<p>Imię i zespół zapisujemy przy każdej decyzji oraz w raporcie. ${SH.on ? 'Decyzje trafiają do wspólnej bazy – widzą je wszyscy użytkownicy.' : 'Decyzje zostają w tej przeglądarce – możesz je zapisać do pliku i przekazać dalej.'}</p></div>
         <p class="err" id="who-err" role="alert"></p>
@@ -250,13 +252,13 @@ function helpHtml() {
   return `<div class="help">
     <h3>Po co jest analiza fit-gap</h3><p>Analiza odpowiada na pytania: czy ${esc(DEF.srcCo)} może przejść z systemu ${esc(DEF.srcSys)} na ${esc(DEF.tgtSys)} używany w ${esc(DEF.tgtCo)}, jakie zmiany procesów musi wprowadzić ${esc(DEF.srcCo)}, co trzeba dobudować w systemie docelowym, jakie są ryzyka i jaką wartość da migracja. Punktem odniesienia jest szablon AX 2012 w ${esc(DEF.tgtCo)} – to, jak ${esc(DEF.tgtCo)} faktycznie pracuje w systemie, a nie standard producenta.</p>
     <h3>Przebieg analizy</h3><ol>
-      <li><b>Zakres i zespół</b> – dane analizy, osoby (imię i nazwisko, zespół, rola; key userom przypisujesz obszary), obszary w zakresie, eksperci obu stron i uczestnicy. Dla każdego obszaru narzędzie przygotuje agendę i pytania do wysłania uczestnikom w załączniku e-maila.</li>
+      <li><b>Zakres i zespół</b> – dane analizy, osoby (imię i nazwisko, zespół, rola; key userom przypisujesz obszary), obszary w zakresie, liderzy procesu obu stron i uczestnicy. Dla każdego obszaru narzędzie przygotuje agendę i pytania do wysłania uczestnikom w załączniku e-maila.</li>
       <li><b>Procesy AS-IS</b> – które procesy z katalogu występują w ${esc(DEF.srcCo)}, właściciele, wolumeny, narzędzia, opis praktyki w obu spółkach i możliwość wspólnego standardu.</li>
-      <li><b>Ocena fit-gap</b> – pytania z katalogu dla każdego procesu: praktyka ${esc(DEF.srcCo)}, praktyka ${esc(DEF.tgtCo)} w AX 2012 i ocena dopasowania. Tryb skupienia pokazuje jedno pytanie naraz – wygodny podczas spotkania z ekspertami.</li>
+      <li><b>Ocena fit-gap</b> – pytania z katalogu dla każdego procesu: praktyka ${esc(DEF.srcCo)}, praktyka ${esc(DEF.tgtCo)} w AX 2012 i ocena dopasowania. Tryb skupienia pokazuje jedno pytanie naraz – wygodny podczas spotkania z liderami procesu.</li>
       <li><b>Luki i zmiany</b> – rejestr luk z pracochłonnością i decyzją oraz lista zmian procesowych w ${esc(DEF.srcCo)} (skala, kogo dotyczą, szkolenia).</li>
       <li><b>Ryzyka</b> – rejestr ryzyk z podpowiedziami: ryzyka typowe dla tej migracji, luki krytyczne i duże zmiany procesów.</li>
       <li><b>Wartość dodana</b> – korzyści migracji i szacunek nakładów (business case).</li>
-      <li><b>Wynik</b> – indeks dopasowania, propozycja rekomendacji, rekomendacja zespołu, potwierdzenia ekspertów i zatwierdzenie sponsora. Raport końcowy do druku lub PDF i raport Excel.</li></ol>
+      <li><b>Wynik</b> – indeks dopasowania, propozycja rekomendacji, rekomendacja zespołu, potwierdzenia liderów procesu i zatwierdzenie sponsora. Raport końcowy do druku lub PDF i raport Excel.</li></ol>
     <h3>Ocena krok po kroku</h3><p>Wybierz obszar na liście po lewej – kolejne kroki pokażą tylko jego procesy, a ocenę jednego obszaru zakończysz bez czekania na pozostałe. W trybie skupienia klawisze <span class="kbd">1</span>–<span class="kbd">5</span> ustawiają ocenę (Fit, Częściowe, Luka, N/D, Do wyjaśnienia), <span class="kbd">←</span> <span class="kbd">→</span> przechodzą między pytaniami, a <span class="kbd">Ctrl</span>+<span class="kbd">Enter</span> w polu tekstowym przechodzi do następnego pytania.</p>
     <h3>Pola wymagane</h3><p>Pola z gwiazdką (*) trzeba uzupełnić przed przejściem do kolejnego kroku. Przycisk „Dalej” pokaże listę braków – kliknij pozycję, aby przejść do pola.</p>
     <h3>Słownik</h3><dl>

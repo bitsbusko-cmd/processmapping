@@ -37,7 +37,7 @@ function reportDoc(m) {
   const arRows = m.areas.filter(a => a.in || a.later).map(a => { const rs = s.reqs.filter(r => r.a === a.k);
     return `<tr><td><b>${esc(a.n)}</b></td><td>${a.in ? 'w zakresie' : 'kolejny etap'}</td><td>${esc(a.ecc ? a.ecc.n : '–')}</td><td>${esc(a.ecp ? a.ecp.n : '–')}</td><td class="n">${a.in ? m.procs.filter(p => p.a === a.k && p.act).length : '–'}</td><td class="n">${a.in ? rs.length : '–'}</td></tr>`; });
   const scope = `<h2>Zakres i metoda</h2>${norm(co.scope) ? lines(co.scope).map(x => `<p>${esc(x)}</p>`).join('') : ''}
-    <h3>Obszary analizy</h3>${docTbl([['Obszar'], ['Zakres'], ['Ekspert ' + co.srcCo], ['Ekspert ' + co.tgtCo], ['Procesy', 1], ['Wymagania', 1]], arRows, 'Nie wskazano obszarów.')}
+    <h3>Obszary analizy</h3>${docTbl([['Obszar'], ['Zakres'], ['Lider procesu ' + co.srcCo], ['Lider procesu ' + co.tgtCo], ['Procesy', 1], ['Wymagania', 1]], arRows, 'Nie wskazano obszarów.')}
     ${m.areas.filter(a => a.on === 'N').length ? `<p class="sm muted">Poza zakresem: ${esc(m.areas.filter(a => a.on === 'N').map(a => a.n).join(', '))}.</p>` : ''}
     <h3>Zespół i uczestnicy</h3>${docTbl([['Imię i nazwisko'], ['Zespół'], ['Rola'], ['Obszary key usera']], m.people.map(p => `<tr><td>${esc(p.n)}</td><td>${esc(p.co || '')}</td><td>${esc(p.role || '')}</td><td class="sm">${esc(p.kas.map(x => x.n).join('; ') || '–')}</td></tr>`), 'Brak osób.')}
     <h3>Metoda oceny</h3><p>Punktem odniesienia jest szablon ${esc(co.tgtSys)} w ${esc(co.tgtCo)} – sposób, w jaki ${esc(co.tgtCo)} faktycznie pracuje w systemie. Dla każdego pytania z katalogu zapisano praktykę ${esc(co.srcCo)} i ${esc(co.tgtCo)} oraz ocenę dopasowania:</p>
@@ -75,7 +75,7 @@ function reportDoc(m) {
     ${nexts.length ? `<h3>Następne kroki</h3><ol>${nexts.map(x => `<li>${esc(x)}</li>`).join('')}</ol>` : ''}
     ${iss.length ? `<h3>Braki w danych analizy</h3><ul>${iss.slice(0, 15).map(x => `<li>${esc(x.txt)}${x.n > 1 ? ' (' + x.n + ')' : ''}</li>`).join('')}${iss.length > 15 ? `<li>…oraz ${iss.length - 15} kolejnych</li>` : ''}</ul>` : ''}`;
   /* 9. akceptacja */
-  const acc = `<h2>Akceptacja</h2><p>Potwierdzenie wyników przez ekspertów obszarów i zatwierdzenie analizy przez sponsora.</p>
+  const acc = `<h2>Akceptacja</h2><p>Potwierdzenie wyników przez liderów procesu i zatwierdzenie analizy przez sponsora.</p>
     ${docTbl([['Obszar'], ['Potwierdzenie'], ['Data']], s.areas.map(a => `<tr><td>${esc(a.n)}</td><td>${esc(a.sg || 'niepotwierdzone')}</td><td>${esc(a.sgAt ? fd(a.sgAt) : '–')}</td></tr>`), 'Brak obszarów.')}
     <div class="sigs"><div><b>${esc(co.sg || co.sp || 'Sponsor analizy')}</b>${co.sg ? 'zatwierdził(a) ' + esc(fd(co.sgAt)) : 'sponsor – data i podpis'}</div><div><b>${esc(co.pl || 'Lider analizy')}</b>lider analizy – data i podpis</div></div>
     <div class="foot2">Dokument wewnętrzny · ${esc(co.n)} · wygenerowano ${esc(fdt(now()))} w narzędziu Analiza Fit-Gap ERP (wersja ${esc(VER)})</div>`;
@@ -88,7 +88,7 @@ function agendaDoc(m, aid) {
   if (!a) return '<div class="empty"><b>Nie znaleziono obszaru</b></div>';
   const procs = m.procs.filter(p => p.a === a.k && p.on !== 'N'), parts = a.us.map(k => m.OBY[k]).filter(Boolean);
   const nq = procs.reduce((x, p) => x + p.reqs.length, 0);
-  const meta = `<div class="meta"><div><span>Ekspert ${esc(co.srcCo)}</span>${esc(a.ecc ? a.ecc.n : '–')}</div><div><span>Ekspert ${esc(co.tgtCo)}</span>${esc(a.ecp ? a.ecp.n : '–')}</div><div><span>Key user</span>${esc(a.kus.map(x => x.n).join(', ') || '–')}</div>
+  const meta = `<div class="meta"><div><span>Lider procesu ${esc(co.srcCo)}</span>${esc(a.ecc ? a.ecc.n : '–')}</div><div><span>Lider procesu ${esc(co.tgtCo)}</span>${esc(a.ecp ? a.ecp.n : '–')}</div><div><span>Key user</span>${esc(a.kus.map(x => x.n).join(', ') || '–')}</div>
     <div><span>Zakres</span>${esc(plural(procs.length, F_PROC))} · ${esc(plural(nq, F_Q))}</div><div><span>Lider analizy</span>${esc(co.pl || '–')}</div><div><span>Przygotowano</span>${esc(fd(today()))}</div></div>`;
   const plan = [`Cel, skala oceny i sposób pracy (5 min)`, ...procs.map(p => `${p.cd} ${p.n} – ${plural(p.reqs.length, F_Q)}`), 'Podsumowanie: luki, pytania otwarte, kolejne kroki (10 min)'];
   const qs = procs.map(p => `<h3><span class="mono">${esc(p.cd)}</span> ${esc(p.n)}</h3>${p.d ? `<p class="sm muted">${esc(p.d)}</p>` : ''}

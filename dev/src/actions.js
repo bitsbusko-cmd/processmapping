@@ -151,7 +151,7 @@ document.addEventListener('click', ev => {
     /* krok 1 */
     case 'os-add': { const k = newId(); put(ID.os(V.cid, k), {n: '', cr: now()}); render(); focusSel(`#os-${CSS.escape(k)} input`); break; }
     case 'os-del': { const p = m.OBY[d.o], used = m.areas.filter(a => a.xcc === d.o || a.xcp === d.o).map(a => a.n);
-      confirmBox('Usunąć osobę „' + (p.n || 'bez nazwy') + '”?', used.length ? 'Osoba jest ekspertem obszarów: ' + used.join(', ') + '. Po usunięciu trzeba wskazać innego eksperta.' : 'Osoba zniknie z zespołu i z list uczestników obszarów.', 'Usuń osobę', () => { drop(ID.os(V.cid, d.o)); render(); }); break; }
+      confirmBox('Usunąć osobę „' + (p.n || 'bez nazwy') + '”?', used.length ? 'Osoba jest liderem procesu w obszarach: ' + used.join(', ') + '. Po usunięciu trzeba wskazać innego lidera procesu.' : 'Osoba zniknie z zespołu i z list uczestników obszarów.', 'Usuń osobę', () => { drop(ID.os(V.cid, d.o)); render(); }); break; }
     case 'area-on': { const a = m.ABY[d.a]; put(ID.ar(V.cid, d.a), {on: a.on === d.v ? '' : d.v}); if (V.aid === d.a && d.v !== 'Y') V.aid = ''; render(); break; }
     case 'area-rest': m.areas.filter(a => !a.on).forEach(a => put(ID.ar(V.cid, a.k), {on: 'L'})); render(); break;
     case 'area-addtog': V.open['area-add'] = !V.open['area-add']; render(); if (V.open['area-add']) focusSel('#na-n'); break;
@@ -220,6 +220,7 @@ document.addEventListener('input', ev => {
 });
 document.addEventListener('change', ev => {
   const t = ev.target;
+  if (t.name === 'team' && t.closest && t.closest('#who-form')) { const u = $('#who-unit-f'); if (u) u.hidden = t.value !== LIDER; return; }
   if (t.closest && (t.closest('#who-form') || t.closest('#addan-form'))) return;
   const act = t.dataset && t.dataset.act; if (!act) return;
   if (act === 'f') { setField(t); renderSoon(); }
@@ -271,10 +272,11 @@ document.addEventListener('submit', async ev => {
     V.modal = null; renderModal(); go(href(1, '', k)); toast('Utworzono analizę ' + n + '.'); return;
   }
   if (f.id !== 'who-form') return;
-  const name = norm(f.nm.value), team = (f.querySelector('input[name="team"]:checked') || {}).value, key = f.key ? f.key.value : '';
-  const err = !name && !team ? 'Podaj imię i nazwisko oraz wybierz swój zespół.' : !name ? 'Podaj imię i nazwisko.' : !team ? 'Wybierz swój zespół.' : f.key && !key ? 'Podaj hasło zespołu.' : '';
-  if (err) { $('#who-err').textContent = err; (!name ? f.nm : !team ? f.querySelector('input[name="team"]') : f.key).focus(); return; }
-  const first = !known(); S.name = name; S.team = team; S.who = name + ' · ' + team; saveLocal();
+  const name = norm(f.nm.value), team = (f.querySelector('input[name="team"]:checked') || {}).value, unit = team === LIDER && f.unit ? norm(f.unit.value) : '', key = f.key ? f.key.value : '';
+  const noUnit = team === LIDER && !unit;
+  const err = !name && !team ? 'Podaj imię i nazwisko oraz wybierz swój zespół.' : !name ? 'Podaj imię i nazwisko.' : !team ? 'Wybierz swój zespół.' : noUnit ? 'Wybierz jednostkę organizacyjną.' : f.key && !key ? 'Podaj hasło zespołu.' : '';
+  if (err) { $('#who-err').textContent = err; (!name ? f.nm : !team ? f.querySelector('input[name="team"]') : noUnit ? f.unit : f.key).focus(); return; }
+  const first = !known(); S.name = name; S.team = team; S.unit = unit; S.who = name + ' · ' + teamLbl(team, unit); saveLocal();
   if (f.key) {
     const b = f.querySelector('[type=submit]'); b.disabled = true; $('#who-err').textContent = '';
     try { await connect(key); } catch (e) { b.disabled = false; $('#who-err').textContent = e.auth ? 'Nieprawidłowe hasło zespołu.' : 'Brak połączenia z serwerem. Spróbuj ponownie.'; f.key.select(); return; }
