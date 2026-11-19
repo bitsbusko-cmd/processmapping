@@ -107,7 +107,7 @@ function renderTop() {
     <span class="grow"></span>
     <div class="tools">
       ${syncChip()}
-      ${known() ? `<button type="button" class="btn ghost user" data-act="who" title="${esc(S.who)} – zmień imię lub rolę">${ic('user')}<span class="t">${esc(S.name)} <small>${esc(S.team)}</small></span></button>` : ''}
+      ${known() ? `<button type="button" class="btn ghost user" data-act="who" title="${esc(S.who)} – zmień imię lub zespół">${ic('user')}<span class="t">${esc(S.name)} <small>${esc(S.team)}</small></span></button>` : ''}
       ${c ? `<a class="btn pri" href="${hrefDoc(c.k)}">${ic('doc')}<span class="t">Raport końcowy</span></a>` : ''}
       <div class="menu"><button type="button" class="btn icon" data-act="menu" aria-expanded="${V.menu}" aria-label="Dane i ustawienia" title="Dane i ustawienia">${ic('dots')}</button>
         <div class="pop"${V.menu ? '' : ' hidden'}>
@@ -206,12 +206,12 @@ function renderModal() {
     const req = !known() || needKey(), old = $('#who-form');
     const nm = old ? old.nm.value : S.name || '', tm = old ? (old.querySelector('input[name="team"]:checked') || {}).value : TEAMS.some(t => t.n === S.team) ? S.team : '';
     m.innerHTML = `<div class="box sm whobox" role="dialog" aria-modal="true" aria-labelledby="m-h"><form id="who-form" novalidate>
-      <div class="mh"><h2 id="m-h">${req ? 'Kto pracuje w narzędziu?' : 'Zmień imię lub rolę'}</h2>${req ? '' : `<button type="button" class="btn icon ghost" data-act="close" aria-label="Zamknij">${ic('x')}</button>`}</div>
+      <div class="mh"><h2 id="m-h">Podaj imię i wybierz swój zespół</h2>${req ? '' : `<button type="button" class="btn icon ghost" data-act="close" aria-label="Zamknij">${ic('x')}</button>`}</div>
       <div class="mb">
         <label class="fl" for="who-nm">Imię i nazwisko</label><input id="who-nm" class="inp" name="nm" autocomplete="name" maxlength="60" value="${esc(nm)}" placeholder="np. Anna Kowalska">
-        <fieldset><legend class="fl">Rola w analizie</legend><div class="teams" style="grid-template-columns:repeat(2,minmax(0,1fr))">${TEAMS.map(t => `<label><input type="radio" name="team" value="${esc(t.n)}"${tm === t.n ? ' checked' : ''}><span>${esc(t.n)}<small style="display:block;font-weight:400;font-size:.75rem;color:var(--muted)">${esc(t.d)}</small></span></label>`).join('')}</div></fieldset>
+        <fieldset><legend class="fl">Zespół</legend><div class="teams" style="grid-template-columns:repeat(2,minmax(0,1fr))">${TEAMS.map(t => `<label><input type="radio" name="team" value="${esc(t.n)}"${tm === t.n ? ' checked' : ''}><span>${esc(t.n)}${t.d ? `<small style="display:block;font-weight:400;font-size:.75rem;color:var(--muted)">${esc(t.d)}</small>` : ''}</span></label>`).join('')}</div></fieldset>
         ${needKey() ? `<label class="fl" for="who-key" style="margin-top:14px">Hasło zespołu</label><input id="who-key" class="inp" name="key" type="password" autocomplete="current-password" maxlength="200">` : ''}
-        <div class="note">${ic('info')}<p>${SH.on ? 'Imię i rolę zapisujemy przy każdej zmianie. Dane trafiają do wspólnej bazy – widzą je wszyscy uczestnicy analizy.' : 'Imię i rolę zapisujemy przy każdej zmianie. Dane zostają w tej przeglądarce – możesz je zapisać do pliku i przekazać dalej.'} Ekspert ${esc(DEF.srcCo)} lub ${esc(DEF.tgtCo)} zobaczy swoją kolumnę wyróżnioną w ocenie fit-gap.</p></div>
+        <div class="note">${ic('info')}<p>Imię i zespół zapisujemy przy każdej decyzji oraz w raporcie. ${SH.on ? 'Decyzje trafiają do wspólnej bazy – widzą je wszyscy użytkownicy.' : 'Decyzje zostają w tej przeglądarce – możesz je zapisać do pliku i przekazać dalej.'}</p></div>
         <p class="err" id="who-err" role="alert"></p>
         <div class="mf"><button type="submit" class="btn pri">${req ? 'Rozpocznij' : 'Zapisz'}</button></div>
       </div></form></div>`;

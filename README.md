@@ -8,7 +8,7 @@ Punktem odniesienia jest **szablon AX w Construction Products** – to, jak Cons
 
 ## Przebieg analizy
 
-Przy pierwszym wejściu podajesz imię i nazwisko oraz rolę (Digital & IT, ekspert Construction Chemicals, ekspert Construction Products, FSSC). Nowa analiza ma podpowiedziane spółki i systemy (Construction Chemicals · Symfonia → Construction Products · Axapta (AX 2012)); o zakresie obszarów decydujesz sam. Potem przechodzisz siedem kroków:
+Przy pierwszym wejściu podajesz imię i nazwisko oraz swój zespół (Digital & IT, ekspert Construction Chemicals, ekspert Construction Products, FSSC). Nowa analiza ma podpowiedziane spółki i systemy (Construction Chemicals · Symfonia → Construction Products · Axapta (AX 2012)); o zakresie obszarów decydujesz sam. Potem przechodzisz siedem kroków:
 
 1. **Zakres i zespół** – dane analizy (sponsor, lider, data rozpoczęcia, cel i zakres), osoby biorące udział (imię i nazwisko, zespół, rola; key userom przypisujesz obszary z listy rozwijanej, także kilka), obszary: w zakresie / kolejny etap / poza zakresem, eksperci obu stron i uczestnicy. Dla każdego obszaru narzędzie przygotuje **agendę i pytania** – dokument do zapisania jako PDF i wysłania uczestnikom w załączniku e-maila.
 2. **Procesy AS-IS** – procesy z katalogu realizowane w Construction Chemicals i procesy specyficzne, właściciele po obu stronach, wolumen, częstotliwość, narzędzia, opis praktyki obu spółek i ocena, czy Construction Chemicals może pracować według standardu Construction Products (wspólny standard / częściowo / specyfika).

@@ -272,7 +272,7 @@ document.addEventListener('submit', async ev => {
   }
   if (f.id !== 'who-form') return;
   const name = norm(f.nm.value), team = (f.querySelector('input[name="team"]:checked') || {}).value, key = f.key ? f.key.value : '';
-  const err = !name && !team ? 'Podaj imię i nazwisko oraz wybierz rolę.' : !name ? 'Podaj imię i nazwisko.' : !team ? 'Wybierz rolę w analizie.' : f.key && !key ? 'Podaj hasło zespołu.' : '';
+  const err = !name && !team ? 'Podaj imię i nazwisko oraz wybierz swój zespół.' : !name ? 'Podaj imię i nazwisko.' : !team ? 'Wybierz swój zespół.' : f.key && !key ? 'Podaj hasło zespołu.' : '';
   if (err) { $('#who-err').textContent = err; (!name ? f.nm : !team ? f.querySelector('input[name="team"]') : f.key).focus(); return; }
   const first = !known(); S.name = name; S.team = team; S.who = name + ' · ' + team; saveLocal();
   if (f.key) {
