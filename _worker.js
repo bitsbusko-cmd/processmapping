@@ -64,8 +64,10 @@ function clean(v, depth) {
   for (const k of Object.keys(v)) { if (++n > 300) break; if (KEY_RE.test(k)) out[k] = clean(v[k], depth + 1); }
   return out;
 }
-// RODO: narzędzie nie przechowuje adresów e-mail – osoby opisuje imię i nazwisko oraz SGID
+// RODO: narzędzie nie przechowuje adresów e-mail ani numerów SGID – osoby opisuje imię i nazwisko.
+// SGID z wersji 1.0 nie trafia już do bazy; wpisy, które go zawierają, aplikacja zapisuje ponownie bez numeru.
 function noMail(id, v) { if (v && typeof v === 'object') delete v.em; return v; }
+function scrub(id, v) { v = noMail(id, v); if (v && typeof v === 'object') delete v.sgid; return v; }
 async function setup(db) {
   if (ready) return;
   await db.batch([
@@ -111,7 +113,7 @@ async function api(request, env) {
     if (!Array.isArray(c) || c.length !== 2) continue;
     const [id, raw] = c;
     if (typeof id !== 'string' || !ID_RE.test(id) || !raw || typeof raw !== 'object' || Array.isArray(raw)) continue;
-    let v = noMail(id, clean(raw, 0));
+    let v = scrub(id, clean(raw, 0));
     if (typeof v.ts !== 'string' || v.ts.length > 40) continue;
     if (v.del) v = {del: true, ts: v.ts};
     const txt = JSON.stringify(v);

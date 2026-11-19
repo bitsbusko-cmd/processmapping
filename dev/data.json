@@ -1,10 +1,10 @@
 {
  "v": 1,
  "defaults": {
-  "n": "Migracja CC: Symfonia → AX 2012",
-  "srcCo": "CC",
+  "n": "Migracja Construction Chemicals: Symfonia → AX 2012",
+  "srcCo": "Construction Chemicals",
   "srcSys": "Symfonia",
-  "tgtCo": "CP",
+  "tgtCo": "Construction Products",
   "tgtSys": "Axapta (AX 2012)"
  },
  "fit": [
@@ -12,7 +12,7 @@
    "k": "F",
    "n": "Fit",
    "l": "Pełne dopasowanie",
-   "d": "Szablon AX używany w CP obsługuje wymaganie bez zmian – CC może pracować tak jak CP."
+   "d": "Szablon AX używany w Construction Products obsługuje wymaganie bez zmian – Construction Chemicals może pracować tak jak Construction Products."
   },
   {
    "k": "P",
@@ -24,19 +24,19 @@
    "k": "G",
    "n": "Luka",
    "l": "Luka (gap)",
-   "d": "Szablon AX z CP nie obsługuje wymagania – potrzebna zmiana procesu w CC, rozwój AX, integracja albo obejście."
+   "d": "Szablon AX z Construction Products nie obsługuje wymagania – potrzebna zmiana procesu w Construction Chemicals, rozwój AX, integracja albo obejście."
   },
   {
    "k": "N",
    "n": "N/D",
    "l": "Nie dotyczy",
-   "d": "Wymaganie nie występuje w CC."
+   "d": "Wymaganie nie występuje w Construction Chemicals."
   },
   {
    "k": "O",
    "n": "Do wyjaśnienia",
    "l": "Do wyjaśnienia",
-   "d": "Brak pełnej odpowiedzi – pytanie otwarte do wyjaśnienia po wywiadzie."
+   "d": "Brak pełnej odpowiedzi – pytanie otwarte do wyjaśnienia."
   }
  ],
  "res": [
@@ -47,8 +47,8 @@
   },
   {
    "k": "proc",
-   "n": "Zmiana procesu w CC",
-   "d": "CC przyjmuje sposób pracy stosowany w CP."
+   "n": "Zmiana procesu w Construction Chemicals",
+   "d": "Construction Chemicals przyjmuje sposób pracy stosowany w Construction Products."
   },
   {
    "k": "dev",
@@ -85,7 +85,7 @@
   {
    "k": "M",
    "n": "Must",
-   "d": "Niezbędne – wymóg prawny albo krytyczne dla działania CC"
+   "d": "Niezbędne – wymóg prawny albo krytyczne dla działania Construction Chemicals"
   },
   {
    "k": "S",
@@ -173,7 +173,7 @@
  "harm": [
   {
    "k": "Y",
-   "n": "Wspólny standard z CP",
+   "n": "Wspólny standard z Construction Products",
    "s": "wspólny standard"
   },
   {
@@ -183,8 +183,8 @@
   },
   {
    "k": "N",
-   "n": "Specyfika CC",
-   "s": "specyfika CC"
+   "n": "Specyfika Construction Chemicals",
+   "s": "specyfika Construction Chemicals"
   }
  ],
  "freq": [
@@ -197,33 +197,30 @@
   "ad hoc"
  ],
  "coTypes": [
-  "CC",
-  "CP",
+  "Construction Chemicals",
+  "Construction Products",
   "FSSC",
   "Digital & IT",
-  "Partner zewnętrzny",
-  "Grupa"
+  "Partner zewnętrzny"
  ],
  "roles": [
   "Sponsor",
   "Lider analizy",
-  "Prowadzący wywiad",
-  "Właściciel systemu",
   "Key user / ekspert procesu",
   "Konsultant"
  ],
  "teams": [
   {
    "n": "Zespół analizy",
-   "d": "prowadzę analizę i wywiady"
+   "d": "prowadzę analizę"
   },
   {
-   "n": "Ekspert CC",
-   "d": "Symfonia i procesy CC"
+   "n": "Ekspert Construction Chemicals",
+   "d": "Symfonia i procesy Construction Chemicals"
   },
   {
-   "n": "Ekspert CP",
-   "d": "AX 2012 i procesy CP"
+   "n": "Ekspert Construction Products",
+   "d": "AX 2012 i procesy Construction Products"
   },
   {
    "n": "FSSC",
@@ -287,7 +284,7 @@
   {
    "v": 1,
    "n": "niski",
-   "d": "Niewielkie opóźnienie lub koszt, bez wpływu na działanie CC."
+   "d": "Niewielkie opóźnienie lub koszt, bez wpływu na działanie Construction Chemicals."
   },
   {
    "v": 2,
@@ -297,12 +294,12 @@
   {
    "v": 3,
    "n": "wysoki",
-   "d": "Istotne opóźnienie, koszt lub zakłócenie działania CC."
+   "d": "Istotne opóźnienie, koszt lub zakłócenie działania Construction Chemicals."
   },
   {
    "v": 4,
    "n": "bardzo wysoki",
-   "d": "Zagraża wykonalności migracji lub ciągłości działania CC."
+   "d": "Zagraża wykonalności migracji lub ciągłości działania Construction Chemicals."
   }
  ],
  "riskLv": [
@@ -374,7 +371,7 @@
    "pr": 3,
    "im": 3,
    "t": "Platforma AX 2012 bez wsparcia producenta",
-   "ds": "Microsoft zakończył wsparcie AX 2012 R3: podstawowe 12.10.2021, rozszerzone 10.01.2023. Nie ma już poprawek producenta, także bezpieczeństwa i regulacyjnych. Przeniesienie CC zwiększa zależność od tej platformy, a zmiany prawne (KSeF, JPK) zależą od partnera.",
+   "ds": "Microsoft zakończył wsparcie AX 2012 R3: podstawowe 12.10.2021, rozszerzone 10.01.2023. Nie ma już poprawek producenta, także bezpieczeństwa i regulacyjnych. Przeniesienie Construction Chemicals zwiększa zależność od tej platformy, a zmiany prawne (KSeF, JPK) zależą od partnera.",
    "ac": "Potwierdzić plany grupy dla AX 2012 (utrzymanie, migracja do Dynamics 365) i warunki wsparcia partnera dla polskiej lokalizacji."
   },
   {
@@ -383,7 +380,7 @@
    "pr": 3,
    "im": 3,
    "t": "Integracja AX z ARA MES",
-   "ds": "Produkcja CC opiera się na integracji Symfonii z ARA MES (AB Industry). Po migracji potrzebny jest nowy interfejs AX ↔ MES albo przeniesienie funkcji MES do AX.",
+   "ds": "Produkcja Construction Chemicals opiera się na integracji Symfonii z ARA MES (AB Industry). Po migracji potrzebny jest nowy interfejs AX ↔ MES albo przeniesienie funkcji MES do AX.",
    "ac": "Zdecydować o docelowej architekturze produkcji i zamówić u dostawców wycenę interfejsu."
   },
   {
@@ -392,7 +389,7 @@
    "pr": 3,
    "im": 2,
    "t": "Jakość i harmonizacja danych podstawowych",
-   "ds": "Różne indeksy, kontrahenci i plan kont w CC i CP. Bez uporządkowania danych migracja przeniesie błędy i duplikaty do AX.",
+   "ds": "Różne indeksy, kontrahenci i plan kont w Construction Chemicals i Construction Products. Bez uporządkowania danych migracja przeniesie błędy i duplikaty do AX.",
    "ac": "Wyznaczyć właścicieli danych i rozpocząć czyszczenie danych przed migracją."
   },
   {
@@ -409,9 +406,9 @@
    "cat": "law",
    "pr": 2,
    "im": 4,
-   "t": "KSeF i JPK dla CC jako nowego podmiotu w AX",
-   "ds": "CC wymaga konfiguracji KSeF, JPK i rejestrów VAT w AX dla swojego NIP. Błędy grożą wstrzymaniem fakturowania lub sankcjami.",
-   "ac": "Uzgodnić z integratorem zakres i testy KSeF oraz JPK dla CC przed uruchomieniem."
+   "t": "KSeF i JPK dla Construction Chemicals jako nowego podmiotu w AX",
+   "ds": "Construction Chemicals wymaga konfiguracji KSeF, JPK i rejestrów VAT w AX dla swojego NIP. Błędy grożą wstrzymaniem fakturowania lub sankcjami.",
+   "ac": "Uzgodnić z integratorem zakres i testy KSeF oraz JPK dla Construction Chemicals przed uruchomieniem."
   },
   {
    "k": "people",
@@ -419,7 +416,7 @@
    "pr": 3,
    "im": 2,
    "t": "Zależność od kluczowych osób i obciążenie zespołów",
-   "ds": "Wiedza o Symfonii i procesach CC jest w rękach kilku osób, które jednocześnie prowadzą bieżącą pracę.",
+   "ds": "Wiedza o Symfonii i procesach Construction Chemicals jest w rękach kilku osób, które jednocześnie prowadzą bieżącą pracę.",
    "ac": "Zapewnić zastępstwa i czas key userów na projekt; udokumentować procesy AS-IS."
   },
   {
@@ -428,8 +425,8 @@
    "pr": 2,
    "im": 2,
    "t": "Modyfikacje AX zwiększające dług technologiczny",
-   "ds": "Każda modyfikacja AX wprowadzona dla CC utrudnia utrzymanie i przyszłą zmianę platformy.",
-   "ac": "Ograniczyć rozwój AX do wymagań Must; preferować zmianę procesu w CC."
+   "ds": "Każda modyfikacja AX wprowadzona dla Construction Chemicals utrudnia utrzymanie i przyszłą zmianę platformy.",
+   "ac": "Ograniczyć rozwój AX do wymagań Must; preferować zmianę procesu w Construction Chemicals."
   }
  ],
  "benCats": [
@@ -451,7 +448,7 @@
   },
   {
    "k": "syn",
-   "n": "Synergie CP–CC"
+   "n": "Synergie Construction Products – Construction Chemicals"
   },
   {
    "k": "scale",
@@ -462,7 +459,7 @@
   {
    "k": "b01",
    "cat": "syn",
-   "n": "Jedna platforma ERP i wspólny szablon procesów CP i CC",
+   "n": "Jedna platforma ERP i wspólny szablon procesów Construction Products i Construction Chemicals",
    "d": "Jedna konfiguracja, jedna dokumentacja procesów, wspólne zmiany prawne i usprawnienia."
   },
   {
@@ -480,7 +477,7 @@
   {
    "k": "b04",
    "cat": "syn",
-   "n": "Automatyzacja rozliczeń wewnątrzgrupowych CC–CP",
+   "n": "Automatyzacja rozliczeń wewnątrzgrupowych Construction Chemicals – Construction Products",
    "d": "Mniej ręcznych uzgodnień i różnic przy transakcjach między spółkami."
   },
   {
@@ -505,7 +502,7 @@
    "k": "b08",
    "cat": "ctrl",
    "n": "Lepsza kontrola procesu zakupowego",
-   "d": "Zamówienia, dopasowanie faktur, ścieżki akceptacji i rozdział obowiązków jak w CP."
+   "d": "Zamówienia, dopasowanie faktur, ścieżki akceptacji i rozdział obowiązków jak w Construction Products."
   },
   {
    "k": "b09",
@@ -529,7 +526,7 @@
    "k": "b12",
    "cat": "eff",
    "n": "Standaryzacja magazynu i logistyki",
-   "d": "Partie, daty ważności, lokalizacje i skanery według standardu CP."
+   "d": "Partie, daty ważności, lokalizacje i skanery według standardu Construction Products."
   }
  ],
  "benV": [
@@ -579,7 +576,7 @@
   {
    "k": "go",
    "n": "Migracja rekomendowana",
-   "d": "AX w szablonie CP pokrywa wymagania CC; luki da się zamknąć konfiguracją lub zmianą procesu."
+   "d": "AX w szablonie Construction Products pokrywa wymagania Construction Chemicals; luki da się zamknąć konfiguracją lub zmianą procesu."
   },
   {
    "k": "cond",
@@ -599,7 +596,6 @@
    "n": "Księga główna i zamknięcie",
    "i": "book-open-text",
    "c": "c-blue",
-   "ph": 1,
    "d": "Plan kont, księgowania, zamknięcie miesiąca i roku, raportowanie, rozrachunki wewnątrzgrupowe, środki trwałe, płace"
   },
   {
@@ -608,7 +604,6 @@
    "n": "Podatki: VAT, CIT, JPK, KSeF",
    "i": "receipt",
    "c": "c-indigo",
-   "ph": 1,
    "d": "Rejestry VAT, pliki JPK, faktury ustrukturyzowane KSeF, CIT i podatek odroczony"
   },
   {
@@ -617,7 +612,6 @@
    "n": "Banki i płatności",
    "i": "bank",
    "c": "c-teal",
-   "ph": 1,
    "d": "Rachunki i wyciągi, uzgodnienia, przelewy, MPP i biała lista, płynność"
   },
   {
@@ -626,7 +620,6 @@
    "n": "Należności",
    "i": "hand-coins",
    "c": "c-green",
-   "ph": 1,
    "d": "Faktury sprzedaży w księdze, rozliczenia wpłat, potwierdzenia sald, windykacja i odpisy"
   },
   {
@@ -635,7 +628,6 @@
    "n": "Zobowiązania – faktury zakupowe",
    "i": "invoice",
    "c": "c-amber",
-   "ph": 1,
    "d": "Odbiór faktur (KSeF), rejestracja, weryfikacja i akceptacja, rozrachunki z dostawcami"
   },
   {
@@ -644,7 +636,6 @@
    "n": "Kontroling i koszty",
    "i": "chart-pie-slice",
    "c": "c-violet",
-   "ph": 2,
    "d": "Ośrodki kosztów, budżet, kalkulacja kosztu wyrobów, rentowność"
   },
   {
@@ -653,7 +644,6 @@
    "n": "Kontrola kredytowa",
    "i": "shield-check",
    "c": "c-pink",
-   "ph": 2,
    "d": "Limity kredytowe, ubezpieczenie należności, blokady i zwalnianie zamówień, monitoring ryzyka"
   },
   {
@@ -662,7 +652,6 @@
    "n": "Zakupy",
    "i": "shopping-cart",
    "c": "c-cyan",
-   "ph": 2,
    "d": "Dostawcy i cenniki, zapotrzebowania i zamówienia, przyjęcie dostaw, import i WNT"
   },
   {
@@ -671,7 +660,6 @@
    "n": "Sprzedaż i obsługa klienta",
    "i": "storefront",
    "c": "c-blue",
-   "ph": 2,
    "d": "Klienci, cenniki i rabaty, zamówienia, wydanie i fakturowanie, reklamacje, eksport"
   },
   {
@@ -680,7 +668,6 @@
    "n": "Magazyn",
    "i": "warehouse",
    "c": "c-lime",
-   "ph": 2,
    "d": "Magazyny i lokalizacje, partie i daty ważności, dokumenty magazynowe, inwentaryzacja, opakowania zwrotne"
   },
   {
@@ -689,7 +676,6 @@
    "n": "Transport i logistyka",
    "i": "truck",
    "c": "c-teal",
-   "ph": 2,
    "d": "Planowanie wysyłek, dostawy luzem i paletowe, koszty transportu, dokumenty i ADR"
   },
   {
@@ -698,7 +684,6 @@
    "n": "Produkcja i jakość",
    "i": "factory",
    "c": "c-slate",
-   "ph": 2,
    "d": "Receptury, zlecenia i integracja z ARA MES, planowanie, kontrola jakości, zgodność produktowa"
   },
   {
@@ -707,7 +692,6 @@
    "n": "Dane podstawowe i migracja",
    "i": "database",
    "c": "c-navy",
-   "ph": 2,
    "d": "Indeksy, kontrahenci, zakres i termin migracji danych, archiwum"
   },
   {
@@ -716,7 +700,6 @@
    "n": "Raportowanie i BI",
    "i": "chart-bar",
    "c": "c-indigo",
-   "ph": 2,
    "d": "Raporty operacyjne i zarządcze, Power BI, raportowanie grupowe"
   },
   {
@@ -725,7 +708,6 @@
    "n": "Integracje, uprawnienia i utrzymanie",
    "i": "plugs-connected",
    "c": "c-gray",
-   "ph": 2,
    "d": "Interfejsy, role i SoD, licencje i wsparcie, infrastruktura i środowiska"
   }
  ],
@@ -739,26 +721,26 @@
    "q": [
     {
      "k": "gl1-1",
-     "t": "Jak zbudowany jest plan kont CC (poziomy, analityki, słowniki) i czym różni się od planu kont CP w AX?",
-     "h": "W AX analitykę prowadzi się wymiarami finansowymi, a nie rozbudową kont. Ustal, czy CC może przyjąć plan kont CP – to warunek wspólnego raportowania i jednej procedury w FSSC.",
+     "t": "Jak zbudowany jest plan kont Construction Chemicals (poziomy, analityki, słowniki) i czym różni się od planu kont Construction Products w AX?",
+     "h": "W AX analitykę prowadzi się wymiarami finansowymi, a nie rozbudową kont. Ustal, czy Construction Chemicals może przyjąć plan kont Construction Products – to warunek wspólnego raportowania i jednej procedury w FSSC.",
      "p": "M"
     },
     {
      "k": "gl1-2",
-     "t": "Jakie wymiary analityczne (MPK, projekty, linie produktowe, regiony, handlowcy) są potrzebne w raportowaniu CC i jak odwzorować je w wymiarach finansowych AX?",
-     "h": "Porównaj z wymiarami używanymi w CP. Nowy wymiar w AX to konfiguracja; wymiar z własną logiką rozliczeń może wymagać rozwoju.",
+     "t": "Jakie wymiary analityczne (MPK, projekty, linie produktowe, regiony, handlowcy) są potrzebne w raportowaniu Construction Chemicals i jak odwzorować je w wymiarach finansowych AX?",
+     "h": "Porównaj z wymiarami używanymi w Construction Products. Nowy wymiar w AX to konfiguracja; wymiar z własną logiką rozliczeń może wymagać rozwoju.",
      "p": "M"
     },
     {
      "k": "gl1-3",
      "t": "Jak prowadzone jest mapowanie kont na plan kont grupy (raportowanie do konsolidacji) i kto je utrzymuje?",
-     "h": "Sprawdź, czy mapowanie w CP jest w AX, czy w narzędziu raportowym grupy.",
+     "h": "Sprawdź, czy mapowanie w Construction Products jest w AX, czy w narzędziu raportowym grupy.",
      "p": "M"
     },
     {
      "k": "gl1-4",
-     "t": "Czy plan kont i słowniki są utrzymywane centralnie (szablon dla wielu spółek), czy osobno dla CC?",
-     "h": "Wspólny szablon CP i CC zmniejsza koszt utrzymania – wartość dodana.",
+     "t": "Czy plan kont i słowniki są utrzymywane centralnie (szablon dla wielu spółek), czy osobno dla Construction Chemicals?",
+     "h": "Wspólny szablon Construction Products i Construction Chemicals zmniejsza koszt utrzymania – wartość dodana.",
      "p": "S"
     }
    ]
@@ -772,32 +754,32 @@
    "q": [
     {
      "k": "gl2-1",
-     "t": "Jakie typy dokumentów i dzienniki księgowe są używane w CC (np. PK, WB, FZ, FS) i jak są numerowane?",
-     "h": "Porównaj z dziennikami i sekwencjami numerów w AX CP. Zmiana symboli dokumentów to typowa zmiana procesowa po stronie CC.",
+     "t": "Jakie typy dokumentów i dzienniki księgowe są używane w Construction Chemicals (np. PK, WB, FZ, FS) i jak są numerowane?",
+     "h": "Porównaj z dziennikami i sekwencjami numerów w AX Construction Products. Zmiana symboli dokumentów to typowa zmiana procesowa po stronie Construction Chemicals.",
      "p": "S"
     },
     {
      "k": "gl2-2",
      "t": "Które księgowania powstają automatycznie z modułów (sprzedaż, zakupy, magazyn, produkcja), a które są ręczne? Jak zdefiniowane są schematy księgowań?",
-     "h": "W AX księgowania automatyczne wynikają z profili księgowania i grup magazynowych. Oceń, czy logikę CC da się odwzorować konfiguracją.",
+     "h": "W AX księgowania automatyczne wynikają z profili księgowania i grup magazynowych. Oceń, czy logikę Construction Chemicals da się odwzorować konfiguracją.",
      "p": "M"
     },
     {
      "k": "gl2-3",
      "t": "Jak rozliczane są koszty i przychody międzyokresowe (RMK) oraz rezerwy?",
-     "h": "Sprawdź, czy CP używa w AX harmonogramów lub dzienników okresowych, czy księguje ręcznie.",
+     "h": "Sprawdź, czy Construction Products używa w AX harmonogramów lub dzienników okresowych, czy księguje ręcznie.",
      "p": "S"
     },
     {
      "k": "gl2-4",
      "t": "Jak korygowane są błędne księgowania (storno czerwone lub czarne) i jak zatwierdzane są dokumenty PK?",
-     "h": "W polskiej praktyce często wymagane jest storno czerwone – sprawdź ustawienia w AX CP.",
+     "h": "W polskiej praktyce często wymagane jest storno czerwone – sprawdź ustawienia w AX Construction Products.",
      "p": "S"
     },
     {
      "k": "gl2-5",
      "t": "Jak księgowane są transakcje w walutach obcych i jak liczone są różnice kursowe (kurs NBP z dnia poprzedzającego, wycena na koniec miesiąca)?",
-     "h": "Różnice kursowe zrealizowane i niezrealizowane, typy kursów, automatyczny import kursów NBP – porównaj z CP.",
+     "h": "Różnice kursowe zrealizowane i niezrealizowane, typy kursów, automatyczny import kursów NBP – porównaj z Construction Products.",
      "p": "M",
      "reg": 1
     }
@@ -812,8 +794,8 @@
    "q": [
     {
      "k": "gl3-1",
-     "t": "Jak wygląda harmonogram zamknięcia miesiąca w CC (dzień zamknięcia, kolejność czynności, odpowiedzialni)?",
-     "h": "Porównaj z harmonogramem CP. Wspólny kalendarz zamknięcia w FSSC to wartość dodana.",
+     "t": "Jak wygląda harmonogram zamknięcia miesiąca w Construction Chemicals (dzień zamknięcia, kolejność czynności, odpowiedzialni)?",
+     "h": "Porównaj z harmonogramem Construction Products. Wspólny kalendarz zamknięcia w FSSC to wartość dodana.",
      "p": "M"
     },
     {
@@ -825,7 +807,7 @@
     {
      "k": "gl3-3",
      "t": "Jakie wyceny i uzgodnienia wykonuje się na koniec miesiąca (różnice kursowe, zapasy, rozrachunki, konta techniczne)?",
-     "h": "Ustal, które czynności w CP są zautomatyzowane w AX, a które ręczne.",
+     "h": "Ustal, które czynności w Construction Products są zautomatyzowane w AX, a które ręczne.",
      "p": "M"
     },
     {
@@ -859,25 +841,25 @@
     {
      "k": "gl4-2",
      "t": "Jak przygotowywane są dane do raportowania grupowego (konsolidacji) i w jakim terminie?",
-     "h": "Sprawdź, czy CP zasila raportowanie grupowe bezpośrednio z AX.",
+     "h": "Sprawdź, czy Construction Products zasila raportowanie grupowe bezpośrednio z AX.",
      "p": "M"
     },
     {
      "k": "gl4-3",
-     "t": "Jakie miesięczne raporty zarządcze przygotowuje FSSC dla CC i z jakich źródeł danych?",
+     "t": "Jakie miesięczne raporty zarządcze przygotowuje FSSC dla Construction Chemicals i z jakich źródeł danych?",
      "h": "Uzgodnij listę raportów do odtworzenia po migracji.",
      "p": "S"
     },
     {
      "k": "gl4-4",
      "t": "Jak wspierany jest audyt (obroty i salda, zestawienia, wydruki ksiąg, ślad zmian)?",
-     "h": "Porównaj z praktyką CP w AX.",
+     "h": "Porównaj z praktyką Construction Products w AX.",
      "p": "S"
     },
     {
      "k": "gl4-5",
      "t": "Czy e-sprawozdanie finansowe (XML) jest przygotowywane z systemu, czy w narzędziu zewnętrznym?",
-     "h": "Sprawdź, jak robi to CP – możliwe wspólne narzędzie.",
+     "h": "Sprawdź, jak robi to Construction Products – możliwe wspólne narzędzie.",
      "p": "S",
      "reg": 1
     }
@@ -887,25 +869,25 @@
    "k": "gl5",
    "a": "gl",
    "n": "Rozrachunki wewnątrzgrupowe",
-   "d": "Transakcje i uzgodnienia z podmiotami grupy (w tym z CP), refaktury, oznaczanie partnerów, eliminacje, potwierdzenia sald.",
+   "d": "Transakcje i uzgodnienia z podmiotami grupy (w tym z Construction Products), refaktury, oznaczanie partnerów, eliminacje, potwierdzenia sald.",
    "o": "Kierownik zespołu FSSC",
    "q": [
     {
      "k": "gl5-1",
-     "t": "Jakie transakcje wewnątrzgrupowe ma CC (sprzedaż i zakupy z podmiotami grupy, usługi, refaktury) i jak są uzgadniane?",
+     "t": "Jakie transakcje wewnątrzgrupowe ma Construction Chemicals (sprzedaż i zakupy z podmiotami grupy, usługi, refaktury) i jak są uzgadniane?",
      "h": "Zbierz listę partnerów grupowych i wolumen transakcji.",
      "p": "M"
     },
     {
      "k": "gl5-2",
      "t": "Jak oznaczani są kontrahenci grupowi (kod partnera) na potrzeby eliminacji w konsolidacji?",
-     "h": "Porównaj z oznaczeniem w AX CP.",
+     "h": "Porównaj z oznaczeniem w AX Construction Products.",
      "p": "M"
     },
     {
      "k": "gl5-3",
-     "t": "Czy po przejściu na AX można zautomatyzować transakcje między CC i CP (zamówienie wewnątrzgrupowe tworzy dokument u drugiej strony)?",
-     "h": "Wartość dodana wspólnego AX – sprawdź, czy CP używa funkcji intercompany.",
+     "t": "Czy po przejściu na AX można zautomatyzować transakcje między Construction Chemicals i Construction Products (zamówienie wewnątrzgrupowe tworzy dokument u drugiej strony)?",
+     "h": "Wartość dodana wspólnego AX – sprawdź, czy Construction Products używa funkcji intercompany.",
      "p": "C"
     }
    ]
@@ -919,27 +901,27 @@
    "q": [
     {
      "k": "gl6-1",
-     "t": "Gdzie prowadzona jest ewidencja środków trwałych CC i ile jest pozycji?",
+     "t": "Gdzie prowadzona jest ewidencja środków trwałych Construction Chemicals i ile jest pozycji?",
      "h": "Dane do zakresu migracji (karty, wartości, umorzenia).",
      "p": "M"
     },
     {
      "k": "gl6-2",
      "t": "Czy prowadzona jest odrębna amortyzacja bilansowa i podatkowa (różne stawki i metody), a także według zasad grupy?",
-     "h": "Sprawdź, ile ksiąg (modeli) amortyzacji używa CP w AX.",
+     "h": "Sprawdź, ile ksiąg (modeli) amortyzacji używa Construction Products w AX.",
      "p": "M",
      "reg": 1
     },
     {
      "k": "gl6-3",
      "t": "Jak rozliczane są inwestycje w toku i przyjęcia środków trwałych (OT)?",
-     "h": "Porównaj obieg dokumentów i powiązanie z zakupami w AX CP.",
+     "h": "Porównaj obieg dokumentów i powiązanie z zakupami w AX Construction Products.",
      "p": "S"
     },
     {
      "k": "gl6-4",
      "t": "Jak ewidencjonowany jest leasing oraz sprzęt instalowany u klientów (np. urządzenia dozujące)?",
-     "h": "Specyfika CC: urządzenia u klientów – lokalizacja, odpowiedzialność, amortyzacja.",
+     "h": "Specyfika Construction Chemicals: urządzenia u klientów – lokalizacja, odpowiedzialność, amortyzacja.",
      "p": "S"
     },
     {
@@ -959,8 +941,8 @@
    "q": [
     {
      "k": "gl7-1",
-     "t": "W jakim systemie liczone są płace CC i jak lista płac trafia do księgi (plik, ręcznie, interfejs)?",
-     "h": "Sprawdź, jak CP importuje płace do AX; uwzględnij zmiany w systemach kadrowych grupy.",
+     "t": "W jakim systemie liczone są płace Construction Chemicals i jak lista płac trafia do księgi (plik, ręcznie, interfejs)?",
+     "h": "Sprawdź, jak Construction Products importuje płace do AX; uwzględnij zmiany w systemach kadrowych grupy.",
      "p": "M"
     },
     {
@@ -972,7 +954,7 @@
     {
      "k": "gl7-3",
      "t": "Jak rozliczane są delegacje, zaliczki i wydatki pracownicze?",
-     "h": "Możliwe wspólne narzędzie z CP.",
+     "h": "Możliwe wspólne narzędzie z Construction Products.",
      "p": "S"
     }
    ]
@@ -986,8 +968,8 @@
    "q": [
     {
      "k": "tx1-1",
-     "t": "Jak prowadzone są rejestry VAT w CC i jakie oznaczenia są stosowane (kody GTU, procedury, typy dokumentów)?",
-     "h": "Porównaj kody i procedury w AX CP oraz sposób ich nadawania (automatycznie z kartoteki czy ręcznie).",
+     "t": "Jak prowadzone są rejestry VAT w Construction Chemicals i jakie oznaczenia są stosowane (kody GTU, procedury, typy dokumentów)?",
+     "h": "Porównaj kody i procedury w AX Construction Products oraz sposób ich nadawania (automatycznie z kartoteki czy ręcznie).",
      "p": "M",
      "reg": 1
     },
@@ -1015,13 +997,13 @@
     {
      "k": "tx1-5",
      "t": "Czy stosowana jest ulga na złe długi i jak monitorowane są przeterminowane należności i zobowiązania na jej potrzeby?",
-     "h": "Sprawdź, czy CP ma raport lub automat w AX.",
+     "h": "Sprawdź, czy Construction Products ma raport lub automat w AX.",
      "p": "S",
      "reg": 1
     },
     {
      "k": "tx1-6",
-     "t": "Czy CC stosuje proporcję lub prewspółczynnik albo ma sprzedaż zwolnioną?",
+     "t": "Czy Construction Chemicals stosuje proporcję lub prewspółczynnik albo ma sprzedaż zwolnioną?",
      "h": "",
      "p": "C"
     }
@@ -1036,14 +1018,14 @@
    "q": [
     {
      "k": "tx2-1",
-     "t": "Jak generowany jest JPK_V7M lub JPK_V7K w CC (z Symfonii, narzędziem zewnętrznym) i jak wygląda kontrola przed wysyłką?",
-     "h": "Ustal, czy CP generuje JPK w AX czy w narzędziu zewnętrznym i kto utrzymuje polską lokalizację AX.",
+     "t": "Jak generowany jest JPK_V7M lub JPK_V7K w Construction Chemicals (z Symfonii, narzędziem zewnętrznym) i jak wygląda kontrola przed wysyłką?",
+     "h": "Ustal, czy Construction Products generuje JPK w AX czy w narzędziu zewnętrznym i kto utrzymuje polską lokalizację AX.",
      "p": "M",
      "reg": 1
     },
     {
      "k": "tx2-2",
-     "t": "Jakie inne struktury JPK CC przygotowuje na żądanie (JPK_KR, JPK_KR_PD, JPK_MAG, JPK_FA, JPK_WB) i skąd pochodzą dane?",
+     "t": "Jakie inne struktury JPK Construction Chemicals przygotowuje na żądanie (JPK_KR, JPK_KR_PD, JPK_MAG, JPK_FA, JPK_WB) i skąd pochodzą dane?",
      "h": "Każda struktura musi być dostępna dla nowego podmiotu w AX.",
      "p": "M",
      "reg": 1
@@ -1057,7 +1039,7 @@
     },
     {
      "k": "tx2-4",
-     "t": "Czy rozwiązanie JPK używane w CP obejmie CC jako kolejny podmiot i jaki jest koszt dodania podmiotu?",
+     "t": "Czy rozwiązanie JPK używane w Construction Products obejmie Construction Chemicals jako kolejny podmiot i jaki jest koszt dodania podmiotu?",
      "h": "Kluczowe dla wykonalności – zapytaj partnera utrzymującego lokalizację AX.",
      "p": "M",
      "reg": 1
@@ -1073,8 +1055,8 @@
    "q": [
     {
      "k": "tx3-1",
-     "t": "Jak CC wystawia faktury w KSeF (integracja Symfonii, narzędzie pośrednie) i jak obsługuje odrzucenia i błędy?",
-     "h": "Porównaj z rozwiązaniem KSeF w AX CP.",
+     "t": "Jak Construction Chemicals wystawia faktury w KSeF (integracja Symfonii, narzędzie pośrednie) i jak obsługuje odrzucenia i błędy?",
+     "h": "Porównaj z rozwiązaniem KSeF w AX Construction Products.",
      "p": "M",
      "reg": 1
     },
@@ -1094,14 +1076,14 @@
     },
     {
      "k": "tx3-4",
-     "t": "Jak zarządzane są uprawnienia i dane uwierzytelniające KSeF dla CC i kto za nie odpowiada?",
+     "t": "Jak zarządzane są uprawnienia i dane uwierzytelniające KSeF dla Construction Chemicals i kto za nie odpowiada?",
      "h": "",
      "p": "S",
      "reg": 1
     },
     {
      "k": "tx3-5",
-     "t": "Czy rozwiązanie KSeF używane w CP może obsłużyć CC jako kolejny NIP i jaki jest zakres zmian?",
+     "t": "Czy rozwiązanie KSeF używane w Construction Products może obsłużyć Construction Chemicals jako kolejny NIP i jaki jest zakres zmian?",
      "h": "Kluczowe dla wykonalności – zakres i koszt po stronie integratora.",
      "p": "M",
      "reg": 1
@@ -1118,7 +1100,7 @@
     {
      "k": "tx4-1",
      "t": "Jak wyliczane są zaliczki CIT i koszty niestanowiące kosztów uzyskania przychodów – w systemie czy w Excelu?",
-     "h": "Wyróżnienie NKUP kontami lub wymiarem w AX – sprawdź praktykę CP.",
+     "h": "Wyróżnienie NKUP kontami lub wymiarem w AX – sprawdź praktykę Construction Products.",
      "p": "S",
      "reg": 1
     },
@@ -1153,14 +1135,14 @@
    "q": [
     {
      "k": "bk1-1",
-     "t": "Ile rachunków bankowych, w jakich bankach i walutach ma CC i jak importowane są wyciągi (format, częstotliwość)?",
-     "h": "Sprawdź formaty wyciągów obsługiwane w AX CP (np. MT940, CAMT) i czy CC korzysta z tych samych banków.",
+     "t": "Ile rachunków bankowych, w jakich bankach i walutach ma Construction Chemicals i jak importowane są wyciągi (format, częstotliwość)?",
+     "h": "Sprawdź formaty wyciągów obsługiwane w AX Construction Products (np. MT940, CAMT) i czy Construction Chemicals korzysta z tych samych banków.",
      "p": "M"
     },
     {
      "k": "bk1-2",
      "t": "Jaka część pozycji wyciągu rozliczana jest automatycznie z należnościami i zobowiązaniami i jakie reguły dopasowania są stosowane?",
-     "h": "Niska automatyzacja w CC i wyższa w CP to wartość dodana migracji.",
+     "h": "Niska automatyzacja w Construction Chemicals i wyższa w Construction Products to wartość dodana migracji.",
      "p": "S"
     },
     {
@@ -1171,8 +1153,8 @@
     },
     {
      "k": "bk1-4",
-     "t": "Czy CC prowadzi kasę gotówkową (KP, KW, raporty kasowe)?",
-     "h": "Sprawdź, czy CP obsługuje kasę w AX.",
+     "t": "Czy Construction Chemicals prowadzi kasę gotówkową (KP, KW, raporty kasowe)?",
+     "h": "Sprawdź, czy Construction Products obsługuje kasę w AX.",
      "p": "C"
     }
    ]
@@ -1187,13 +1169,13 @@
     {
      "k": "bk2-1",
      "t": "Jak przygotowywana jest propozycja płatności (kryteria, terminy, priorytety) i kto ją akceptuje?",
-     "h": "Porównaj z propozycjami płatności w AX CP i ścieżką akceptacji.",
+     "h": "Porównaj z propozycjami płatności w AX Construction Products i ścieżką akceptacji.",
      "p": "M"
     },
     {
      "k": "bk2-2",
      "t": "Jak przelewy trafiają do banku (plik, połączenie bezpośrednie, ręcznie w bankowości) i w jakim formacie?",
-     "h": "Sprawdź, czy kanał i format CP można użyć dla CC.",
+     "h": "Sprawdź, czy kanał i format Construction Products można użyć dla Construction Chemicals.",
      "p": "M"
     },
     {
@@ -1206,7 +1188,7 @@
     {
      "k": "bk2-4",
      "t": "Jak weryfikowana jest biała lista podatników VAT przed płatnością i jak dokumentowany jest wynik weryfikacji?",
-     "h": "Sprawdź, czy weryfikacja w CP jest automatyczna (AX, narzędzie zewnętrzne).",
+     "h": "Sprawdź, czy weryfikacja w Construction Products jest automatyczna (AX, narzędzie zewnętrzne).",
      "p": "M",
      "reg": 1
     },
@@ -1239,7 +1221,7 @@
     },
     {
      "k": "bk3-2",
-     "t": "Czy CC korzysta z gwarancji bankowych, akredytyw lub faktoringu i jak są ewidencjonowane?",
+     "t": "Czy Construction Chemicals korzysta z gwarancji bankowych, akredytyw lub faktoringu i jak są ewidencjonowane?",
      "h": "",
      "p": "C"
     }
@@ -1255,7 +1237,7 @@
     {
      "k": "ar1-1",
      "t": "Jak faktury sprzedaży trafiają z modułu handlowego do księgi i rejestru VAT? Czy część faktur wystawia się bezpośrednio w module finansowym?",
-     "h": "W AX faktury powstają w sprzedaży lub jako faktury niezależne – porównaj z CP.",
+     "h": "W AX faktury powstają w sprzedaży lub jako faktury niezależne – porównaj z Construction Products.",
      "p": "M"
     },
     {
@@ -1295,7 +1277,7 @@
     {
      "k": "ar2-3",
      "t": "Jak naliczane są odsetki za opóźnienia i rekompensaty za koszty odzyskiwania należności?",
-     "h": "Sprawdź automatyzację not odsetkowych w AX CP.",
+     "h": "Sprawdź automatyzację not odsetkowych w AX Construction Products.",
      "p": "S"
     },
     {
@@ -1316,7 +1298,7 @@
     {
      "k": "ar3-1",
      "t": "Jak monitorowane są należności przeterminowane i wysyłane przypomnienia lub wezwania do zapłaty?",
-     "h": "W AX: listy przypomnień – sprawdź, czy CP ich używa.",
+     "h": "W AX: listy przypomnień – sprawdź, czy Construction Products ich używa.",
      "p": "M"
     },
     {
@@ -1342,19 +1324,19 @@
    "q": [
     {
      "k": "ap1-1",
-     "t": "Jakimi kanałami wpływają faktury zakupowe do CC (KSeF, PDF e-mailem, papier) i jaki jest wolumen miesięczny?",
+     "t": "Jakimi kanałami wpływają faktury zakupowe do Construction Chemicals (KSeF, PDF e-mailem, papier) i jaki jest wolumen miesięczny?",
      "h": "Wolumen przyda się do szacunku efektów wspólnego procesu w FSSC.",
      "p": "M"
     },
     {
      "k": "ap1-2",
-     "t": "Jak faktury są rejestrowane w Symfonii (ręcznie, import z KSeF, rozpoznawanie OCR) i kto to robi (FSSC, CC)?",
+     "t": "Jak faktury są rejestrowane w Symfonii (ręcznie, import z KSeF, rozpoznawanie OCR) i kto to robi (FSSC, Construction Chemicals)?",
      "h": "",
      "p": "M"
     },
     {
      "k": "ap1-3",
-     "t": "Czy CP używa narzędzia do obiegu faktur zintegrowanego z AX (np. WEBCON), które mogłoby objąć CC?",
+     "t": "Czy Construction Products używa narzędzia do obiegu faktur zintegrowanego z AX (np. WEBCON), które mogłoby objąć Construction Chemicals?",
      "h": "Wspólny obieg faktur w FSSC to wartość dodana.",
      "p": "S"
     }
@@ -1370,7 +1352,7 @@
     {
      "k": "ap2-1",
      "t": "Jak weryfikowane są faktury za towary i surowce: czy jest dopasowanie do zamówienia i przyjęcia (dopasowanie dwu- lub trójstronne)?",
-     "h": "W AX CP faktura jest dopasowywana do zamówienia zakupu i przyjęcia – jeśli CC nie używa zamówień, to istotna zmiana procesu.",
+     "h": "W AX Construction Products faktura jest dopasowywana do zamówienia zakupu i przyjęcia – jeśli Construction Chemicals nie używa zamówień, to istotna zmiana procesu.",
      "p": "M"
     },
     {
@@ -1403,7 +1385,7 @@
     {
      "k": "ap3-1",
      "t": "Jak zakładani i weryfikowani są nowi dostawcy oraz zmiany ich rachunków bankowych (biała lista, zatwierdzanie zmian)?",
-     "h": "Kontrola zmian rachunków ogranicza ryzyko wyłudzeń – porównaj z CP.",
+     "h": "Kontrola zmian rachunków ogranicza ryzyko wyłudzeń – porównaj z Construction Products.",
      "p": "M"
     },
     {
@@ -1414,8 +1396,8 @@
     },
     {
      "k": "ap3-3",
-     "t": "Czy CC raportuje praktyki płatnicze i terminy zapłaty (sprawozdanie dużych przedsiębiorców) i skąd pochodzą dane?",
-     "h": "Sprawdź, czy obowiązek dotyczy CC i jak raport przygotowuje CP.",
+     "t": "Czy Construction Chemicals raportuje praktyki płatnicze i terminy zapłaty (sprawozdanie dużych przedsiębiorców) i skąd pochodzą dane?",
+     "h": "Sprawdź, czy obowiązek dotyczy Construction Chemicals i jak raport przygotowuje Construction Products.",
      "p": "S",
      "reg": 1
     },
@@ -1436,7 +1418,7 @@
    "q": [
     {
      "k": "ct1-1",
-     "t": "Jaka jest struktura ośrodków kosztów w CC i jak koszty są rozliczane (klucze, rozdzielniki)?",
+     "t": "Jaka jest struktura ośrodków kosztów w Construction Chemicals i jak koszty są rozliczane (klucze, rozdzielniki)?",
      "h": "",
      "p": "M"
     },
@@ -1457,13 +1439,13 @@
    "q": [
     {
      "k": "ct2-1",
-     "t": "Gdzie przygotowywany jest budżet CC (ERP, Excel, narzędzie grupowe) i jak porównywane jest wykonanie?",
+     "t": "Gdzie przygotowywany jest budżet Construction Chemicals (ERP, Excel, narzędzie grupowe) i jak porównywane jest wykonanie?",
      "h": "",
      "p": "S"
     },
     {
      "k": "ct2-2",
-     "t": "Czy CP korzysta w AX z budżetowania lub kontroli budżetu (np. przy zamówieniach)?",
+     "t": "Czy Construction Products korzysta w AX z budżetowania lub kontroli budżetu (np. przy zamówieniach)?",
      "h": "",
      "p": "C"
     }
@@ -1478,8 +1460,8 @@
    "q": [
     {
      "k": "ct3-1",
-     "t": "Jak liczony jest koszt wytworzenia wyrobów w CC (standardowy, rzeczywisty, średni ważony) i w którym systemie (Symfonia, ARA MES, Excel)?",
-     "h": "Sprawdź model wyceny zapasów i kalkulacje w AX CP – zgodność metod wpływa na wynik i wycenę zapasów.",
+     "t": "Jak liczony jest koszt wytworzenia wyrobów w Construction Chemicals (standardowy, rzeczywisty, średni ważony) i w którym systemie (Symfonia, ARA MES, Excel)?",
+     "h": "Sprawdź model wyceny zapasów i kalkulacje w AX Construction Products – zgodność metod wpływa na wynik i wycenę zapasów.",
      "p": "M"
     },
     {
@@ -1506,7 +1488,7 @@
    "q": [
     {
      "k": "ct4-1",
-     "t": "Jakie analizy rentowności (klient, produkt, segment, region) są wymagane przez zarząd CC i skąd pochodzą dane?",
+     "t": "Jakie analizy rentowności (klient, produkt, segment, region) są wymagane przez zarząd Construction Chemicals i skąd pochodzą dane?",
      "h": "",
      "p": "S"
     },
@@ -1534,7 +1516,7 @@
     {
      "k": "cr1-2",
      "t": "Czy limity są powiązane z limitem ubezpieczyciela należności i z zabezpieczeniami (gwarancje, weksle)?",
-     "h": "Sprawdź, czy CP przechowuje te dane w AX czy poza nim.",
+     "h": "Sprawdź, czy Construction Products przechowuje te dane w AX czy poza nim.",
      "p": "S"
     },
     {
@@ -1555,7 +1537,7 @@
     {
      "k": "cr2-1",
      "t": "W którym momencie system sprawdza limit i przeterminowania (oferta, zamówienie, wydanie, faktura)?",
-     "h": "Sprawdź konfigurację kontroli limitu w AX CP i czy obejmuje zamówienia otwarte.",
+     "h": "Sprawdź konfigurację kontroli limitu w AX Construction Products i czy obejmuje zamówienia otwarte.",
      "p": "M"
     },
     {
@@ -1576,7 +1558,7 @@
    "k": "cr3",
    "a": "credit",
    "n": "Monitoring ryzyka kredytowego",
-   "d": "Wiekowanie, DSO, klienci zagrożeni, komitet kredytowy, klienci wspólni z CP.",
+   "d": "Wiekowanie, DSO, klienci zagrożeni, komitet kredytowy, klienci wspólni z Construction Products.",
    "o": "Credit controller",
    "q": [
     {
@@ -1587,7 +1569,7 @@
     },
     {
      "k": "cr3-2",
-     "t": "Czy po migracji możliwy będzie wspólny widok ekspozycji na klientów wspólnych dla CC i CP?",
+     "t": "Czy po migracji możliwy będzie wspólny widok ekspozycji na klientów wspólnych dla Construction Chemicals i Construction Products?",
      "h": "Wartość dodana: łączna ekspozycja kredytowa na wspólnych klientów.",
      "p": "S"
     }
@@ -1629,7 +1611,7 @@
    "q": [
     {
      "k": "pu2-1",
-     "t": "Czy zakupy CC (surowce, opakowania, usługi) są rejestrowane jako zamówienia w systemie? Jaka część zakupów ma zamówienie?",
+     "t": "Czy zakupy Construction Chemicals (surowce, opakowania, usługi) są rejestrowane jako zamówienia w systemie? Jaka część zakupów ma zamówienie?",
      "h": "Brak zamówień oznacza istotną zmianę procesu w AX (dopasowanie faktur, zobowiązania).",
      "p": "M"
     },
@@ -1696,7 +1678,7 @@
     {
      "k": "pu4-2",
      "t": "Jak koszty dodatkowe (transport, cło, ubezpieczenie) są doliczane do wartości zakupu i zapasu?",
-     "h": "Sprawdź, czy CP używa w AX kosztów dodatkowych na zamówieniach zakupu.",
+     "h": "Sprawdź, czy Construction Products używa w AX kosztów dodatkowych na zamówieniach zakupu.",
      "p": "M"
     }
    ]
@@ -1705,12 +1687,12 @@
    "k": "sa1",
    "a": "sal",
    "n": "Klienci i warunki handlowe",
-   "d": "Kartoteka klientów, płatnicy i odbiorcy, miejsca dostaw (np. węzły betoniarskie), segmentacja, klienci wspólni z CP.",
+   "d": "Kartoteka klientów, płatnicy i odbiorcy, miejsca dostaw (np. węzły betoniarskie), segmentacja, klienci wspólni z Construction Products.",
    "o": "Kierownik obsługi klienta",
    "q": [
     {
      "k": "sa1-1",
-     "t": "Jak zbudowana jest kartoteka klientów CC (płatnik, odbiorca, miejsca dostaw) i ilu klientów jest wspólnych z CP?",
+     "t": "Jak zbudowana jest kartoteka klientów Construction Chemicals (płatnik, odbiorca, miejsca dostaw) i ilu klientów jest wspólnych z Construction Products?",
      "h": "",
      "p": "M"
     },
@@ -1744,13 +1726,13 @@
     {
      "k": "sa2-2",
      "t": "Jak naliczane i rozliczane są rabaty posprzedażowe i bonusy (progi obrotu, okresy rozliczeń)?",
-     "h": "Sprawdź obsługę porozumień rabatowych w AX CP – często rozwiązywane w Excelu.",
+     "h": "Sprawdź obsługę porozumień rabatowych w AX Construction Products – często rozwiązywane w Excelu.",
      "p": "M"
     },
     {
      "k": "sa2-3",
      "t": "Czy ceny zależą od jednostki miary i opakowania (kg, l, t, IBC, cysterna) lub od dostawy luzem?",
-     "h": "Specyfika CC: produkty płynne – przeliczniki jednostek i gęstość.",
+     "h": "Specyfika Construction Chemicals: produkty płynne – przeliczniki jednostek i gęstość.",
      "p": "M"
     }
    ]
@@ -1782,8 +1764,8 @@
     },
     {
      "k": "sa3-4",
-     "t": "Czy CC uzupełnia zapas w zbiornikach u klienta (model VMI, konsygnacja) i jak to ewidencjonuje?",
-     "h": "Specyfika CC: zbiorniki i dozowniki u klientów – sprawdź odwzorowanie w AX (magazyn u klienta, konsygnacja).",
+     "t": "Czy Construction Chemicals uzupełnia zapas w zbiornikach u klienta (model VMI, konsygnacja) i jak to ewidencjonuje?",
+     "h": "Specyfika Construction Chemicals: zbiorniki i dozowniki u klientów – sprawdź odwzorowanie w AX (magazyn u klienta, konsygnacja).",
      "p": "M"
     }
    ]
@@ -1833,7 +1815,7 @@
     {
      "k": "sa5-2",
      "t": "Jak obsługiwane są zwroty towarów i opakowań zwrotnych (IBC, beczki, palety)?",
-     "h": "Opakowania zwrotne: kaucje, salda u klientów – sprawdź, czy CP ma podobny proces (np. palety).",
+     "h": "Opakowania zwrotne: kaucje, salda u klientów – sprawdź, czy Construction Products ma podobny proces (np. palety).",
      "p": "M"
     }
    ]
@@ -1870,19 +1852,19 @@
    "q": [
     {
      "k": "wh1-1",
-     "t": "Ile magazynów prowadzi CC (zakład, magazyny zewnętrzne, u klientów) i czy ewidencja jest prowadzona na lokalizacjach?",
+     "t": "Ile magazynów prowadzi Construction Chemicals (zakład, magazyny zewnętrzne, u klientów) i czy ewidencja jest prowadzona na lokalizacjach?",
      "h": "",
      "p": "M"
     },
     {
      "k": "wh1-2",
-     "t": "Czy CP używa w AX zaawansowanej gospodarki magazynowej (lokalizacje, skanery) i czy taki model pasuje do CC?",
+     "t": "Czy Construction Products używa w AX zaawansowanej gospodarki magazynowej (lokalizacje, skanery) i czy taki model pasuje do Construction Chemicals?",
      "h": "",
      "p": "S"
     },
     {
      "k": "wh1-3",
-     "t": "Czy zapasy CC są w magazynach obcych lub konsygnacyjnych i jak są uzgadniane?",
+     "t": "Czy zapasy Construction Chemicals są w magazynach obcych lub konsygnacyjnych i jak są uzgadniane?",
      "h": "",
      "p": "S"
     }
@@ -1897,8 +1879,8 @@
    "q": [
     {
      "k": "wh2-1",
-     "t": "Czy CC ewidencjonuje partie i daty ważności surowców i wyrobów? Czy wydania są realizowane według FEFO?",
-     "h": "Kluczowe w chemii budowlanej (okres przydatności) – sprawdź śledzenie partii w AX CP.",
+     "t": "Czy Construction Chemicals ewidencjonuje partie i daty ważności surowców i wyrobów? Czy wydania są realizowane według FEFO?",
+     "h": "Kluczowe w chemii budowlanej (okres przydatności) – sprawdź śledzenie partii w AX Construction Products.",
      "p": "M"
     },
     {
@@ -1925,7 +1907,7 @@
    "q": [
     {
      "k": "wh3-1",
-     "t": "Jakie dokumenty magazynowe są używane w CC (PZ, WZ, MM, RW, PW) i czy powstają w systemie, czy ręcznie?",
+     "t": "Jakie dokumenty magazynowe są używane w Construction Chemicals (PZ, WZ, MM, RW, PW) i czy powstają w systemie, czy ręcznie?",
      "h": "",
      "p": "M"
     },
@@ -1959,7 +1941,7 @@
     },
     {
      "k": "wh4-2",
-     "t": "Jaka metoda wyceny rozchodu jest stosowana (FIFO, średnia ważona, standard) i czy jest zgodna z CP?",
+     "t": "Jaka metoda wyceny rozchodu jest stosowana (FIFO, średnia ważona, standard) i czy jest zgodna z Construction Products?",
      "h": "Zmiana metody wyceny ma skutki księgowe – decyzja do akceptacji przez finanse.",
      "p": "M"
     }
@@ -2002,13 +1984,13 @@
     },
     {
      "k": "tr1-2",
-     "t": "Jakie rodzaje dostaw realizuje CC (cysterny luzem, palety, kurier, odbiór własny) i jakie wymagania ma każdy z nich?",
-     "h": "Dostawy luzem: ważenie, plomby, mycie cystern – specyfika CC.",
+     "t": "Jakie rodzaje dostaw realizuje Construction Chemicals (cysterny luzem, palety, kurier, odbiór własny) i jakie wymagania ma każdy z nich?",
+     "h": "Dostawy luzem: ważenie, plomby, mycie cystern – specyfika Construction Chemicals.",
      "p": "M"
     },
     {
      "k": "tr1-3",
-     "t": "Czy CP używa w AX modułu transportowego lub zewnętrznego systemu?",
+     "t": "Czy Construction Products używa w AX modułu transportowego lub zewnętrznego systemu?",
      "h": "",
      "p": "C"
     }
@@ -2068,7 +2050,7 @@
     {
      "k": "pr1-1",
      "t": "Gdzie utrzymywane są receptury (Symfonia, ARA MES, system laboratoryjny) i kto je zatwierdza?",
-     "h": "Sprawdź, czy CP używa w AX formuł (produkcja procesowa) czy zestawień materiałowych.",
+     "h": "Sprawdź, czy Construction Products używa w AX formuł (produkcja procesowa) czy zestawień materiałowych.",
      "p": "M"
     },
     {
@@ -2106,7 +2088,7 @@
     },
     {
      "k": "pr2-3",
-     "t": "Czy ARA MES zostaje po migracji, czy jego funkcje przejmie produkcja w AX (jak w CP)?",
+     "t": "Czy ARA MES zostaje po migracji, czy jego funkcje przejmie produkcja w AX (jak w Construction Products)?",
      "h": "Decyzja architektoniczna – wpływa na koszt, ryzyko i harmonogram.",
      "p": "M"
     },
@@ -2133,7 +2115,7 @@
     },
     {
      "k": "pr3-2",
-     "t": "Czy CP używa planowania głównego w AX i czy CC mogłoby przyjąć ten sposób planowania?",
+     "t": "Czy Construction Products używa planowania głównego w AX i czy Construction Chemicals mogłoby przyjąć ten sposób planowania?",
      "h": "",
      "p": "S"
     }
@@ -2192,13 +2174,13 @@
    "q": [
     {
      "k": "md1-1",
-     "t": "Ile indeksów (surowce, opakowania, wyroby, towary) ma CC i jaki jest ich stan (duplikaty, nieaktywne)?",
+     "t": "Ile indeksów (surowce, opakowania, wyroby, towary) ma Construction Chemicals i jaki jest ich stan (duplikaty, nieaktywne)?",
      "h": "",
      "p": "M"
     },
     {
      "k": "md1-2",
-     "t": "Czy indeksy CC i CP mogą mieć wspólną strukturę kodowania i grup towarowych?",
+     "t": "Czy indeksy Construction Chemicals i Construction Products mogą mieć wspólną strukturę kodowania i grup towarowych?",
      "h": "Harmonizacja danych podstawowych: wartość dodana i zarazem ryzyko projektu.",
      "p": "S"
     }
@@ -2208,18 +2190,18 @@
    "k": "md2",
    "a": "md",
    "n": "Kontrahenci",
-   "d": "Klienci i dostawcy, deduplikacja, wspólni kontrahenci z CP, właściciel danych.",
+   "d": "Klienci i dostawcy, deduplikacja, wspólni kontrahenci z Construction Products, właściciel danych.",
    "o": "Właściciel danych podstawowych",
    "q": [
     {
      "k": "md2-1",
-     "t": "Ilu aktywnych klientów i dostawców ma CC i ilu jest wspólnych z CP?",
+     "t": "Ilu aktywnych klientów i dostawców ma Construction Chemicals i ilu jest wspólnych z Construction Products?",
      "h": "",
      "p": "M"
     },
     {
      "k": "md2-2",
-     "t": "Kto będzie właścicielem danych kontrahentów po migracji (CC, FSSC, CP)?",
+     "t": "Kto będzie właścicielem danych kontrahentów po migracji (Construction Chemicals, FSSC, Construction Products)?",
      "h": "",
      "p": "M"
     }
@@ -2268,7 +2250,7 @@
    "q": [
     {
      "k": "rp1-1",
-     "t": "Jakie raporty z Symfonii są krytyczne dla CC (lista 10 najważniejszych) i kto ich używa?",
+     "t": "Jakie raporty z Symfonii są krytyczne dla Construction Chemicals (lista 10 najważniejszych) i kto ich używa?",
      "h": "Każdy raport trzeba zmapować na raport AX lub BI – inaczej to luka.",
      "p": "M"
     },
@@ -2289,13 +2271,13 @@
    "q": [
     {
      "k": "rp2-1",
-     "t": "Czy CC korzysta z raportów Power BI lub hurtowni danych zasilanych z ERP?",
-     "h": "Sprawdź, czy dane AX CP są już w hurtowni – CC może z niej skorzystać.",
+     "t": "Czy Construction Chemicals korzysta z raportów Power BI lub hurtowni danych zasilanych z ERP?",
+     "h": "Sprawdź, czy dane AX Construction Products są już w hurtowni – Construction Chemicals może z niej skorzystać.",
      "p": "S"
     },
     {
      "k": "rp2-2",
-     "t": "Czy wspólne źródło danych AX dla CP i CC uprości raportowanie grupowe i zarządcze?",
+     "t": "Czy wspólne źródło danych AX dla Construction Products i Construction Chemicals uprości raportowanie grupowe i zarządcze?",
      "h": "",
      "p": "S"
     }
@@ -2306,17 +2288,17 @@
    "a": "it",
    "n": "Interfejsy i integracje",
    "d": "Systemy zintegrowane z Symfonią (ARA MES, banki, KSeF, EDI, CRM, płace) i ich odpowiedniki w AX.",
-   "o": "Właściciel systemu",
+   "o": "Administrator systemu (IT)",
    "q": [
     {
      "k": "it1-1",
-     "t": "Jakie systemy są zintegrowane z Symfonią w CC (ARA MES, bankowość, KSeF, EDI, CRM, płace) i jaką technologią?",
+     "t": "Jakie systemy są zintegrowane z Symfonią w Construction Chemicals (ARA MES, bankowość, KSeF, EDI, CRM, płace) i jaką technologią?",
      "h": "Inwentaryzacja interfejsów – każdy wymaga nowego połączenia z AX.",
      "p": "M"
     },
     {
      "k": "it1-2",
-     "t": "Które z tych integracji mają odpowiedniki w AX CP i mogą zostać użyte ponownie?",
+     "t": "Które z tych integracji mają odpowiedniki w AX Construction Products i mogą zostać użyte ponownie?",
      "h": "",
      "p": "M"
     },
@@ -2333,7 +2315,7 @@
    "a": "it",
    "n": "Uprawnienia i rozdział obowiązków",
    "d": "Role i uprawnienia, rozdział obowiązków (SoD), przeglądy dostępów.",
-   "o": "Właściciel systemu",
+   "o": "Administrator systemu (IT)",
    "q": [
     {
      "k": "it2-1",
@@ -2343,7 +2325,7 @@
     },
     {
      "k": "it2-2",
-     "t": "Czy model ról AX w CP (z kontrolą rozdziału obowiązków) można przyjąć dla użytkowników CC?",
+     "t": "Czy model ról AX w Construction Products (z kontrolą rozdziału obowiązków) można przyjąć dla użytkowników Construction Chemicals?",
      "h": "",
      "p": "S"
     }
@@ -2354,11 +2336,11 @@
    "a": "it",
    "n": "Licencje, użytkownicy i wsparcie",
    "d": "Liczba użytkowników, licencje, partnerzy wsparcia, koszty utrzymania, plany platformy.",
-   "o": "Właściciel systemu",
+   "o": "Administrator systemu (IT)",
    "q": [
     {
      "k": "it3-1",
-     "t": "Ilu użytkowników Symfonii ma CC (według modułów) i jaki jest roczny koszt licencji i utrzymania?",
+     "t": "Ilu użytkowników Symfonii ma Construction Chemicals (według modułów) i jaki jest roczny koszt licencji i utrzymania?",
      "h": "Dane do szacunku nakładów i oszczędności w kroku 6.",
      "p": "M"
     },
@@ -2370,7 +2352,7 @@
     },
     {
      "k": "it3-3",
-     "t": "Jakie są plany grupy dla AX 2012 (utrzymanie, migracja do Dynamics 365) i jak wpływają na decyzję o migracji CC?",
+     "t": "Jakie są plany grupy dla AX 2012 (utrzymanie, migracja do Dynamics 365) i jak wpływają na decyzję o migracji Construction Chemicals?",
      "h": "AX 2012 nie ma wsparcia producenta – zweryfikuj plany dla platformy.",
      "p": "M"
     }
@@ -2381,17 +2363,17 @@
    "a": "it",
    "n": "Infrastruktura i środowiska",
    "d": "Serwery AX, przepustowość, środowiska testowe, kopie zapasowe, dostęp zdalny.",
-   "o": "Właściciel systemu",
+   "o": "Administrator systemu (IT)",
    "q": [
     {
      "k": "it4-1",
-     "t": "Gdzie działa AX CP i czy wystarczy zasobów na nową firmę i użytkowników CC?",
+     "t": "Gdzie działa AX Construction Products i czy wystarczy zasobów na nową firmę i użytkowników Construction Chemicals?",
      "h": "",
      "p": "S"
     },
     {
      "k": "it4-2",
-     "t": "Czy są dostępne środowiska testowe AX do zbudowania i przetestowania konfiguracji dla CC?",
+     "t": "Czy są dostępne środowiska testowe AX do zbudowania i przetestowania konfiguracji dla Construction Chemicals?",
      "h": "",
      "p": "S"
     }

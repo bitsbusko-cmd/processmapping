@@ -60,25 +60,25 @@ async function exportXlsx(cid) {
   const wb = new X.Workbook(); wb.creator = S.who || 'Analiza Fit-Gap ERP'; wb.created = new Date();
   /* 1. Podsumowanie */
   let sh = xsheet(wb, 'Podsumowanie', 'Podsumowanie analizy fit-gap', [
-    ['Obszar', G1, [['Obszar', 30], ['Zakres', 13], ['Ekspert ' + co.srcCo, 20], ['Ekspert ' + co.tgtCo, 20], ['Wywiad', 11]]],
+    ['Obszar', G1, [['Obszar', 30], ['Zakres', 13], ['Ekspert ' + co.srcCo, 20], ['Ekspert ' + co.tgtCo, 20]]],
     ['Wymagania', G2, [['Procesy', 9], ['Wymagania', 11], ['Ocenione', 10], ['Fit', 7], ['Częściowe', 10], ['Luka', 7], ['N/D', 7], ['Do wyjaśnienia', 11], ['Indeks dopasowania', 12]]],
     ['Luki i ryzyka', G3, [['Luki krytyczne', 10], ['Pracochłonność luk (md)', 13], ['Zmiany procesowe ' + co.srcCo, 13], ['Ryzyka wysokie i krytyczne', 12]]],
     ['Status', G5, [['Potwierdzenie wyników', 26]]]], 1);
   m.areas.filter(a => a.in || a.later).forEach(a => { const rs = s.reqs.filter(r => r.a === a.k), c = cnt(rs), fi = fitIndex(rs), vv = a.in ? verdict(m, a.k) : null;
-    xrow(sh, [a.n, a.in ? 'w zakresie' : 'kolejny etap', a.ecc ? a.ecc.n : '', a.ecp ? a.ecp.n : '', a.dt ? fd(a.dt) : '', a.in ? m.procs.filter(p => p.a === a.k && p.act).length : '', a.in ? rs.length : '',
+    xrow(sh, [a.n, a.in ? 'w zakresie' : 'kolejny etap', a.ecc ? a.ecc.n : '', a.ecp ? a.ecp.n : '', a.in ? m.procs.filter(p => p.a === a.k && p.act).length : '', a.in ? rs.length : '',
       a.in ? rs.filter(r => r.done).length : '', a.in ? c.F : '', a.in ? c.P : '', a.in ? c.G : '', a.in ? c.N : '', a.in ? c.O : '', fi != null ? fi : '',
       vv ? vv.crit.length : '', vv ? vv.md : '', vv ? vv.chg.length : '', vv ? vv.rkCrit.length + vv.rkHi.length : '', a.in ? (a.sg ? a.sg + ', ' + fd(a.sgAt) : 'niepotwierdzone') : ''],
-      (c, ci) => { if (ci === 1) xbold(c); if (ci === 14) c.numFmt = '0%'; if (ci >= 6 && ci <= 18) c.alignment = {vertical: 'top', horizontal: 'center'}; if (!a.in) c.font = Object.assign({}, XA, {color: {argb: XGREY}}); }); });
+      (c, ci) => { if (ci === 1) xbold(c); if (ci === 13) c.numFmt = '0%'; if (ci >= 5 && ci <= 17) c.alignment = {vertical: 'top', horizontal: 'center'}; if (!a.in) c.font = Object.assign({}, XA, {color: {argb: XGREY}}); }); });
   xend(sh, 'Nie wskazano obszarów.');
   const rec = VERDBY[co.rec], prop = VERDBY[v.k];
-  xblock(sh, 'Analiza i rekomendacja', [['Analiza', co.n], ['Systemy', sysCC(co) + ' → ' + sysCP(co)], ['Sponsor', co.sp], ['Lider analizy', co.pl], ['Cel i zakres', co.scope], ['Wariant terminu uruchomienia', co.golive],
-    ['Pokrycie wywiadu', fpct(v.cov) + ' (' + v.done + ' z ' + v.tot + ' wymagań)'], ['Indeks dopasowania', fpct(v.fi)], ['Luki / krytyczne', v.gaps.length + ' / ' + v.crit.length], ['Pracochłonność luk', fnum(v.md) + ' osobodni'],
+  xblock(sh, 'Analiza i rekomendacja', [['Analiza', co.n], ['Systemy', sysCC(co) + ' → ' + sysCP(co)], ['Sponsor', co.sp], ['Lider analizy', co.pl], ['Cel i zakres', co.scope],
+    ['Pokrycie oceny', fpct(v.cov) + ' (' + v.done + ' z ' + v.tot + ' wymagań)'], ['Indeks dopasowania', fpct(v.fi)], ['Luki / krytyczne', v.gaps.length + ' / ' + v.crit.length], ['Pracochłonność luk', fnum(v.md) + ' osobodni'],
     ['Zmiany procesowe w ' + co.srcCo, v.chg.length + (v.chgHi.length ? ' (wysoka skala: ' + v.chgHi.length + ')' : '')], ['Ryzyka krytyczne / wysokie', v.rkCrit.length + ' / ' + v.rkHi.length],
     ['Propozycja narzędzia', prop ? prop.n : 'za mało danych do rekomendacji'], ['Rekomendacja zespołu', rec ? rec.n : 'nie wpisano'], ['Uzasadnienie', co.recJ], ['Warunki migracji', co.recC], ['Następne kroki', co.next],
     ['Zatwierdzenie', co.sg ? co.sg + ', ' + fd(co.sgAt) : 'niezatwierdzone']]);
   /* 2. Zespół */
-  sh = xsheet(wb, 'Zespół', 'Zespół i uczestnicy wywiadów', [['Osoba', G1, [['Imię i nazwisko', 26], ['SGID', 12], ['Firma', 18], ['Rola', 24]]], ['Udział', G2, [['Ekspert obszarów', 40], ['Uczestnik wywiadów', 40]]]], 1);
-  m.people.forEach(p => xrow(sh, [p.n, p.sgid || '', p.co || '', p.role || '', m.inArea.filter(a => a.xcc === p.k || a.xcp === p.k).map(a => a.n).join(', '), m.inArea.filter(a => a.us.includes(p.k)).map(a => a.n).join(', ')], (c, ci) => { if (ci === 1) xbold(c); }));
+  sh = xsheet(wb, 'Zespół', 'Zespół i uczestnicy', [['Osoba', G1, [['Imię i nazwisko', 26], ['Zespół', 22], ['Rola', 24], ['Procesy key usera', 44]]], ['Udział', G2, [['Ekspert obszarów', 36], ['Uczestnik obszarów', 36]]]], 1);
+  m.people.forEach(p => xrow(sh, [p.n, p.co || '', p.role || '', p.kp.map(x => x.cd + ' ' + x.n).join('\n'), m.inArea.filter(a => a.xcc === p.k || a.xcp === p.k).map(a => a.n).join(', '), m.inArea.filter(a => a.us.includes(p.k)).map(a => a.n).join(', ')], (c, ci) => { if (ci === 1) xbold(c); }));
   xend(sh, 'Brak osób.');
   /* 3. Procesy AS-IS */
   sh = xsheet(wb, 'Procesy AS-IS', 'Procesy AS-IS', [
@@ -92,7 +92,7 @@ async function exportXlsx(cid) {
     (c, ci) => { if (ci === 3 && p.act) xbold(c); if (ci === 18) c.numFmt = '0%'; if (p.on === 'N') c.font = Object.assign({}, XA, {color: {argb: XGREY}}); }));
   xend(sh);
   /* 4. Wymagania fit-gap */
-  sh = xsheet(wb, 'Wymagania fit-gap', 'Wymagania – wyniki wywiadów fit-gap', [
+  sh = xsheet(wb, 'Wymagania fit-gap', 'Wymagania – wyniki oceny fit-gap', [
     ['Wymaganie', G1, [['Obszar', 20], ['Proces', 24], ['Kod', 8], ['Wymaganie / pytanie', 48], ['Przepisy', 9]]],
     ['Praktyka', G2, [['Praktyka ' + co.srcCo + ' (' + co.srcSys + ')', 44], ['Praktyka ' + co.tgtCo + ' (' + co.tgtSys + ')', 44]]],
     ['Ocena', G4, [['Ocena dopasowania', 13], ['Sposób zamknięcia', 18], ['Priorytet', 9], ['Luka krytyczna', 9], ['Pracochłonność', 10], ['Osobodni', 9], ['Decyzja', 14], ['Opis luki i rozwiązania', 40], ['Odpowiedzialny', 16]]],
@@ -111,7 +111,7 @@ async function exportXlsx(cid) {
   xend(sh, 'Brak luk.');
   if (s.gaps.length) { const tr = sh.ws.getRow(sh.r++); tr.getCell(9).value = 'Razem'; tr.getCell(10).value = v.md; tr.getCell(9).font = tr.getCell(10).font = Object.assign({}, XA, {bold: true}); }
   /* 6. Zmiany procesowe */
-  sh = xsheet(wb, ('Zmiany procesowe ' + co.srcCo).replace(/[:\\/?*\[\]]/g, '').slice(0, 31), 'Zmiany procesowe w ' + co.srcCo, [
+  sh = xsheet(wb, 'Zmiany procesowe', 'Zmiany procesowe w ' + co.srcCo, [
     ['Zmiana', G1, [['Kod', 8], ['Obszar', 18], ['Proces', 22], ['Wymaganie', 36], ['Co zmienia się w ' + co.srcCo, 48]]],
     ['Wdrożenie zmiany', G4, [['Skala zmiany', 12], ['Kogo dotyczy', 26], ['Szkolenie', 10], ['Etap', 16], ['Pracochłonność', 10], ['Decyzja', 16]]]], 1);
   v.chg.slice().sort((x, y) => (+y.imp || 0) - (+x.imp || 0)).forEach(r => xrow(sh, [r.code, r.area.n, r.proc.n, r.t, r.chg || '', r.imp ? r.imp + ' – ' + IMP[r.imp - 1].n : '', r.who || '', r.tr ? 'tak' : '', r.ph || '', r.eff || '', (DECBY[r.dec || 'P'] || {}).n],

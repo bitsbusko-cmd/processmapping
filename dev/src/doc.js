@@ -1,10 +1,10 @@
-/* ===================== Fit-Gap ERP – dokumenty: raport końcowy, agenda wywiadu, zaproszenie .ics ===================== */
+/* ===================== Fit-Gap ERP – dokumenty: raport końcowy, agenda i pytania dla uczestników ===================== */
 const lines = t => String(t || '').split(/\r?\n/).map(norm).filter(Boolean);
 const docTbl = (head, rows, empty) => `<table><thead><tr>${head.map(h => `<th${h[1] ? ' class="n"' : ''}>${esc(h[0])}</th>`).join('')}</tr></thead><tbody>${rows.length ? rows.join('') : `<tr><td colspan="${head.length}" class="muted">${esc(empty || 'Brak danych.')}</td></tr>`}</tbody></table>`;
 function renderDoc(m) {
   const back = V.doc === 'agenda' ? href(1, '') : href(UI.last && UI.last.c === m.cid && UI.last.s ? UI.last.s : NS, '');
   const bar = `<div class="docbar noprint"><a class="btn" href="${back}">${ic('left')}Wróć do analizy</a><span class="grow"></span>
-    <button type="button" class="btn pri" data-act="print">${ic('print')}Drukuj lub zapisz PDF</button>${V.doc === 'raport' ? `<button type="button" class="btn" data-act="xlsx">${ic('sheet')}Raport Excel</button>` : `<button type="button" class="btn" data-act="ics" data-a="${esc(V.docA)}">${ic('cal')}Zaproszenie (.ics)</button>`}</div>`;
+    ${V.doc === 'agenda' ? '<span class="sm muted">Zapisz jako PDF i wyślij uczestnikom w załączniku e-maila.</span>' : ''}<button type="button" class="btn pri" data-act="print">${ic('print')}Drukuj lub zapisz PDF</button>${V.doc === 'raport' ? `<button type="button" class="btn" data-act="xlsx">${ic('sheet')}Raport Excel</button>` : ''}</div>`;
   return bar + (V.doc === 'agenda' ? agendaDoc(m, V.docA) : reportDoc(m));
 }
 
@@ -35,12 +35,11 @@ function reportDoc(m) {
     ${conds.length ? `<h3>Warunki migracji</h3><ol>${conds.map(x => `<li>${esc(x)}</li>`).join('')}</ol>` : ''}`;
   /* 2. zakres i metoda */
   const arRows = m.areas.filter(a => a.in || a.later).map(a => { const rs = s.reqs.filter(r => r.a === a.k);
-    return `<tr><td><b>${esc(a.n)}</b></td><td>${a.in ? 'w zakresie' : 'kolejny etap'}</td><td>${esc(a.ecc ? a.ecc.n : '–')}</td><td>${esc(a.ecp ? a.ecp.n : '–')}</td><td>${esc(a.dt ? fd(a.dt) : '–')}</td><td class="n">${a.in ? m.procs.filter(p => p.a === a.k && p.act).length : '–'}</td><td class="n">${a.in ? rs.length : '–'}</td></tr>`; });
+    return `<tr><td><b>${esc(a.n)}</b></td><td>${a.in ? 'w zakresie' : 'kolejny etap'}</td><td>${esc(a.ecc ? a.ecc.n : '–')}</td><td>${esc(a.ecp ? a.ecp.n : '–')}</td><td class="n">${a.in ? m.procs.filter(p => p.a === a.k && p.act).length : '–'}</td><td class="n">${a.in ? rs.length : '–'}</td></tr>`; });
   const scope = `<h2>Zakres i metoda</h2>${norm(co.scope) ? lines(co.scope).map(x => `<p>${esc(x)}</p>`).join('') : ''}
-    ${norm(co.golive) ? `<p>Wariant terminu uruchomienia przyjęty do oceny: <b>${esc(co.golive)}</b>.</p>` : ''}
-    <h3>Obszary analizy</h3>${docTbl([['Obszar'], ['Zakres'], ['Ekspert ' + co.srcCo], ['Ekspert ' + co.tgtCo], ['Wywiad'], ['Procesy', 1], ['Wymagania', 1]], arRows, 'Nie wskazano obszarów.')}
+    <h3>Obszary analizy</h3>${docTbl([['Obszar'], ['Zakres'], ['Ekspert ' + co.srcCo], ['Ekspert ' + co.tgtCo], ['Procesy', 1], ['Wymagania', 1]], arRows, 'Nie wskazano obszarów.')}
     ${m.areas.filter(a => a.on === 'N').length ? `<p class="sm muted">Poza zakresem: ${esc(m.areas.filter(a => a.on === 'N').map(a => a.n).join(', '))}.</p>` : ''}
-    <h3>Zespół i uczestnicy</h3>${docTbl([['Imię i nazwisko'], ['SGID'], ['Firma'], ['Rola']], m.people.map(p => `<tr><td>${esc(p.n)}</td><td class="mono">${esc(p.sgid || '')}</td><td>${esc(p.co || '')}</td><td>${esc(p.role || '')}</td></tr>`), 'Brak osób.')}
+    <h3>Zespół i uczestnicy</h3>${docTbl([['Imię i nazwisko'], ['Zespół'], ['Rola'], ['Procesy key usera']], m.people.map(p => `<tr><td>${esc(p.n)}</td><td>${esc(p.co || '')}</td><td>${esc(p.role || '')}</td><td class="sm">${esc(p.kp.map(x => x.cd + ' ' + x.n).join('; ') || '–')}</td></tr>`), 'Brak osób.')}
     <h3>Metoda oceny</h3><p>Punktem odniesienia jest szablon ${esc(co.tgtSys)} w ${esc(co.tgtCo)} – sposób, w jaki ${esc(co.tgtCo)} faktycznie pracuje w systemie. Dla każdego pytania z katalogu zapisano praktykę ${esc(co.srcCo)} i ${esc(co.tgtCo)} oraz ocenę dopasowania:</p>
     <ul>${FIT.map(f => `<li><b>${esc(f.n)}</b> – ${esc(f.d)}</li>`).join('')}</ul>
     <p>Indeks dopasowania to średnia ocen (Fit = 1, Częściowe = ${D.fitW.P}, Luka = 0) ważona priorytetem MoSCoW (Must ×${D.priW.M}, Should ×${D.priW.S}, Could ×${D.priW.C}). Luka krytyczna to luka o priorytecie Must, która wymaga rozwoju AX, integracji albo obejścia poza ERP.</p>`;
@@ -83,61 +82,32 @@ function reportDoc(m) {
   return `<article class="doc">${cover}${sum}${scope}${byArea}${gaps}${chg}${rk}${val}${open}${acc}</article>`;
 }
 
-/* ---------- agenda i pytania wywiadu dla obszaru ---------- */
+/* ---------- agenda i pytania dla uczestników obszaru (PDF w załączniku e-maila) ---------- */
 function agendaDoc(m, aid) {
   const co = m.co, a = m.ABY[aid];
   if (!a) return '<div class="empty"><b>Nie znaleziono obszaru</b></div>';
   const procs = m.procs.filter(p => p.a === a.k && p.on !== 'N'), parts = a.us.map(k => m.OBY[k]).filter(Boolean);
-  const nq = procs.reduce((x, p) => x + p.reqs.length, 0);
-  const meta = `<div class="meta"><div><span>Termin</span>${esc(a.dt ? fd(a.dt) + (a.tm ? ', godz. ' + a.tm : '') : 'do ustalenia')}${a.dur ? ' · ' + esc(a.dur) + ' min' : ''}</div><div><span>Miejsce</span>${esc(a.loc || '–')}</div><div><span>Pytania</span>${esc(plural(nq, F_Q))} · ${esc(plural(procs.length, F_PROC))}</div>
-    <div><span>Ekspert ${esc(co.srcCo)}</span>${esc(a.ecc ? a.ecc.n : '–')}</div><div><span>Ekspert ${esc(co.tgtCo)}</span>${esc(a.ecp ? a.ecp.n : '–')}</div><div><span>Prowadzący</span>${esc(co.pl || '–')}</div></div>`;
-  const plan = [`Cel spotkania, skala oceny i sposób pracy (5 min)`, ...procs.map(p => `${p.cd} ${p.n} – ${plural(p.reqs.length, F_Q)}`), 'Podsumowanie: luki, pytania otwarte, kolejne kroki (10 min)'];
-  const qs = procs.map(p => `<h3><span class="mono">${esc(p.cd)}</span> ${esc(p.n)}</h3>${p.d ? `<p class="sm muted">${esc(p.d)}</p>` : ''}
+  const nq = procs.reduce((x, p) => x + p.reqs.length, 0), kpA = x => x.kp.filter(p => p.a === a.k);
+  const meta = `<div class="meta"><div><span>Ekspert ${esc(co.srcCo)}</span>${esc(a.ecc ? a.ecc.n : '–')}</div><div><span>Ekspert ${esc(co.tgtCo)}</span>${esc(a.ecp ? a.ecp.n : '–')}</div><div><span>Lider analizy</span>${esc(co.pl || '–')}</div>
+    <div><span>Zakres</span>${esc(plural(procs.length, F_PROC))} · ${esc(plural(nq, F_Q))}</div><div><span>Uczestnicy</span>${esc(parts.length ? plural(parts.length, F_PER) : 'do wskazania')}</div><div><span>Przygotowano</span>${esc(fd(today()))}</div></div>`;
+  const plan = [`Cel, skala oceny i sposób pracy (5 min)`, ...procs.map(p => `${p.cd} ${p.n} – ${plural(p.reqs.length, F_Q)}`), 'Podsumowanie: luki, pytania otwarte, kolejne kroki (10 min)'];
+  const qs = procs.map(p => `<h3><span class="mono">${esc(p.cd)}</span> ${esc(p.n)}</h3>${p.d ? `<p class="sm muted">${esc(p.d)}</p>` : ''}${p.kus.length ? `<p class="sm">Key user: <b>${esc(p.kus.map(x => x.n).join(', '))}</b></p>` : ''}
     <ol class="qlist">${p.reqs.map(r => `<li data-c="${esc(r.code)}"><div><b>${esc(r.t)}</b>${r.h ? `<div class="sm muted">${esc(r.h)}</div>` : ''}
       <div class="ans"><div><span class="src">${esc(co.srcCo)}</span> ${esc(r.cc || '')}</div><div><span class="tgt">${esc(co.tgtCo)}</span> ${esc(r.cp || '')}</div></div></div></li>`).join('')}</ol>`).join('');
-  return `<article class="doc"><div class="cover"><div class="k">Analiza Fit-Gap ERP · agenda wywiadu</div><h1>${esc(a.n)}</h1><p class="sub">${esc(co.n)} · ${esc(sysCC(co))} → ${esc(sysCP(co))}</p>${meta}</div>
-    <h2>Cel spotkania</h2><p>Porównujemy, jak procesy obszaru „${esc(a.n)}” działają w ${esc(co.srcCo)} (${esc(co.srcSys)}) i w ${esc(co.tgtCo)} (${esc(co.tgtSys)}), i oceniamy, czy szablon ${esc(co.tgtCo)} pokryje wymagania ${esc(co.srcCo)}. Każde pytanie dostaje ocenę: ${FIT.map(f => esc(f.n)).join(', ')}.</p>
-    ${parts.length ? `<h3>Uczestnicy</h3><ul>${parts.map(p => `<li>${esc(p.n)}${p.co || p.role ? ' – ' + esc([p.co, p.role].filter(Boolean).join(', ')) : ''}</li>`).join('')}</ul>` : ''}
-    <h2>Plan spotkania</h2><ol>${plan.map(x => `<li>${esc(x)}</li>`).join('')}</ol>
+  return `<article class="doc"><div class="cover"><div class="k">Analiza Fit-Gap ERP · agenda i pytania</div><h1>${esc(a.n)}</h1><p class="sub">${esc(co.n)} · ${esc(sysCC(co))} → ${esc(sysCP(co))}</p>${meta}</div>
+    <h2>Cel</h2><p>Porównujemy procesy obszaru „${esc(a.n)}” w ${esc(co.srcCo)} (${esc(co.srcSys)}) z szablonem ${esc(co.tgtCo)} w systemie ${esc(co.tgtSys)} i oceniamy, czy szablon pokryje wymagania ${esc(co.srcCo)}. Każde pytanie dostaje ocenę: ${FIT.map(f => esc(f.n)).join(', ')}.</p>
+    <p>Prosimy o zapoznanie się z pytaniami przed spotkaniem i przygotowanie przykładów: dokumentów, raportów, zestawień z systemu i plików Excel używanych w procesach. Odpowiedzi można wpisać w ramkach przy pytaniach.</p>
+    ${parts.length ? `<h3>Uczestnicy</h3><ul>${parts.map(p => `<li>${esc(p.n)}${p.co || p.role ? ' – ' + esc([p.co, p.role].filter(Boolean).join(', ')) : ''}${kpA(p).length ? `<br><span class="sm muted">Procesy: ${esc(kpA(p).map(x => x.cd + ' ' + x.n).join('; '))}</span>` : ''}</li>`).join('')}</ul>` : ''}
+    <h2>Agenda</h2><ol>${plan.map(x => `<li>${esc(x)}</li>`).join('')}</ol>
     <h2>Pytania</h2>${qs || '<p>Brak procesów w obszarze – potwierdź je w kroku 2.</p>'}
     <h2>Skala oceny</h2><ul>${FIT.map(f => `<li><b>${esc(f.n)}</b> – ${esc(f.d)}</li>`).join('')}</ul>
     <div class="foot2">Dokument wewnętrzny · przygotowano ${esc(fdt(now()))} w narzędziu Analiza Fit-Gap ERP</div></article>`;
 }
 
-/* ---------- zaproszenie do kalendarza (.ics, bez adresów e-mail) ---------- */
-function icsText(m, a) {
-  const co = m.co, procs = m.procs.filter(p => p.a === a.k && p.on !== 'N'), parts = a.us.map(k => m.OBY[k]).filter(Boolean);
-  const ex = t => String(t).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
-  const enc = new TextEncoder();
-  const fold = l => { const out = []; let cur = '', n = 0; for (const ch of l) { const b = enc.encode(ch).length; if (n + b > 74) { out.push(cur); cur = ' ' + ch; n = 1 + b; } else { cur += ch; n += b; } } out.push(cur); return out.join('\r\n'); };
-  const d = a.dt.replace(/-/g, ''), [hh, mi] = a.tm.split(':').map(Number), dur = Math.max(15, parseInt(a.dur, 10) || 90);
-  const end = new Date(2000, 0, 1, hh, mi + dur), pad = x => String(x).padStart(2, '0');
-  const endDay = new Date(+d.slice(0, 4), +d.slice(4, 6) - 1, +d.slice(6, 8) + (end.getDate() - 1));
-  const st = d + 'T' + pad(hh) + pad(mi) + '00', en = endDay.getFullYear() + pad(endDay.getMonth() + 1) + pad(endDay.getDate()) + 'T' + pad(end.getHours()) + pad(end.getMinutes()) + '00';
-  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-  const desc = [`Wywiad fit-gap: ${a.n}`, `Analiza: ${co.n} (${sysCC(co)} → ${sysCP(co)})`, '',
-    `Cel: porównanie praktyki ${co.srcCo} i ${co.tgtCo} oraz ocena dopasowania do szablonu ${co.tgtSys}.`,
-    `Eksperci: ${co.srcCo} – ${a.ecc ? a.ecc.n : 'do ustalenia'}; ${co.tgtCo} – ${a.ecp ? a.ecp.n : 'do ustalenia'}.`,
-    parts.length ? 'Uczestnicy: ' + parts.map(p => p.n + (p.co ? ' (' + p.co + ')' : '')).join(', ') + '.' : '', '',
-    'Procesy do omówienia:', ...procs.map(p => `- ${p.cd} ${p.n} (${plural(p.reqs.length, F_Q)})`), '',
-    'Skala oceny: ' + FIT.map(f => f.n).join(' / ') + '.', 'Agenda z pytaniami: menu analizy → krok 1 → Agenda i pytania.'].filter(x => x !== null);
-  const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Saint-Gobain Polska Digital & IT//Analiza Fit-Gap ERP//PL', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
-    'BEGIN:VTIMEZONE', 'TZID:Europe/Warsaw', 'BEGIN:STANDARD', 'DTSTART:19701025T030000', 'RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU', 'TZOFFSETFROM:+0200', 'TZOFFSETTO:+0100', 'TZNAME:CET', 'END:STANDARD',
-    'BEGIN:DAYLIGHT', 'DTSTART:19700329T020000', 'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU', 'TZOFFSETFROM:+0100', 'TZOFFSETTO:+0200', 'TZNAME:CEST', 'END:DAYLIGHT', 'END:VTIMEZONE',
-    'BEGIN:VEVENT', `UID:fitgap-${m.cid}-${a.k}-${d}@fitgap.local`, `DTSTAMP:${stamp}`, `DTSTART;TZID=Europe/Warsaw:${st}`, `DTEND;TZID=Europe/Warsaw:${en}`,
-    'SUMMARY:' + ex(`Wywiad fit-gap: ${a.n} – ${co.n}`), a.loc ? 'LOCATION:' + ex(a.loc) : '', 'DESCRIPTION:' + ex(desc.join('\n')), 'END:VEVENT', 'END:VCALENDAR'].filter(Boolean);
-  return L.map(fold).join('\r\n') + '\r\n';
-}
 async function printView() {
   if (!(await dlCap())) { window.print(); return; }
   const css = (document.querySelector('style') || {}).textContent || '', main = $('#main').cloneNode(true);
   $$('.noprint, .docbar, .foot, .mselect', main).forEach(x => x.remove());
   const title = document.title, html = `<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(title)}</title><style>${css}</style></head><body style="background:#fff"><div class="wrap full"><main class="main">${main.innerHTML}</main></div></body></html>`;
   if (await download(slug(title).slice(0, 80) + '.html', new Blob([html], {type: 'text/html'}))) toast('Zapisano widok jako plik HTML – otwórz go w przeglądarce i wydrukuj albo zapisz jako PDF.');
-}
-function downloadIcs(m, aid) {
-  const a = m.ABY[aid]; if (!a) return;
-  if (!a.dt || !/^\d{1,2}:\d{2}$/.test(a.tm || '')) { toast('Uzupełnij datę i godzinę wywiadu w kroku 1, aby przygotować zaproszenie.'); return; }
-  download(`Wywiad_FitGap_${slug(a.n)}_${a.dt}.ics`, new Blob([icsText(m, a)], {type: 'text/calendar;charset=utf-8'}))
-    .then(ok => { if (ok) toast('Pobrano zaproszenie. Otwórz plik w Outlooku i dodaj uczestników – plik nie zawiera adresów e-mail.'); });
 }

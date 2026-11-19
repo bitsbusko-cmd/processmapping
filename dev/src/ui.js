@@ -211,7 +211,7 @@ function renderModal() {
         <label class="fl" for="who-nm">Imię i nazwisko</label><input id="who-nm" class="inp" name="nm" autocomplete="name" maxlength="60" value="${esc(nm)}" placeholder="np. Anna Kowalska">
         <fieldset><legend class="fl">Rola w analizie</legend><div class="teams" style="grid-template-columns:repeat(2,minmax(0,1fr))">${TEAMS.map(t => `<label><input type="radio" name="team" value="${esc(t.n)}"${tm === t.n ? ' checked' : ''}><span>${esc(t.n)}<small style="display:block;font-weight:400;font-size:.75rem;color:var(--muted)">${esc(t.d)}</small></span></label>`).join('')}</div></fieldset>
         ${needKey() ? `<label class="fl" for="who-key" style="margin-top:14px">Hasło zespołu</label><input id="who-key" class="inp" name="key" type="password" autocomplete="current-password" maxlength="200">` : ''}
-        <div class="note">${ic('info')}<p>${SH.on ? 'Imię i rolę zapisujemy przy każdej zmianie. Dane trafiają do wspólnej bazy – widzą je wszyscy uczestnicy analizy.' : 'Imię i rolę zapisujemy przy każdej zmianie. Dane zostają w tej przeglądarce – możesz je zapisać do pliku i przekazać dalej.'} Ekspert ${esc(DEF.srcCo)} lub ${esc(DEF.tgtCo)} zobaczy swoją kolumnę wyróżnioną w wywiadzie.</p></div>
+        <div class="note">${ic('info')}<p>${SH.on ? 'Imię i rolę zapisujemy przy każdej zmianie. Dane trafiają do wspólnej bazy – widzą je wszyscy uczestnicy analizy.' : 'Imię i rolę zapisujemy przy każdej zmianie. Dane zostają w tej przeglądarce – możesz je zapisać do pliku i przekazać dalej.'} Ekspert ${esc(DEF.srcCo)} lub ${esc(DEF.tgtCo)} zobaczy swoją kolumnę wyróżnioną w ocenie fit-gap.</p></div>
         <p class="err" id="who-err" role="alert"></p>
         <div class="mf"><button type="submit" class="btn pri">${req ? 'Rozpocznij' : 'Zapisz'}</button></div>
       </div></form></div>`;
@@ -223,7 +223,6 @@ function renderModal() {
       <div class="mb" style="display:grid;gap:12px"><label class="fld"><span>Nazwa analizy</span><input class="inp" id="addan-nm" name="nm" maxlength="90" value="${esc(DEF.n)}" autocomplete="off"></label>
       <div class="fgrid">${fld('Spółka przenoszona', `<input class="inp" name="srcCo" maxlength="40" value="${esc(DEF.srcCo)}">`)}${fld('System źródłowy', `<input class="inp" name="srcSys" maxlength="60" value="${esc(DEF.srcSys)}">`)}
         ${fld('Spółka z systemem docelowym', `<input class="inp" name="tgtCo" maxlength="40" value="${esc(DEF.tgtCo)}">`)}${fld('System docelowy', `<input class="inp" name="tgtSys" maxlength="60" value="${esc(DEF.tgtSys)}">`)}</div>
-      <label class="chk"><input type="checkbox" name="fssc" checked><span>Zacznij od procesów księgowych (FSSC): księga główna, podatki, banki, należności i zobowiązania. Pozostałe obszary oznaczymy jako kolejny etap.</span></label>
       <p class="err" id="addan-err" role="alert"></p><div class="mf" style="margin-top:4px"><button type="button" class="btn" data-act="close">Anuluj</button><button type="submit" class="btn pri">${ic('plus')}Utwórz analizę</button></div></div></form></div>`;
     $('#addan-nm').focus(); $('#addan-nm').select(); return;
   }
@@ -251,14 +250,14 @@ function helpHtml() {
   return `<div class="help">
     <h3>Po co jest analiza fit-gap</h3><p>Analiza odpowiada na pytania: czy ${esc(DEF.srcCo)} może przejść z systemu ${esc(DEF.srcSys)} na ${esc(DEF.tgtSys)} używany w ${esc(DEF.tgtCo)}, jakie zmiany procesów musi wprowadzić ${esc(DEF.srcCo)}, co trzeba dobudować w systemie docelowym, jakie są ryzyka i jaką wartość da migracja. Punktem odniesienia jest szablon AX w ${esc(DEF.tgtCo)} – to, jak ${esc(DEF.tgtCo)} faktycznie pracuje w systemie, a nie standard producenta.</p>
     <h3>Przebieg analizy</h3><ol>
-      <li><b>Zakres i zespół</b> – dane analizy, osoby (imię i nazwisko, SGID, firma, rola), obszary w zakresie, eksperci obu stron i plan wywiadów z zaproszeniem do kalendarza.</li>
+      <li><b>Zakres i zespół</b> – dane analizy, osoby (imię i nazwisko, zespół, rola; key userom przypisujesz procesy), obszary w zakresie, eksperci obu stron i uczestnicy. Dla każdego obszaru narzędzie przygotuje agendę i pytania do wysłania uczestnikom w załączniku e-maila.</li>
       <li><b>Procesy AS-IS</b> – które procesy z katalogu występują w ${esc(DEF.srcCo)}, właściciele, wolumeny, narzędzia, opis praktyki w obu spółkach i możliwość wspólnego standardu.</li>
-      <li><b>Wywiad fit-gap</b> – pytania z katalogu dla każdego procesu: praktyka ${esc(DEF.srcCo)}, praktyka ${esc(DEF.tgtCo)} w AX i ocena dopasowania. Tryb skupienia pokazuje jedno pytanie naraz – wygodny do prowadzenia wywiadu na ekranie.</li>
+      <li><b>Ocena fit-gap</b> – pytania z katalogu dla każdego procesu: praktyka ${esc(DEF.srcCo)}, praktyka ${esc(DEF.tgtCo)} w AX i ocena dopasowania. Tryb skupienia pokazuje jedno pytanie naraz – wygodny podczas spotkania z ekspertami.</li>
       <li><b>Luki i zmiany</b> – rejestr luk z pracochłonnością i decyzją oraz lista zmian procesowych w ${esc(DEF.srcCo)} (skala, kogo dotyczą, szkolenia).</li>
       <li><b>Ryzyka</b> – rejestr ryzyk z podpowiedziami: ryzyka typowe dla tej migracji, luki krytyczne i duże zmiany procesów.</li>
       <li><b>Wartość dodana</b> – korzyści migracji i szacunek nakładów (business case).</li>
       <li><b>Wynik</b> – indeks dopasowania, propozycja rekomendacji, rekomendacja zespołu, potwierdzenia ekspertów i zatwierdzenie sponsora. Raport końcowy do druku lub PDF i raport Excel.</li></ol>
-    <h3>Wywiad krok po kroku</h3><p>Wybierz obszar na liście po lewej – kolejne kroki pokażą tylko jego procesy, a wywiad z jednym obszarem przeprowadzisz do końca bez czekania na pozostałe. W trybie skupienia klawisze <span class="kbd">1</span>–<span class="kbd">5</span> ustawiają ocenę (Fit, Częściowe, Luka, N/D, Do wyjaśnienia), <span class="kbd">←</span> <span class="kbd">→</span> przechodzą między pytaniami, a <span class="kbd">Ctrl</span>+<span class="kbd">Enter</span> w polu tekstowym przechodzi do następnego pytania.</p>
+    <h3>Ocena krok po kroku</h3><p>Wybierz obszar na liście po lewej – kolejne kroki pokażą tylko jego procesy, a ocenę jednego obszaru zakończysz bez czekania na pozostałe. W trybie skupienia klawisze <span class="kbd">1</span>–<span class="kbd">5</span> ustawiają ocenę (Fit, Częściowe, Luka, N/D, Do wyjaśnienia), <span class="kbd">←</span> <span class="kbd">→</span> przechodzą między pytaniami, a <span class="kbd">Ctrl</span>+<span class="kbd">Enter</span> w polu tekstowym przechodzi do następnego pytania.</p>
     <h3>Pola wymagane</h3><p>Pola z gwiazdką (*) trzeba uzupełnić przed przejściem do kolejnego kroku. Przycisk „Dalej” pokaże listę braków – kliknij pozycję, aby przejść do pola.</p>
     <h3>Słownik</h3><dl>
       <dt>Fit</dt><dd>Szablon AX w ${esc(DEF.tgtCo)} obsługuje wymaganie bez zmian.</dd>
@@ -267,6 +266,6 @@ function helpHtml() {
       <dt>MoSCoW</dt><dd>Priorytet wymagania: Must, Should, Could.</dd>
       <dt>AS-IS</dt><dd>Obecny sposób realizacji procesu.</dd>
       <dt>FSSC</dt><dd>Centrum usług księgowych obsługujące obie spółki.</dd></dl>
-    <h3>Zapisywanie danych i RODO</h3><p>${SH.on ? 'Dane zapisują się we wspólnej bazie i widzą je wszyscy uczestnicy analizy; zmiany innych osób pojawiają się co kilkanaście sekund. Plik z menu „…” służy jako kopia zapasowa.' : 'Dane zapisują się automatycznie w tej przeglądarce. Aby przekazać je innej osobie, użyj menu „…” → Zapisz dane do pliku; druga osoba wczytuje plik tym samym menu. Do pracy zespołowej uruchom wersję wieloosobową (instrukcja w README repozytorium).'} Narzędzie nie zbiera adresów e-mail – osoby opisuje imię i nazwisko oraz SGID. Zaproszenia do kalendarza nie zawierają adresów: uczestników dodajesz w Outlooku.</p>
+    <h3>Zapisywanie danych i RODO</h3><p>${SH.on ? 'Dane zapisują się we wspólnej bazie i widzą je wszyscy uczestnicy analizy; zmiany innych osób pojawiają się co kilkanaście sekund. Plik z menu „…” służy jako kopia zapasowa.' : 'Dane zapisują się automatycznie w tej przeglądarce. Aby przekazać je innej osobie, użyj menu „…” → Zapisz dane do pliku; druga osoba wczytuje plik tym samym menu. Do pracy zespołowej uruchom wersję wieloosobową (instrukcja w README repozytorium).'} Narzędzie nie zbiera adresów e-mail – osoby opisuje imię i nazwisko. Agendę i pytania wysyłasz uczestnikom samodzielnie, w załączniku e-maila.</p>
   </div>`;
 }

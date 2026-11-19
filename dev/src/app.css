@@ -582,24 +582,32 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 .scale5 li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:10px;align-items:start;font-size:.833rem;color:var(--ink2);list-style:none}
 .scale5 .fs{justify-content:flex-start}
 
-/* krok 1: zespół i wywiady */
+/* krok 1: zespół i uczestnicy */
 .ptab{width:100%;border-collapse:collapse;font-size:.9rem}
 .ptab th{text-align:left;font-size:.75rem;font-weight:600;color:var(--muted);padding:4px 6px 6px;white-space:nowrap}
 .ptab td{padding:4px 6px;border-top:1px solid var(--line);vertical-align:middle}
 .ptab .inp{height:32px;font-size:.9rem}
 .ptab td.act{width:36px;text-align:right}
-.ptab .sgid{max-width:120px;font-family:var(--fm)}
-.iv{border-top:1px dashed var(--line2);padding-top:10px;display:grid;gap:8px}
-.iv .ivh{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.833rem;font-weight:600;color:var(--ink2)}
-.iv .ivh .acts{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
-.iv .ivg{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) minmax(0,.8fr);gap:8px 10px}
-.iv .ivg>.wide{grid-column:1/-1}
+.ptab tr.kprow td{border-top:0;padding:0 6px 10px}
+.kp{display:grid;grid-template-columns:150px minmax(0,560px);gap:6px 12px;align-items:start;margin-left:4px;padding-left:12px;border-left:3px solid var(--acc-line)}
+.kp>.lb{font-size:.8rem;font-weight:600;color:var(--muted);padding-top:7px}
+.kp .kpchips{grid-column:2;display:flex;flex-wrap:wrap;gap:5px}
+.kp .tg b{font:600 .733rem/1 var(--fm);margin-right:3px}
+.kp .msel>summary{height:32px}
+.kp .msel>summary[aria-invalid="true"]{border-color:var(--err)}
+.kp .msel .mlist{max-height:320px}
+.msel .mgrp+.mgrp{border-top:1px solid var(--line);margin-top:4px;padding-top:4px}
+.msel .mlist label.mga{font-size:.867rem}
+.msel .mga small{margin-left:auto;color:var(--faint);font-weight:500}
+.msel .mlist label .qcode{min-width:34px}
+.acard .parts{border-top:1px dashed var(--line2);padding-top:10px;display:grid;gap:8px}
+.acard .parts .ph2{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:.833rem;font-weight:600;color:var(--ink2)}
+.acard .parts .ph2 small{font-weight:500;color:var(--muted)}
 .pchips{display:flex;flex-wrap:wrap;gap:5px}
 .pchips .chipbtn{font-size:.8rem;padding:2px 9px}
 .pchips .chipbtn small{font-weight:500;color:var(--muted)}
 .pchips .chipbtn[aria-pressed="true"] small{color:inherit;opacity:.8}
 .acard.later{background:var(--sunk);border-style:dashed}
-.acard .ah .ph{font-size:.7rem;font-weight:700;color:var(--muted);background:var(--sunk);border-radius:4px;padding:1px 6px;white-space:nowrap}
 .seg button[aria-pressed="true"].l{background:var(--warn-bg);color:var(--warn)}
 
 /* krok 2: procesy AS-IS */
@@ -615,7 +623,7 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 .fld.cc>span{color:var(--src)}.fld.cp>span{color:var(--tgt)}
 .hmseg{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 
-/* krok 3: wywiad */
+/* krok 3: ocena fit-gap */
 .ivtools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
 .ivtools .grow{flex:1}
 .ivtools .prog{display:flex;gap:10px;align-items:center;font-size:.867rem;color:var(--muted);min-width:240px}
@@ -768,7 +776,7 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 .charts3{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;margin:0 0 18px}
 .charts3 .chart.wide{grid-column:1/-1}
 
-/* dokument: raport końcowy i agenda wywiadu */
+/* dokument: raport końcowy oraz agenda i pytania */
 .docbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);margin:0 0 14px}
 .docbar .grow{flex:1}
 .doc{background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);padding:48px 56px;max-width:960px;margin:0 auto;color:var(--ink);font-size:.967rem;line-height:1.55}
@@ -817,7 +825,7 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
   .hbars .hb{grid-template-columns:110px minmax(0,1fr) 60px}
   .doc{padding:24px 18px}.doc .meta{grid-template-columns:minmax(0,1fr)}.doc .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .sysmig{grid-template-columns:minmax(0,1fr)}.sysarr{transform:rotate(90deg);height:30px}
-  .iv .ivg{grid-template-columns:minmax(0,1fr)}
+  .kp{grid-template-columns:minmax(0,1fr);margin-left:0}.kp .kpchips{grid-column:1}.kp>.lb{padding-top:0}
   .ptab thead{display:none}.ptab tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;padding:8px 0;border-top:1px solid var(--line)}.ptab td{border:0;padding:2px 0}.ptab td.wide{grid-column:1/-1}
 }
 
@@ -834,6 +842,7 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 
 /* poprawki układu (Fit-Gap) */
 .whobox .teams span{flex-direction:column;height:auto;min-height:50px;padding:6px 8px;gap:1px;line-height:1.25}
+.whobox .teams label{display:flex}.whobox .teams label>span{flex:1 1 auto}
 .scale5 .fs{justify-self:start}
 .acard .ah{flex-wrap:wrap;row-gap:8px}
 .acard .ah b{flex:1 1 150px;min-width:0}

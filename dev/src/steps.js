@@ -1,5 +1,5 @@
 /* ===================== Fit-Gap ERP – widoki: start i kroki analizy ===================== */
-const noAreas = () => `<div class="empty"><b>Najpierw wskaż obszary objęte analizą</b>Procesy, wywiad i ocenę luk prowadzimy dla obszarów w zakresie.<br><a class="btn pri" href="${href(1, '')}">Przejdź do kroku 1</a></div>`;
+const noAreas = () => `<div class="empty"><b>Najpierw wskaż obszary objęte analizą</b>Procesy, ocenę dopasowania i luki prowadzimy dla obszarów w zakresie.<br><a class="btn pri" href="${href(1, '')}">Przejdź do kroku 1</a></div>`;
 function nextStep(m) { if (!m.inArea.length) return 1; for (let i = 1; i < NS; i++) if (required(m, i, '').length) return i; return NS; }
 const areaFilterChip = m => { const a = V.aid && m.ABY[V.aid]; return a ? `<span class="filt">${tile(a)}${esc(a.n)}<button type="button" data-act="area" data-a="" aria-label="Pokaż wszystkie obszary" title="Pokaż wszystkie obszary">${ic('x')}</button></span>` : ''; };
 const sysTags = co => `<span class="src">${esc(sysCC(co))}</span> ${ic('right')} <span class="tgt">${esc(sysCP(co))}</span>`;
@@ -19,7 +19,7 @@ function renderStart() {
       <div class="kv"><span><b>${m.inArea.length}</b>obszary</span><span><b>${v.tot ? v.done + '/' + v.tot : '–'}</b>ocenione wymagania</span><span><b>${v.fi != null ? fpct(v.fi) : '–'}</b>dopasowanie</span></div>
       <div class="ft"><span>${last ? 'Zmiana ' + esc(fdt(last.ts)) + (last.by ? ' · ' + esc(String(last.by).split(' · ')[0]) : '') : 'Brak danych'}</span><span class="lnk">${pr.started ? 'Kontynuuj' : 'Rozpocznij'}</span></div></a>`; }).join('');
   const add = `<button type="button" class="cocard add" data-act="addan" data-key="an-add">${ic('plus')}Nowa analiza fit-gap</button>`;
-  const method = [['Zakres i zespół', 'obszary, eksperci obu stron, plan wywiadów'], ['Procesy AS-IS', 'procesy, właściciele, narzędzia, wolumeny'], ['Wywiad fit-gap', 'praktyka obu spółek i ocena dopasowania'],
+  const method = [['Zakres i zespół', 'obszary, eksperci obu stron, uczestnicy, agenda i pytania'], ['Procesy AS-IS', 'procesy, właściciele, narzędzia, wolumeny'], ['Ocena fit-gap', 'praktyka obu spółek i ocena dopasowania'],
     ['Luki i zmiany', 'rozwiązania, pracochłonność, zmiany w ' + DEF.srcCo], ['Ryzyka', 'ocena, właściciele i działania'], ['Wartość dodana', 'korzyści i szacunek nakładów'], ['Wynik', 'rekomendacja, akceptacje i raport końcowy']];
   const started = all.map(c => ({c, m: model(c.k)})).filter(x => progress(x.m, '').started);
   let overview = '';
@@ -31,69 +31,80 @@ function renderStart() {
   }
   return `<div class="card"><div class="hero">
       <div><h1>Analiza Fit-Gap ERP</h1>
-        <p>Narzędzie prowadzi zespół przez analizę dopasowania procesów spółki ${esc(DEF.srcCo)}, pracującej w systemie ${esc(DEF.srcSys)}, do systemu ${esc(DEF.tgtSys)} używanego w ${esc(DEF.tgtCo)}. Wywiady z ekspertami obu systemów porównują praktykę obu spółek proces po procesie.</p>
-        <p>Wynik odpowiada na cztery pytania: czy migracja jest wykonalna, jakie są ryzyka, jakie zmiany procesów musi wprowadzić ${esc(DEF.srcCo)} i jaką wartość da przejście na wspólny system. Zaczynamy od procesów księgowych obsługiwanych przez FSSC.</p>
+        <p>Narzędzie prowadzi zespół przez analizę dopasowania procesów spółki ${esc(DEF.srcCo)}, pracującej w systemie ${esc(DEF.srcSys)}, do systemu ${esc(DEF.tgtSys)} używanego w ${esc(DEF.tgtCo)}. Razem z ekspertami obu systemów porównujemy praktykę obu spółek proces po procesie.</p>
+        <p>Wynik odpowiada na cztery pytania: czy migracja jest wykonalna, jakie są ryzyka, jakie zmiany procesów musi wprowadzić ${esc(DEF.srcCo)} i jaką wartość da przejście na wspólny system.</p>
         <ol class="method">${method.map((x, i) => `<li><span class="k">${i + 1}</span><span><b>${esc(x[0])}</b>${esc(x[1])}</span></li>`).join('')}</ol></div>
       <div class="demo" aria-label="Skala oceny dopasowania"><h2>Jak oceniamy dopasowanie</h2><p>Punktem odniesienia jest szablon AX w ${esc(DEF.tgtCo)} – to, jak ${esc(DEF.tgtCo)} faktycznie pracuje w systemie. Każde wymaganie ${esc(DEF.srcCo)} dostaje jedną z ocen:</p>
         <div class="sysmig"><div class="sysbox s"><small>${esc(DEF.srcCo)} · obecnie</small><b>${esc(DEF.srcSys)}</b><span>procesy i praktyka AS-IS</span></div><div class="sysarr">${ic('right')}</div><div class="sysbox t"><small>${esc(DEF.tgtCo)} · szablon docelowy</small><b>${esc(DEF.tgtSys)}</b><span>konfiguracja i procesy ${esc(DEF.tgtCo)}</span></div></div>
         <ul class="scale5">${FIT.map(f => `<li>${fsTag(f.k)}<span>${esc(f.d)}</span></li>`).join('')}</ul></div>
     </div></div>
-    <div class="card"><div class="cardb"><h2>${all.length ? 'Wybierz analizę' : 'Rozpocznij pierwszą analizę'}</h2><p class="blk">Każda analiza dotyczy jednej spółki przenoszonej do systemu docelowego. Zacznij od zakresu i zespołu, potem prowadź wywiady według kolejnych kroków.</p>
+    <div class="card"><div class="cardb"><h2>${all.length ? 'Wybierz analizę' : 'Rozpocznij pierwszą analizę'}</h2><p class="blk">Każda analiza dotyczy jednej spółki przenoszonej do systemu docelowego. Zacznij od zakresu i zespołu, potem przejdź kolejne kroki analizy.</p>
       <div class="cogrid">${cards}${add}</div></div></div>
     ${overview}`;
 }
 
 /* ---------- krok 1: zakres i zespół ---------- */
 function step1(m) {
-  const c = m.co, id = ID.an(m.cid), e = ent(id) || {}, raw = f => e[f] != null ? e[f] : DEF[f];
+  const c = m.co, id = ID.an(m.cid), e = ent(id) || {}, raw = f => e[f] != null ? coRaw(e[f]) : DEF[f];
   const coSec = `<section class="sec"><div class="sech"><h2>${pic('arrows-left-right')}Dane analizy</h2><div class="acts"><button type="button" class="lnk del" data-act="an-del">${ic('trash')} Usuń analizę</button></div></div>
     <div class="secb fgrid">
       ${fld(rq('Nazwa analizy'), inpF(id, 'n', c.n, {max: 90, req: 1}), 'wide')}
-      ${fld(rq('Spółka przenoszona'), inpF(id, 'srcCo', raw('srcCo'), {max: 40, req: 1, ph: 'np. CC'}), 'cc')}
+      ${fld(rq('Spółka przenoszona'), inpF(id, 'srcCo', raw('srcCo'), {max: 40, req: 1, ph: 'np. ' + DEF.srcCo}), 'cc')}
       ${fld(rq('System źródłowy'), inpF(id, 'srcSys', raw('srcSys'), {max: 60, req: 1, ph: 'np. Symfonia'}), 'cc')}
-      ${fld(rq('Spółka z systemem docelowym'), inpF(id, 'tgtCo', raw('tgtCo'), {max: 40, req: 1, ph: 'np. CP'}), 'cp')}
+      ${fld(rq('Spółka z systemem docelowym'), inpF(id, 'tgtCo', raw('tgtCo'), {max: 40, req: 1, ph: 'np. ' + DEF.tgtCo}), 'cp')}
       ${fld(rq('System docelowy'), inpF(id, 'tgtSys', raw('tgtSys'), {max: 60, req: 1, ph: 'np. Axapta (AX 2012)'}), 'cp')}
       ${fld(rq('Sponsor analizy'), inpF(id, 'sp', fval(c, 'sp'), {ph: 'Imię i nazwisko, np. dyrektor generalny ' + c.srcCo, req: 1}))}
       ${fld(rq('Lider analizy'), inpF(id, 'pl', fval(c, 'pl'), {ph: 'Imię i nazwisko', req: 1}))}
       ${fld('Data rozpoczęcia analizy', inpF(id, 'start', fval(c, 'start'), {type: 'date'}))}
-      ${fld('Planowana decyzja o migracji', inpF(id, 'due', fval(c, 'due'), {type: 'date'}))}
-      ${fld(rq('Cel i zakres analizy'), txtF(id, 'scope', fval(c, 'scope'), {req: 1, rows: 3, ph: 'np. ocena, czy przeniesienie ' + c.srcCo + ' z ' + c.srcSys + ' do ' + c.tgtSys + ' jest wykonalne i uzasadnione; etap 1 – procesy księgowe obsługiwane przez FSSC'}), 'wide')}
-      ${fld('Planowany termin uruchomienia <small>(wariant do oceny)</small>', inpF(id, 'golive', fval(c, 'golive'), {ph: 'np. 1 stycznia 2028 – początek roku obrotowego'}), 'wide')}
+      ${fld(rq('Cel i zakres analizy'), txtF(id, 'scope', fval(c, 'scope'), {req: 1, rows: 3, ph: 'np. ocena, czy przeniesienie ' + c.srcCo + ' z systemu ' + c.srcSys + ' do ' + c.tgtSys + ' jest wykonalne i uzasadnione'}), 'wide')}
     </div></section>`;
-  const ppl = m.people.map(p => { const pi = ID.os(m.cid, p.k), sg = String(p.sgid || ''), bad = !!sg && !SGID_RE.test(sg);
-    return `<tr data-key="os-${esc(p.k)}" id="os-${esc(p.k)}"><td class="wide">${inpF(pi, 'n', fval(p, 'n'), {ph: 'Imię i nazwisko', label: 'Imię i nazwisko', req: 1, max: 80})}</td>
-      <td>${inpF(pi, 'sgid', sg, {ph: 'A1234566', label: 'SGID', req: 1, bad, max: 8, cls: 'sgid', attrs: ' spellcheck="false" autocapitalize="characters"'})}</td>
-      <td>${selF(pi, 'co', fval(p, 'co'), D.coTypes.map(x => [x, x]), {empty: '– firma –', label: 'Firma', req: 1})}</td>
-      <td>${selF(pi, 'role', fval(p, 'role'), D.roles.map(x => [x, x]), {empty: '– rola –', label: 'Rola', req: 1})}</td>
-      <td class="act"><button type="button" class="btn icon sm ghost" data-act="os-del" data-o="${esc(p.k)}" aria-label="Usuń osobę ${esc(p.n)}" title="Usuń osobę">${ic('trash')}</button></td></tr>`; }).join('');
-  const pplSec = `<section class="sec" id="team"><div class="sech"><h2>${pic('users-three')}Zespół i uczestnicy wywiadów</h2><div class="acts"><span>${esc(plural(m.people.length, F_PER))}</span></div></div>
-    <div class="secb"><p class="blk">Dodaj osoby, które biorą udział w analizie: ekspertów ${esc(c.srcSys)} (${esc(c.srcCo)}) i ${esc(c.tgtSys)} (${esc(c.tgtCo)}), osoby z FSSC i zespół prowadzący. Narzędzie nie zbiera adresów e-mail – osobę identyfikuje SGID.</p>
-    ${m.people.length ? `<div class="tblwrap"><table class="ptab"><thead><tr><th>Imię i nazwisko<span class="rq">*</span></th><th>SGID<span class="rq">*</span></th><th>Firma<span class="rq">*</span></th><th>Rola<span class="rq">*</span></th><th></th></tr></thead><tbody>${ppl}</tbody></table></div>` : ''}
+  const ppl = m.people.map(p => { const pi = ID.os(m.cid, p.k);
+    return `<tr data-key="os-${esc(p.k)}" id="os-${esc(p.k)}"${p.ku ? ' class="haskp"' : ''}><td class="wide">${inpF(pi, 'n', fval(p, 'n'), {ph: 'Imię i nazwisko', label: 'Imię i nazwisko', req: 1, max: 80})}</td>
+      <td>${selF(pi, 'co', p.co, D.coTypes.map(x => [x, x]), {empty: '– zespół –', label: 'Zespół', req: 1})}</td>
+      <td>${selF(pi, 'role', p.role, D.roles.map(x => [x, x]), {empty: '– rola –', label: 'Rola', req: 1})}</td>
+      <td class="act"><button type="button" class="btn icon sm ghost" data-act="os-del" data-o="${esc(p.k)}" aria-label="Usuń osobę ${esc(p.n)}" title="Usuń osobę">${ic('trash')}</button></td></tr>${p.ku ? kuRow(m, p) : ''}`; }).join('');
+  const pplSec = `<section class="sec" id="team"><div class="sech"><h2>${pic('users-three')}Zespół i uczestnicy</h2><div class="acts"><span>${esc(plural(m.people.length, F_PER))}</span></div></div>
+    <div class="secb"><p class="blk">Dodaj osoby, które biorą udział w analizie: ekspertów obu spółek (${esc(c.srcCo)} i ${esc(c.tgtCo)}), osoby z FSSC i zespół prowadzący. Key userom przypisz procesy, za które odpowiadają. Narzędzie nie zbiera adresów e-mail.</p>
+    ${m.people.length ? `<div class="tblwrap"><table class="ptab"><thead><tr><th>Imię i nazwisko<span class="rq">*</span></th><th>Zespół<span class="rq">*</span></th><th>Rola<span class="rq">*</span></th><th></th></tr></thead><tbody>${ppl}</tbody></table></div>` : ''}
     <div style="margin-top:10px"><button type="button" class="btn dash" data-act="os-add">${ic('plus')}Dodaj osobę</button></div></div></section>`;
-  const und = m.areas.filter(a => !a.on).length, fsscUnd = m.areas.some(a => !a.on && a.ph === 1);
+  const und = m.areas.filter(a => !a.on).length;
   const cards = m.areas.map(a => areaCard(m, a)).join('');
   const add = V.open['area-add'] ? `<div class="addbox" data-key="area-addbox"><div class="row">${fld('Nazwa obszaru', `<input class="inp" id="na-n" maxlength="80" placeholder="np. Serwis urządzeń u klientów" autocomplete="off">`)}${fld('Krótki opis <small>(opcjonalnie)</small>', `<input class="inp" id="na-d" maxlength="200" placeholder="Jakie procesy obejmuje" autocomplete="off">`)}<button type="button" class="btn pri" data-act="area-add">${ic('plus')}Dodaj obszar</button><button type="button" class="btn ghost" data-act="area-addtog">Anuluj</button></div></div>`
     : `<div data-key="area-addbtn"><button type="button" class="btn dash" data-act="area-addtog">${ic('plus')}Dodaj obszar specyficzny dla ${esc(c.srcCo)}</button></div>`;
   return coSec + pplSec + `<section class="sec"><div class="sech"><h2>${pic('squares-four')}Obszary analizy</h2><div class="acts"><span>w zakresie: ${m.inArea.length} · kolejny etap: ${m.later.length} · bez decyzji: ${und}</span>
-      ${fsscUnd ? `<button type="button" class="btn sm" data-act="area-fssc">Etap 1: księgowość (FSSC)</button>` : ''}${und ? `<button type="button" class="btn sm" data-act="area-rest">Pozostałe – kolejny etap (${und})</button>` : ''}</div></div>
-    <div class="secb"><p class="blk">Wskaż obszary analizowane teraz, obszary na kolejny etap i obszary poza zakresem. Dla każdego obszaru w zakresie wybierz eksperta ${esc(c.srcCo)} i eksperta ${esc(c.tgtCo)} oraz zaplanuj wywiad – narzędzie przygotuje zaproszenie do kalendarza i agendę z pytaniami.</p>
-    ${m.people.length ? '' : `<div class="note warn">${ic('warn')}<p>Najpierw dodaj osoby w sekcji „Zespół i uczestnicy wywiadów” – ekspertów obszarów wybierasz z tej listy.</p></div>`}
+      ${und ? `<button type="button" class="btn sm" data-act="area-rest">Pozostałe – kolejny etap (${und})</button>` : ''}</div></div>
+    <div class="secb"><p class="blk">Wskaż obszary analizowane teraz, obszary na kolejny etap i obszary poza zakresem. Dla każdego obszaru w zakresie wybierz eksperta ${esc(c.srcCo)}, eksperta ${esc(c.tgtCo)} i uczestników. Agendę i pytania obszaru zapiszesz jako PDF i wyślesz uczestnikom w załączniku e-maila.</p>
+    ${m.people.length ? '' : `<div class="note warn">${ic('warn')}<p>Najpierw dodaj osoby w sekcji „Zespół i uczestnicy” – ekspertów i uczestników obszarów wybierasz z tej listy.</p></div>`}
     <div class="agrid">${cards}</div><div style="margin-top:12px">${add}</div></div></section>`;
+}
+/* procesy key usera: lista rozwijana z wyborem wielokrotnym (procesy obszarów w zakresie) */
+function kuRow(m, p) {
+  const pi = ID.os(m.cid, p.k), bad = MISS.has(pi + '#ps'), sel = new Set(p.kp.map(x => x.k));
+  const groups = m.inArea.map(a => { const ps = m.kuProcs.filter(x => x.a === a.k); if (!ps.length) return '';
+    const n = ps.filter(x => sel.has(x.k)).length;
+    return `<div class="mgrp" data-key="mg-${esc(a.k)}"><label class="mga"><input type="checkbox" data-act="ms-area" data-o="${esc(p.k)}" data-a="${esc(a.k)}"${n === ps.length ? ' checked' : ''}${n && n < ps.length ? ' data-mixed="1"' : ''}><b>${esc(a.n)}</b><small>${n}/${ps.length}</small></label>
+      ${ps.map(x => `<label data-key="mp-${esc(x.k)}"><input type="checkbox" data-act="ms-tog" data-o="${esc(p.k)}" data-p="${esc(x.k)}"${sel.has(x.k) ? ' checked' : ''}><span class="qcode">${esc(x.cd)}</span><span>${esc(x.n)}</span></label>`).join('')}</div>`; }).join('');
+  const sum = p.kp.length ? `<span class="val">Wybrano: ${esc(plural(p.kp.length, F_PROC))}</span>` : `<span class="ph">${m.kuProcs.length ? 'Wybierz procesy z listy' : 'Najpierw oznacz obszary „W zakresie”'}</span>`;
+  const chips = p.kp.map(x => `<span class="tg" data-key="kp-${esc(x.k)}"><span><b>${esc(x.cd)}</b> ${esc(x.n)}</span><button type="button" class="tgx" data-act="ms-rm" data-o="${esc(p.k)}" data-p="${esc(x.k)}" aria-label="Usuń proces: ${esc(x.n)}">${ic('x')}</button></span>`).join('');
+  return `<tr class="kprow" data-key="osk-${esc(p.k)}"><td colspan="4" class="wide"><div class="kp"><span class="lb">${rq('Procesy key usera')}</span>
+    <details class="msel" data-act="ms" data-o="${esc(p.k)}"${V.ms === p.k ? ' open' : ''}><summary class="inp"${bad ? ' aria-invalid="true"' : ''} aria-label="Procesy key usera – ${esc(p.n || 'bez nazwy')}">${sum}</summary>
+      <div class="mlist">${groups || '<p class="muted sm" style="margin:6px 8px">Brak procesów do wyboru – w sekcji „Obszary analizy” oznacz obszary „W zakresie”.</p>'}</div></details>
+    ${chips ? `<div class="kpchips">${chips}</div>` : ''}</div></td></tr>`;
 }
 function areaCard(m, a) {
   const id = ID.ar(m.cid, a.k), c = m.co, n = m.procs.filter(p => p.a === a.k).length, st = a.in ? 'in' : a.later ? 'later' : a.on === 'N' ? 'out' : 'und';
   const seg = segB('area-on', a.on || '', [['Y', 'W zakresie', 'y'], ['L', 'Kolejny etap', 'l'], ['N', 'Poza zakresem', 'n']], `data-a="${esc(a.k)}"`, 'sm');
-  const head = a.std ? `<b>${esc(a.n)}</b>${a.ph === 1 ? '<span class="ph">etap 1 · FSSC</span>' : ''}` : `<input class="inp" data-act="f" data-id="${esc(id)}" data-f="n" value="${esc(a.n)}" aria-label="Nazwa obszaru" maxlength="80" style="max-width:240px;height:32px">`;
+  const head = a.std ? `<b>${esc(a.n)}</b>` : `<input class="inp" data-act="f" data-id="${esc(id)}" data-f="n" value="${esc(a.n)}" aria-label="Nazwa obszaru" maxlength="80" style="max-width:240px;height:32px">`;
   let body = '';
   if (a.in) {
     const opts = m.people.map(p => [p.k, (p.n || 'bez nazwy') + (p.co ? ' · ' + p.co : '') + (p.role ? ' · ' + p.role : '')]);
-    const chips = m.people.map(p => `<button type="button" class="chipbtn" data-act="us-tog" data-a="${esc(a.k)}" data-o="${esc(p.k)}" aria-pressed="${a.us.includes(p.k)}">${esc(p.n || 'bez nazwy')} <small>${esc(p.co || '')}</small></button>`).join('');
+    const kuA = new Set(m.people.filter(p => p.kp.some(x => x.a === a.k)).map(p => p.k));
+    const chips = m.people.map(p => `<button type="button" class="chipbtn" data-act="us-tog" data-a="${esc(a.k)}" data-o="${esc(p.k)}" aria-pressed="${a.us.includes(p.k)}">${esc(p.n || 'bez nazwy')} <small>${esc([p.co, kuA.has(p.k) ? 'key user' : ''].filter(Boolean).join(' · '))}</small></button>`).join('');
     body = `<div class="af">
       ${fld(rq('Ekspert ' + esc(c.srcCo) + ' – ' + esc(c.srcSys)), selF(id, 'xcc', a.ecc ? a.xcc : '', opts, {empty: m.people.length ? '– wybierz osobę –' : '– najpierw dodaj osoby –', req: 1, label: 'Ekspert ' + c.srcCo}), 'cc')}
       ${fld(rq('Ekspert ' + esc(c.tgtCo) + ' – ' + esc(c.tgtSys)), selF(id, 'xcp', a.ecp ? a.xcp : '', opts, {empty: m.people.length ? '– wybierz osobę –' : '– najpierw dodaj osoby –', req: 1, label: 'Ekspert ' + c.tgtCo}), 'cp')}</div>
-      <div class="iv"><div class="ivh">${ic('cal')}Wywiad<span class="acts"><button type="button" class="btn sm" data-act="ics" data-a="${esc(a.k)}" title="Plik .ics do otwarcia w Outlooku – uczestników dodasz w kalendarzu">${ic('cal')}Zaproszenie (.ics)</button><a class="btn sm" href="${hrefDoc(m.cid, a.k)}">${ic('doc')}Agenda i pytania</a></span></div>
-        <div class="ivg">${fld('Data', inpF(id, 'dt', fval(a, 'dt'), {type: 'date', label: 'Data wywiadu'}))}${fld('Godzina', inpF(id, 'tm', fval(a, 'tm'), {type: 'time', label: 'Godzina wywiadu'}))}${fld('Czas (min)', inpF(id, 'dur', fval(a, 'dur'), {num: 1, ph: '90', max: 4, label: 'Czas trwania w minutach'}))}${fld('Miejsce lub Teams', inpF(id, 'loc', fval(a, 'loc'), {ph: 'np. Microsoft Teams, sala 2.14', max: 200}), 'wide')}</div>
-        ${m.people.length ? `<div><span class="fld"><span>Uczestnicy wywiadu</span></span><div class="pchips" role="group" aria-label="Uczestnicy wywiadu – ${esc(a.n)}">${chips}</div></div>` : ''}</div>`;
+      <div class="parts"><div class="ph2"><span>Uczestnicy${a.us.length ? ` <small>(${a.us.length})</small>` : ''}</span><a class="btn sm" href="${hrefDoc(m.cid, a.k)}" title="Dokument do wysłania uczestnikom w załączniku e-maila">${ic('doc')}Agenda i pytania</a></div>
+        ${m.people.length ? `<div class="pchips" role="group" aria-label="Uczestnicy – ${esc(a.n)}">${chips}</div>` : ''}</div>`;
   }
   const meta = `<div class="meta">${a.in ? `<span>${n ? esc(plural(n, F_PROC)) + ' do potwierdzenia w kroku 2' : 'Procesy dodasz w kroku 2'}</span>` : `<span>${esc(a.d || '')}</span>`}${a.sg ? `<span class="tag ok">${ic('check')}wyniki potwierdzone</span>` : ''}${a.std ? '' : `<button type="button" class="lnk del" data-act="area-del" data-a="${esc(a.k)}">${ic('trash')} Usuń</button>`}</div>`;
   return `<div class="acard ${st}${st === 'und' && MISS.has('und') ? ' bad' : ''}" data-key="ac-${esc(a.k)}" id="area-${esc(a.k)}"><div class="ah">${tile(a)}${head}${seg}</div>${a.in && a.d ? `<div class="ad">${esc(a.d)}</div>` : ''}${body}${meta}</div>`;
@@ -111,7 +122,7 @@ function step2(m) {
     return `<section class="sec" data-key="s2-${esc(a.k)}"><div class="sech"><h2>${tile(a, 's')}${esc(a.n)}<span class="who">${esc([a.ecc ? a.ecc.n : '', a.ecp ? a.ecp.n : ''].filter(Boolean).join(' · ') || 'brak ekspertów')}</span></h2><div class="acts"><span>dotyczy: ${yes} · bez decyzji: ${und}</span>${und ? `<button type="button" class="btn sm" data-act="proc-all" data-a="${esc(a.k)}">Pozostałe dotyczą (${und})</button>` : ''}</div></div>
       ${pr.map(p => procRow(m, p)).join('')}${add}</section>`;
   }).join('');
-  return lists + `<div class="note">${ic('info')}<p>Katalog procesów jest punktem wyjścia. Zaznacz procesy realizowane w ${esc(c.srcCo)}, dodaj procesy specyficzne i dla każdego wskaż właściciela, narzędzia i skalę. Krótki opis praktyki obu spółek ułatwi wywiad, a ocena „wspólny standard / specyfika ${esc(c.srcCo)}” pokaże, gdzie procesy można ujednolicić.</p></div>` + secs;
+  return lists + `<div class="note">${ic('info')}<p>Katalog procesów jest punktem wyjścia. Zaznacz procesy realizowane w ${esc(c.srcCo)}, dodaj procesy specyficzne i dla każdego wskaż właściciela, narzędzia i skalę. Krótki opis praktyki obu spółek ułatwi ocenę dopasowania, a ocena „wspólny standard / specyfika ${esc(c.srcCo)}” pokaże, gdzie procesy można ujednolicić.</p></div>` + secs;
 }
 function procRow(m, p) {
   const id = ID.pr(m.cid, p.k), c = m.co, on = p.on || '', ed = V.open['ed-' + p.k];
@@ -135,16 +146,16 @@ function procRow(m, p) {
   const tools = !p.cat ? `<span class="tools2"><button type="button" class="lnk mut" data-act="proc-edit" data-p="${esc(p.k)}">${ic('edit')} ${ed ? 'Gotowe' : 'Edytuj'}</button><button type="button" class="lnk del" data-act="proc-del" data-p="${esc(p.k)}">${ic('trash')} Usuń</button></span>` : '';
   const qn = p.cat ? p.q.length : (m.procs.find(x => x.k === p.k) || {reqs: []}).reqs.length;
   return `<div class="prow${on === 'N' ? ' off' : on === 'Y' ? ' k-y' : ''}${!on && MISS.has('und') ? ' bad' : ''}" data-key="pr-${esc(p.k)}" id="proc-${esc(p.k)}">
-    <div><div class="pn"><span class="qcode">${esc(p.cd)}</span>${esc(p.n)}${!p.cat ? ' <span class="custq">specyficzny dla ' + esc(c.srcCo) + '</span>' : ''}${tools}</div>${p.d ? `<div class="pd">${esc(p.d)}</div>` : ''}${on === 'Y' ? `<div class="pd">${esc(plural(qn, F_Q))} w wywiadzie</div>` : ''}</div>
+    <div><div class="pn"><span class="qcode">${esc(p.cd)}</span>${esc(p.n)}${!p.cat ? ' <span class="custq">specyficzny dla ' + esc(c.srcCo) + '</span>' : ''}${tools}</div>${p.d ? `<div class="pd">${esc(p.d)}</div>` : ''}${on === 'Y' ? `<div class="pd">${esc(plural(qn, F_Q))} do oceny</div>` : ''}</div>
     <div>${seg}</div>${edit}${f}</div>`;
 }
 
-/* ---------- krok 3: wywiad fit-gap ---------- */
+/* ---------- krok 3: ocena fit-gap ---------- */
 function step3(m) {
   const s = slice(m, V.aid); if (!s.areas.length) return noAreas();
   if (!V.aid) return step3overview(m, s);
   const a = s.areas[0], act = s.act;
-  if (!act.length) return `<div class="empty"><b>W obszarze „${esc(a.n)}” nie ma procesów oznaczonych „Dotyczy”</b>Wywiad prowadzimy dla procesów potwierdzonych w kroku 2.<br><a class="btn pri" href="${href(2, a.k)}">Przejdź do kroku 2</a></div>`;
+  if (!act.length) return `<div class="empty"><b>W obszarze „${esc(a.n)}” nie ma procesów oznaczonych „Dotyczy”</b>Ocenę prowadzimy dla procesów potwierdzonych w kroku 2.<br><a class="btn pri" href="${href(2, a.k)}">Przejdź do kroku 2</a></div>`;
   const c = cnt(s.reqs), done = s.reqs.filter(r => r.st).length;
   const tools = `<div class="ivtools noprint">${segB('mode', V.focus ? 'f' : 'l', [['l', ic('list') + 'Lista pytań'], ['f', ic('focus') + 'Tryb skupienia']], '', 'sm')}
     <span class="prog">${fbarHtml(c, true)}<span>${done}/${s.reqs.length}</span></span><span class="grow"></span>
@@ -158,8 +169,8 @@ function step3overview(m, s) {
   const cards = s.areas.map(a => { const rs = s.reqs.filter(r => r.a === a.k), c = cnt(rs), fi = fitIndex(rs), dn = rs.filter(r => r.done).length, any = rs.filter(r => r.st).length;
     return `<a class="ovcard" href="${href(3, a.k)}" data-key="ov-${esc(a.k)}"><div class="h">${tile(a)}<b>${esc(a.n)}</b></div>${fbarHtml(c, true)}
       <div class="kv"><span><b>${dn}/${rs.length}</b>ocenione</span><span><b>${c.P + c.G}</b>luki</span><span><b>${c.O}</b>do wyjaśnienia</span><span><b>${fi != null ? fpct(fi) : '–'}</b>dopasowanie</span></div>
-      <div class="ft"><span>${esc(a.dt ? 'wywiad ' + fd(a.dt) + (a.tm ? ' ' + a.tm : '') : 'termin wywiadu nieustalony')}</span><span class="lnk">${any ? (any === rs.length ? 'Przejrzyj' : 'Kontynuuj wywiad') : 'Prowadź wywiad'}</span></div></a>`; }).join('');
-  return `<div class="note">${ic('info')}<p>Wywiad prowadzimy osobno dla każdego obszaru. Wybierz obszar – zobaczysz jego procesy i pytania. Ocena ostateczna: ${done} z ${esc(plural(s.reqs.length, F_REQ))}${tot.O ? `, do wyjaśnienia: ${tot.O}` : ''}.</p></div>
+      <div class="ft"><span>${esc([a.ecc ? a.ecc.n : '', a.ecp ? a.ecp.n : ''].filter(Boolean).join(' · ') || 'brak ekspertów')}</span><span class="lnk">${any ? (any === rs.length ? 'Przejrzyj' : 'Kontynuuj ocenę') : 'Rozpocznij ocenę'}</span></div></a>`; }).join('');
+  return `<div class="note">${ic('info')}<p>Ocenę prowadzimy osobno dla każdego obszaru. Wybierz obszar – zobaczysz jego procesy i pytania. Ocena ostateczna: ${done} z ${esc(plural(s.reqs.length, F_REQ))}${tot.O ? `, do wyjaśnienia: ${tot.O}` : ''}.</p></div>
     <div style="margin:0 0 14px">${fbarHtml(tot, true)}<div style="margin-top:8px">${fleg()}</div></div><div class="ovgrid">${cards}</div>`;
 }
 function procBlock(m, p) {
@@ -221,7 +232,7 @@ function step4(m) {
   const sum = `<div class="gsum">${kpi('Luki i dopasowania częściowe', String(gaps.length), gaps.filter(r => r.wd).length ? 'w tym wycofane: ' + gaps.filter(r => r.wd).length : '')}${kpi('Luki krytyczne', String(v.crit.length), 'Must + rozwój, integracja lub obejście', v.crit.length ? 'crit' : '')}
     ${kpi('Zmiany procesowe w ' + co.srcCo, String(chg.length), v.chgHi.length ? 'wysoka skala: ' + v.chgHi.length : '', v.chgHi.length ? 'warn' : '')}${kpi('Szacowana pracochłonność', fnum(v.md) + ' md', v.noEff ? 'bez oszacowania: ' + v.noEff : 'osobodni', '')}</div>`;
   const tabs = `<div class="tabs noprint">${segB('r4', V.r4, [['gap', 'Rejestr luk (' + gaps.length + ')'], ['chg', 'Zmiany procesowe w ' + esc(co.srcCo) + ' (' + chg.length + ')']])}</div>`;
-  if (!gaps.length) return sum + `<div class="empty"><b>Brak luk w ocenionych wymaganiach</b>Luki powstają z ocen „Częściowe” i „Luka” w kroku 3.${s.reqs.some(r => !r.st) ? `<br><a class="btn" href="${href(3, V.aid)}">Wróć do wywiadu</a>` : ''}</div>`;
+  if (!gaps.length) return sum + `<div class="empty"><b>Brak luk w ocenionych wymaganiach</b>Luki powstają z ocen „Częściowe” i „Luka” w kroku 3.${s.reqs.some(r => !r.st) ? `<br><a class="btn" href="${href(3, V.aid)}">Wróć do oceny</a>` : ''}</div>`;
   return sum + tabs + (V.r4 === 'chg' ? chgView(m, s, chg) : gapView(m, s, gaps));
 }
 function gapView(m, s, gaps) {
@@ -255,7 +266,7 @@ function chgRow(m, r) {
   return `<div class="grow2 chg${r.wd ? ' off' : ''}" id="g-${esc(r.k)}" data-key="c-${esc(r.k)}">
     <div class="gh"><div class="gt"><span class="qcode">${esc(r.code)}</span>${esc(r.t)}<small>${esc(r.proc.n)}</small></div><div class="chips">${fsTag(r.st)}${priTag(r.pri0)}${r.wd ? '<span class="tag">wycofane</span>' : ''}</div></div>
     <div class="gans"><p><span class="src">${esc(co.srcCo)} dziś</span>${esc(trunc(r.cc, 280) || '–')}</p><p><span class="tgt">${esc(co.tgtCo)} w AX</span>${esc(trunc(r.cp, 280) || '–')}</p></div>
-    <div class="cf">${fld(rq('Co zmienia się w ' + esc(co.srcCo)), txtF(ri, 'chg', fval(r, 'chg'), {rows: 2, req: 1, ph: 'Nowy sposób pracy, dokumenty, role i odpowiedzialności'}))}${fld('Kogo dotyczy', inpF(ri, 'who', fval(r, 'who'), {ph: 'np. FSSC – zobowiązania, zakupy CC, magazyn', max: 200}))}</div>
+    <div class="cf">${fld(rq('Co zmienia się w ' + esc(co.srcCo)), txtF(ri, 'chg', fval(r, 'chg'), {rows: 2, req: 1, ph: 'Nowy sposób pracy, dokumenty, role i odpowiedzialności'}))}${fld('Kogo dotyczy', inpF(ri, 'who', fval(r, 'who'), {ph: 'np. FSSC – zobowiązania, zakupy ' + co.srcCo + ', magazyn', max: 200}))}</div>
     <div class="cf2"><div><span class="lb">${rq('Skala zmiany')}</span>${segB('g-imp', r.imp || '', IMP.map(x => [x.v, x.v + ' – ' + x.n, x.v === 3 ? 'e' : x.v === 2 ? 'q' : 'y', x.d]), `data-q="${esc(r.k)}"`, 'sm' + (MISS.has('imp-' + r.k) ? ' bad' : ''))}</div>
       ${fld('Etap', selF(ri, 'ph', fval(r, 'ph'), D.phase.map(x => [x, x]), {empty: '–'}))}
       <label class="chk"><input type="checkbox" data-act="f" data-id="${esc(ri)}" data-f="tr"${r.tr ? ' checked' : ''}><span>Wymaga szkolenia</span></label>
@@ -298,7 +309,7 @@ function riskRow(m, s, r) {
 function step6(m) {
   const co = m.co, id = ID.an(m.cid), bc = bcase(m), bs = benefitSum(m);
   const rows = m.bens.map(b => benRow(m, b)).join('');
-  const add = V.open['bn-add'] ? `<div class="bnrow" data-key="bn-addbox"><div class="addbox" style="grid-column:1/-1"><div class="row">${fld('Korzyść', `<input class="inp" id="nb-n" maxlength="160" placeholder="np. Wspólne zakupy surowców CP i CC" autocomplete="off">`)}<label class="fld" style="flex:0 0 220px"><span>Kategoria</span><select class="inp" id="nb-c">${BCAT.map(x => `<option value="${esc(x.k)}">${esc(x.n)}</option>`).join('')}</select></label><button type="button" class="btn pri" data-act="bn-add">${ic('plus')}Dodaj</button><button type="button" class="btn ghost" data-act="bn-addtog">Anuluj</button></div></div></div>`
+  const add = V.open['bn-add'] ? `<div class="bnrow" data-key="bn-addbox"><div class="addbox" style="grid-column:1/-1"><div class="row">${fld('Korzyść', `<input class="inp" id="nb-n" maxlength="160" placeholder="np. Wspólne zakupy surowców ${esc(co.tgtCo)} i ${esc(co.srcCo)}" autocomplete="off">`)}<label class="fld" style="flex:0 0 220px"><span>Kategoria</span><select class="inp" id="nb-c">${BCAT.map(x => `<option value="${esc(x.k)}">${esc(x.n)}</option>`).join('')}</select></label><button type="button" class="btn pri" data-act="bn-add">${ic('plus')}Dodaj</button><button type="button" class="btn ghost" data-act="bn-addtog">Anuluj</button></div></div></div>`
     : `<div class="bnrow" data-key="bn-addbtn"><div><button type="button" class="btn sm dash" data-act="bn-addtog">${ic('plus')}Dodaj korzyść</button></div></div>`;
   const out = (l, v, sub, cls) => `<div class="bco${cls ? ' ' + cls : ''}"><span>${esc(l)}${sub ? `<small>${esc(sub)}</small>` : ''}</span><b>${v}</b></div>`;
   const bcSec = `<section class="sec"><div class="sech"><h2>${pic('calculator')}Szacunek nakładów i business case</h2><div class="acts"><span>szacunek orientacyjny – do weryfikacji z partnerem wdrożeniowym</span></div></div>
@@ -338,7 +349,7 @@ function verdictPanel(m, v, opt) {
   const k = o.k || v.k, def = VERDBY[k] || {n: 'Za mało danych do rekomendacji', d: `Oceniono ${fpct(v.cov)} wymagań – propozycja pojawi się po ocenie co najmniej ${fpct(P.minCov)} wymagań.`};
   const li = (cls, icn, t) => `<li class="${cls}">${ic(icn)}<span>${t}</span></li>`;
   const crit = [
-    li(v.cov >= P.minCov ? 'ok' : 'wn', v.cov >= P.minCov ? 'checkc' : 'clock', `Pokrycie wywiadu: <b>${fpct(v.cov)}</b> – ocena ostateczna dla ${v.done} z ${esc(plural(v.tot, F_REQ))}${v.open ? `, do wyjaśnienia: ${v.open}` : ''}`),
+    li(v.cov >= P.minCov ? 'ok' : 'wn', v.cov >= P.minCov ? 'checkc' : 'clock', `Pokrycie oceny: <b>${fpct(v.cov)}</b> – ocena ostateczna dla ${v.done} z ${esc(plural(v.tot, F_REQ))}${v.open ? `, do wyjaśnienia: ${v.open}` : ''}`),
     li(v.fi == null ? 'wn' : v.fi >= P.goFit ? 'ok' : v.fi >= P.condFit ? 'wn' : 'er', v.fi != null && v.fi >= P.goFit ? 'checkc' : 'warn', `Indeks dopasowania: <b>${fpct(v.fi)}</b> (rekomendacja od ${fpct(P.goFit)}, warunkowa od ${fpct(P.condFit)})`),
     li(!v.crit.length ? 'ok' : v.crit.length <= P.condCrit ? 'wn' : 'er', !v.crit.length ? 'checkc' : 'warn', `Luki krytyczne: <b>${v.crit.length}</b> (Must, wymagające rozwoju AX, integracji albo obejścia)`),
     li(!v.rkNo.length ? 'ok' : 'er', !v.rkNo.length ? 'checkc' : 'warn', `Ryzyka krytyczne i wysokie bez działań: <b>${v.rkNo.length}</b> · krytyczne: ${v.rkCrit.length}, wysokie: ${v.rkHi.length}`),
@@ -350,7 +361,7 @@ function step7(m) {
   const s = slice(m, V.aid), v = verdict(m, V.aid), a1 = V.aid ? m.ABY[V.aid] : null, co = m.co, bs = benefitSum(m), bc = bcase(m);
   if (!s.areas.length) return noAreas();
   const kpi = (lb, val, sub, cls) => `<div class="stat${cls ? ' ' + cls : ''}"><span class="lb">${esc(lb)}</span><b>${esc(val)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</div>`;
-  const kpis = `<div class="kpis">${kpi('Pokrycie wywiadu', fpct(v.cov), v.done + ' z ' + v.tot + ' wymagań')}${kpi('Indeks dopasowania', fpct(v.fi), 'ważony priorytetem', v.fi == null ? '' : v.fi >= D.verdict.goFit ? 'okk' : v.fi >= D.verdict.condFit ? 'warn' : 'crit')}
+  const kpis = `<div class="kpis">${kpi('Pokrycie oceny', fpct(v.cov), v.done + ' z ' + v.tot + ' wymagań')}${kpi('Indeks dopasowania', fpct(v.fi), 'ważony priorytetem', v.fi == null ? '' : v.fi >= D.verdict.goFit ? 'okk' : v.fi >= D.verdict.condFit ? 'warn' : 'crit')}
     ${kpi('Luki krytyczne', String(v.crit.length), 'luki razem: ' + v.gaps.length, v.crit.length ? 'crit' : '')}${kpi('Zmiany procesowe w ' + co.srcCo, String(v.chg.length), v.chgHi.length ? 'wysoka skala: ' + v.chgHi.length : 'bez zmian o wysokiej skali', v.chgHi.length ? 'warn' : '')}
     ${kpi('Pracochłonność luk', fnum(v.md) + ' md', bc.rate ? '≈ ' + fpln(v.md * bc.rate) : 'osobodni')}${kpi('Ryzyka wysokie i krytyczne', String(v.rkCrit.length + v.rkHi.length), plural(s.risks.length, F_RISK) + ' w rejestrze', v.rkCrit.length ? 'crit' : v.rkHi.length ? 'warn' : '')}</div>`;
   const benChart = !a1 ? `<div class="chart"><h3>Wartość dodana</h3><p class="cs">Korzyści oznaczone „dotyczy”: ${bs.on.length}${bs.pln ? ' · wycenione: ' + esc(fpln(bs.pln)) + ' rocznie' : ''}</p>
@@ -391,9 +402,9 @@ function step7(m) {
 
 /* ---------- ramka kroku ---------- */
 const STEP_LEAD = [null,
-  'Opisz analizę, dodaj osoby biorące udział, wskaż obszary w zakresie, ekspertów obu stron i zaplanuj wywiady.',
+  'Opisz analizę, dodaj osoby biorące udział, wskaż obszary w zakresie, ekspertów obu stron i uczestników, przygotuj agendę i pytania.',
   'Potwierdź procesy realizowane w spółce przenoszonej, ich właścicieli, narzędzia i skalę oraz możliwość wspólnego standardu.',
-  'Prowadź wywiad z ekspertami: praktyka obu spółek dla każdego pytania i ocena dopasowania do szablonu systemu docelowego.',
+  'Razem z ekspertami opisz praktykę obu spółek dla każdego pytania i oceń dopasowanie do szablonu systemu docelowego.',
   'Uzupełnij rejestr luk: sposób zamknięcia, pracochłonność i decyzję, a dla zmian procesowych – opis i skalę zmiany.',
   'Zbuduj rejestr ryzyk migracji z właścicielami i działaniami. Narzędzie podpowiada ryzyka typowe i wynikające z luk.',
   'Oceń korzyści migracji i oszacuj nakłady – to podstawa oceny, czy migracja jest uzasadniona biznesowo.',

@@ -26,8 +26,10 @@ $fp = fopen($dir . '/state.json', 'c+');
 if (!$fp) out(500, ['error' => 'storage']);
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-/* RODO: narzędzie nie przechowuje adresów e-mail – osoby opisuje imię i nazwisko oraz SGID */
+/* RODO: narzędzie nie przechowuje adresów e-mail ani numerów SGID – osoby opisuje imię i nazwisko.
+   SGID z wersji 1.0 nie trafia już do pliku; wpisy, które go zawierają, aplikacja zapisuje ponownie bez numeru. */
 function noMail(string $id, $v) { if (is_array($v)) unset($v['em']); return $v; }
+function scrub(string $id, $v) { $v = noMail($id, $v); if (is_array($v)) unset($v['sgid']); return $v; }
 flock($fp, $method === 'POST' ? LOCK_EX : LOCK_SH);
 $raw = stream_get_contents($fp);
 $db = $raw ? json_decode($raw, true) : null;
@@ -65,7 +67,7 @@ foreach ($in['ch'] as $c) {
   if (!is_array($c) || count($c) !== 2) continue;
   [$id, $v] = $c;
   if (!is_string($id) || !preg_match('/^(an|ar|pr|rq|os|rk|bn|sg)\|[A-Za-z0-9_-]{1,40}(\|[A-Za-z0-9_-]{1,60})?$/', $id) || !is_array($v) || array_is_list($v) && $v !== []) continue;
-  $v = noMail($id, clean($v, 0));
+  $v = scrub($id, clean($v, 0));
   if (!isset($v['ts']) || !is_string($v['ts']) || strlen($v['ts']) > 40) continue;
   if (strlen(json_encode($v, JSON_UNESCAPED_UNICODE)) > 65536) continue;
   $prev = $db['e'][$id]['v'] ?? null;

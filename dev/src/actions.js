@@ -6,9 +6,11 @@ function render() {
   try {
     if (V.cid && !analysis(V.cid)) { V.cid = null; V.aid = ''; V.doc = ''; history.replaceState(null, '', '#start'); }
     const c = V.cid ? analysis(V.cid) : null;
-    document.title = c ? c.n + ' – ' + (V.doc === 'raport' ? 'Raport końcowy' : V.doc === 'agenda' ? 'Agenda wywiadu' : STEPS[V.step] || '') + ' – Fit-Gap ERP' : 'Analiza Fit-Gap ERP';
+    const ag = c && V.doc === 'agenda' ? model(c.k).ABY[V.docA] : null;
+    document.title = ag ? 'Agenda i pytania – ' + ag.n + ' – ' + c.n : c ? c.n + ' – ' + (V.doc === 'raport' ? 'Raport końcowy' : STEPS[V.step] || '') + ' – Fit-Gap ERP' : 'Analiza Fit-Gap ERP';
     renderTop(); renderSide();
     paint($('#main'), c ? (V.doc ? renderDoc(model(c.k)) : renderAnalysis()) : renderStart());
+    $$('input[data-mixed]').forEach(x => { x.indeterminate = true; }); $$('.mga input:not([data-mixed])').forEach(x => { x.indeterminate = false; });
   } finally { RENDERING = false; }
   if (AGAIN) { AGAIN = false; render(); }
 }
@@ -82,8 +84,6 @@ function setField(t) {
   const id = t.dataset.id, f = t.dataset.f; if (!ID_RE.test(id)) return;
   let v = t.type === 'checkbox' ? t.checked : t.value;
   if (t.dataset.num) { v = String(v).replace(/[^\d,.\s]/g, ''); if (t.value !== v) t.value = v; }
-  if (f === 'sgid') { const raw = t.value, p = t.selectionStart; v = raw.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
-    if (raw !== v) { t.value = v; try { const q = Math.max(0, (p || 0) - (raw.length - v.length)); t.setSelectionRange(q, q); } catch (e) {} } }
   if (f === 'n' && t.tagName === 'INPUT' && !norm(v) && /^(ar|pr)\|/.test(id)) return;
   put(id, {[f]: v});
 }
@@ -114,7 +114,14 @@ function deleteAnalysis() {
 }
 
 /* ---------- zdarzenia ---------- */
+/* procesy key usera: zmiana listy procesów osoby */
+function setKu(o, fn) { const id = ID.os(V.cid, o), cur = arr((ent(id) || {}).ps); put(id, {ps: uniq(fn(cur))}); render(); }
 document.addEventListener('click', ev => {
+  // lista rozwijana procesów zamyka się po kliknięciu poza nią
+  $$('details.msel[open]').forEach(x => { if (!x.contains(ev.target)) { x.open = false; if (V.ms === x.dataset.o) V.ms = ''; } });
+  // stan rozwinięcia zapisujemy od razu – odświeżenie widoku zaraz po kliknięciu (np. po zmianie pola) nie zwinie listy
+  const sm = ev.target.closest('details[data-act] > summary');
+  if (sm) { const dt = sm.parentNode, op = !dt.open; if (dt.dataset.act === 'ms') V.ms = op ? dt.dataset.o : ''; else if (dt.dataset.act === 'pmore') V.open['pm-' + dt.dataset.p] = op; }
   const t = ev.target.closest('[data-act]');
   if (!t) { if (V.menu && !ev.target.closest('.menu')) { V.menu = false; renderTop(); } if (ev.target.id === 'modal') closeModal(); return; }
   const act = t.dataset.act, d = t.dataset;
@@ -145,16 +152,15 @@ document.addEventListener('click', ev => {
     /* krok 1 */
     case 'os-add': { const k = newId(); put(ID.os(V.cid, k), {n: '', cr: now()}); render(); focusSel(`#os-${CSS.escape(k)} input`); break; }
     case 'os-del': { const p = m.OBY[d.o], used = m.areas.filter(a => a.xcc === d.o || a.xcp === d.o).map(a => a.n);
-      confirmBox('Usunąć osobę „' + (p.n || 'bez nazwy') + '”?', used.length ? 'Osoba jest ekspertem obszarów: ' + used.join(', ') + '. Po usunięciu trzeba wskazać innego eksperta.' : 'Osoba zniknie z zespołu i z list uczestników wywiadów.', 'Usuń osobę', () => { drop(ID.os(V.cid, d.o)); render(); }); break; }
+      confirmBox('Usunąć osobę „' + (p.n || 'bez nazwy') + '”?', used.length ? 'Osoba jest ekspertem obszarów: ' + used.join(', ') + '. Po usunięciu trzeba wskazać innego eksperta.' : 'Osoba zniknie z zespołu i z list uczestników obszarów.', 'Usuń osobę', () => { drop(ID.os(V.cid, d.o)); render(); }); break; }
     case 'area-on': { const a = m.ABY[d.a]; put(ID.ar(V.cid, d.a), {on: a.on === d.v ? '' : d.v}); if (V.aid === d.a && d.v !== 'Y') V.aid = ''; render(); break; }
-    case 'area-fssc': m.areas.filter(a => !a.on).forEach(a => put(ID.ar(V.cid, a.k), {on: a.ph === 1 ? 'Y' : 'L'})); render(); toast('Obszary księgowe w zakresie, pozostałe – kolejny etap.'); break;
     case 'area-rest': m.areas.filter(a => !a.on).forEach(a => put(ID.ar(V.cid, a.k), {on: 'L'})); render(); break;
     case 'area-addtog': V.open['area-add'] = !V.open['area-add']; render(); if (V.open['area-add']) focusSel('#na-n'); break;
     case 'area-add': { const n = norm($('#na-n').value); if (!n) { toast('Podaj nazwę obszaru.'); $('#na-n').focus(); break; }
       put(ID.ar(V.cid, newId()), {cus: true, n, d: norm($('#na-d').value), on: 'Y', cr: now()}); V.open['area-add'] = false; render(); toast('Dodano obszar ' + n + '.'); break; }
     case 'area-del': { const a = m.ABY[d.a]; confirmBox('Usunąć obszar „' + a.n + '”?', 'Obszar zniknie z analizy razem z dodanymi w nim procesami. Tej operacji nie można cofnąć.', 'Usuń obszar', () => { drop(ID.ar(V.cid, d.a)); m.procs.filter(p => p.a === d.a && !p.cat).forEach(p => drop(ID.pr(V.cid, p.k))); if (V.aid === d.a) go(href(V.step, '')); else render(); }); break; }
     case 'us-tog': { const a = m.ABY[d.a], us = a.us.includes(d.o) ? a.us.filter(x => x !== d.o) : a.us.concat(d.o); put(ID.ar(V.cid, d.a), {us}); render(); break; }
-    case 'ics': downloadIcs(m, d.a); break;
+    case 'ms-rm': setKu(d.o, cur => cur.filter(x => x !== d.p)); break;
     /* krok 2 */
     case 'proc-on': { const p = m.PBY[d.p]; put(ID.pr(V.cid, d.p), {on: p.on === d.v ? '' : d.v}); render(); break; }
     case 'proc-all': m.procs.filter(p => p.a === d.a && p.on !== 'Y' && p.on !== 'N').forEach(p => put(ID.pr(V.cid, p.k), {on: 'Y'})); render(); break;
@@ -162,7 +168,7 @@ document.addEventListener('click', ev => {
     case 'proc-add': { const ni = $('#np-n-' + CSS.escape(d.a)), di = $('#np-d-' + CSS.escape(d.a)), n = norm(ni.value); if (!n) { toast('Podaj nazwę procesu.'); ni.focus(); break; }
       put(ID.pr(V.cid, newId()), {cus: true, a: d.a, n, d: norm(di.value), on: 'Y', cr: now()}); ni.value = ''; di.value = ''; render(); ni.focus(); toast('Dodano proces ' + n + '.'); break; }
     case 'proc-edit': V.open['ed-' + d.p] = !V.open['ed-' + d.p]; render(); break;
-    case 'proc-del': { const p = m.PBY[d.p]; confirmBox('Usunąć proces „' + p.n + '”?', 'Proces zniknie z analizy razem z wymaganiami dodanymi w wywiadzie. Tej operacji nie można cofnąć.', 'Usuń proces', () => { p.reqs.forEach(r => drop(ID.rq(V.cid, r.k))); drop(ID.pr(V.cid, p.k)); render(); }); break; }
+    case 'proc-del': { const p = m.PBY[d.p]; confirmBox('Usunąć proces „' + p.n + '”?', 'Proces zniknie z analizy razem z dodanymi do niego wymaganiami. Tej operacji nie można cofnąć.', 'Usuń proces', () => { p.reqs.forEach(r => drop(ID.rq(V.cid, r.k))); drop(ID.pr(V.cid, p.k)); render(); }); break; }
     case 'harm': { const p = m.PBY[d.p]; put(ID.pr(V.cid, d.p), {hm: p.hm === d.v ? '' : d.v}); render(); break; }
     /* krok 3 */
     case 'mode': V.focus = d.v === 'f'; UI.focus = V.focus; saveUI(); render(); break;
@@ -222,13 +228,17 @@ document.addEventListener('change', ev => {
   else if (act === 'rv') { if (t.dataset.a === GLOBAL) put(ID.an(V.cid), {rvg: t.checked}); else put(ID.ar(V.cid, t.dataset.a), {rv: t.checked}); render(); }
   else if (act === 'ansel') go(href(1, '', t.value));
   else if (act === 'msel') go(href(V.step, t.value));
+  else if (act === 'ms-tog') setKu(t.dataset.o, cur => t.checked ? cur.concat(t.dataset.p) : cur.filter(x => x !== t.dataset.p));
+  else if (act === 'ms-area') { const ks = cur().kuProcs.filter(p => p.a === t.dataset.a).map(p => p.k); setKu(t.dataset.o, c => t.checked ? c.concat(ks) : c.filter(x => !ks.includes(x))); }
 });
-document.addEventListener('toggle', ev => { const x = ev.target; if (!x.dataset) return; if (x.dataset.act === 'pmore') V.open['pm-' + x.dataset.p] = x.open; }, true);
+document.addEventListener('toggle', ev => { const x = ev.target; if (!x.dataset) return; if (x.dataset.act === 'pmore') V.open['pm-' + x.dataset.p] = x.open;
+  if (x.dataset.act === 'ms') { if (x.open) V.ms = x.dataset.o; else if (V.ms === x.dataset.o) V.ms = ''; } }, true);
 document.addEventListener('focusout', ev => { const t = ev.target; if (t.classList && t.classList.contains('tgi') && norm(t.value)) addTag(t, t.value); });
 const typing = el => el && (el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || (el.tagName === 'INPUT' && !/^(checkbox|radio|button)$/.test(el.type)));
 document.addEventListener('keydown', ev => {
   const t = ev.target;
-  if (ev.key === 'Escape') { if (V.modal) { closeModal(); return; } if (V.menu) { V.menu = false; renderTop(); return; } }
+  if (ev.key === 'Escape') { if (V.modal) { closeModal(); return; } if (V.menu) { V.menu = false; renderTop(); return; }
+    const ms = $('details.msel[open]'); if (ms) { ms.open = false; V.ms = ''; ms.querySelector('summary').focus(); return; } }
   if (ev.key === 'Tab' && V.modal) {
     const f = $$('#modal .box button, #modal .box input, #modal .box select, #modal .box textarea, #modal .box a[href]').filter(x => !x.disabled && x.offsetParent !== null);
     if (f.length) { const i = f.indexOf(document.activeElement); if (ev.shiftKey && i <= 0) { ev.preventDefault(); f[f.length - 1].focus(); } else if (!ev.shiftKey && (i === f.length - 1 || i < 0)) { ev.preventDefault(); f[0].focus(); } }
@@ -239,7 +249,7 @@ document.addEventListener('keydown', ev => {
     else if (ev.key === 'Backspace' && !t.value) { const btns = t.parentNode.querySelectorAll('.tgx'); if (btns.length) { ev.preventDefault(); removeTag(btns[btns.length - 1], btns.length - 1); } }
     return;
   }
-  /* tryb skupienia wywiadu: 1–5 ocena, strzałki – pytania, Ctrl+Enter – dalej z pola tekstowego */
+  /* tryb skupienia: 1–5 ocena, strzałki – pytania, Ctrl+Enter – dalej z pola tekstowego */
   if (V.cid && !V.doc && V.step === 3 && V.aid && V.focus && !V.modal && !ev.altKey && !ev.metaKey) {
     if (typing(t)) { if (ev.key === 'Enter' && ev.ctrlKey) { ev.preventDefault(); if (t.dataset && t.dataset.act === 'f') { setField(t); } t.blur(); focusMove(1); } return; }
     if (ev.ctrlKey) return;
@@ -261,7 +271,6 @@ document.addEventListener('submit', async ev => {
     if (analyses().some(c => lc(c.n) === lc(n))) { err.textContent = 'Analiza o tej nazwie już jest na liście.'; f.nm.focus(); return; }
     if (!g('srcCo') || !g('srcSys') || !g('tgtCo') || !g('tgtSys')) { err.textContent = 'Uzupełnij spółki i systemy.'; return; }
     const k = newId(); put(ID.an(k), {n, srcCo: g('srcCo'), srcSys: g('srcSys'), tgtCo: g('tgtCo'), tgtSys: g('tgtSys'), start: today(), cr: now()});
-    if (f.fssc.checked) AREAS.forEach(a => put(ID.ar(k, a.k), {on: a.ph === 1 ? 'Y' : 'L'}));
     V.modal = null; renderModal(); go(href(1, '', k)); toast('Utworzono analizę ' + n + '.'); return;
   }
   if (f.id !== 'who-form') return;

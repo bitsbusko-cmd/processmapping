@@ -17,7 +17,7 @@ const fd = s => { if (!s) return ''; const d = new Date(String(s).length === 10 
 const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
 const plural = (n, f) => (n === 1 ? f[0] : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? f[1] : f[2]).replace('{n}', n);
 const trunc = (x, n) => { x = String(x || ''); return x.length > n ? x.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : x; };
-const slug = s => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[łŁ]/g, 'l').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
+const slug = s => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l').replace(/Ł/g, 'L').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
 const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
 const uniq = a => a.filter((x, i) => a.indexOf(x) === i);
 const arr = x => Array.isArray(x) ? x : [];
@@ -37,7 +37,7 @@ const RCAT = D.riskCats, RCATBY = by(RCAT), BCAT = D.benCats, BCATBY = by(BCAT),
 const VERD = D.verd, VERDBY = by(VERD), TEAMS = D.teams, CRITRES = D.critRes, DEF = D.defaults;
 const DONE_ST = ['F', 'P', 'G', 'N'];
 const RST = {O: 'otwarte', W: 'w realizacji', Z: 'zamknięte'};
-const STEPS = [null, 'Zakres i zespół', 'Procesy AS-IS', 'Wywiad fit-gap', 'Luki i zmiany', 'Ryzyka', 'Wartość dodana', 'Wynik'];
+const STEPS = [null, 'Zakres i zespół', 'Procesy AS-IS', 'Ocena fit-gap', 'Luki i zmiany', 'Ryzyka', 'Wartość dodana', 'Wynik'];
 const NS = 7, GLOBAL = '_g';
 const riskLv = s => { const i = D.riskLv.findIndex(l => s <= l.max); return i < 0 ? D.riskLv.length - 1 : i; };
 const fitName = k => (FITBY[k] || {}).n || 'bez oceny';
@@ -45,30 +45,44 @@ const resName = k => (RESBY[k] || {}).n || '';
 const effMd = k => (EFFBY[k] || {}).md || 0;
 const sysCC = co => (co.srcCo || DEF.srcCo) + ' · ' + (co.srcSys || DEF.srcSys);
 const sysCP = co => (co.tgtCo || DEF.tgtCo) + ' · ' + (co.tgtSys || DEF.tgtSys);
+/* rola key usera – osoba z tą rolą ma przypisane procesy */
+const KU = D.roles.find(r => /^key user/i.test(r)) || '';
+/* dane z wersji 1.0: skróty spółek CC i CP, domyślna nazwa analizy i nazwy ról w narzędziu */
+const CO_OLD = {CC: DEF.srcCo, CP: DEF.tgtCo}, coRaw = v => CO_OLD[v] || v, NAME_OLD = 'Migracja CC: Symfonia → AX 2012';
+const TEAM_OLD = {'Ekspert CC': TEAMS[1].n, 'Ekspert CP': TEAMS[2].n};
 
 /* ---------- stan ---------- */
 let S = {who: '', name: '', team: '', e: {}};
 try { const o = JSON.parse(store.get(LS) || 'null'); if (o && o.e && typeof o.e === 'object') S = o; } catch (e) {}
+if (TEAM_OLD[S.team]) { S.team = TEAM_OLD[S.team]; S.who = S.name + ' · ' + S.team; }
 let UI = {}; try { UI = JSON.parse(store.get(LSU) || '{}') || {}; } catch (e) {}
 const saveUI = () => store.set(LSU, JSON.stringify(UI));
-const V = {cid: null, step: 1, aid: '', miss: 0, menu: false, modal: null, open: {}, r4: 'gap', f4: {res: '', pri: '', crit: false}, focus: !!UI.focus, fq: '', doc: '', docA: '', jump: null, allAn: false};
+const V = {cid: null, step: 1, aid: '', miss: 0, menu: false, modal: null, open: {}, r4: 'gap', f4: {res: '', pri: '', crit: false}, focus: !!UI.focus, fq: '', doc: '', docA: '', jump: null, allAn: false, ms: ''};
 let REV = 0;
 const saveLocal = () => store.set(LS, JSON.stringify(S));
-/* RODO: narzędzie nie przechowuje adresów e-mail – osoby opisuje imię i nazwisko oraz SGID (np. A1234566) */
-const SGID_RE = /^[A-Z]\d{7}$/;
+/* RODO: narzędzie nie przechowuje adresów e-mail ani numerów SGID – osoby opisuje imię i nazwisko */
 const noMail = (id, v) => { if (v && typeof v === 'object' && 'em' in v) { v = Object.assign({}, v); delete v.em; } return v; };
 const save = () => { REV++; saveLocal(); if (SH.on && SH.ok) pushSoon(); };
 const known = () => !!(S.name && TEAMS.some(t => t.n === S.team));
-const mySide = () => S.team === 'Ekspert CC' ? 'cc' : S.team === 'Ekspert CP' ? 'cp' : '';
+const mySide = () => S.team === TEAMS[1].n ? 'cc' : S.team === TEAMS[2].n ? 'cp' : '';
 
 /* ---------- wpisy: każdy obiekt to osobny rekord (ostatni zapis wygrywa, usunięcie to trwały znacznik) ---------- */
 const ID_RE = /^(an|ar|pr|rq|os|rk|bn|sg)\|[A-Za-z0-9_-]{1,40}(\|[A-Za-z0-9_-]{1,60})?$/;
 const ID = {an: c => 'an|' + c, ar: (c, a) => 'ar|' + c + '|' + a, pr: (c, p) => 'pr|' + c + '|' + p, rq: (c, q) => 'rq|' + c + '|' + q,
   os: (c, o) => 'os|' + c + '|' + o, rk: (c, k) => 'rk|' + c + '|' + k, bn: (c, b) => 'bn|' + c + '|' + b, sg: (c, k) => 'sg|' + c + '|' + k};
 const ent = id => { const x = S.e[id]; return x && !x.del ? x : null; };
-/* znaczniki czasu pól (_t) pozwalają scalić równoległe zmiany różnych pól tego samego rekordu, np. odpowiedzi eksperta CC i CP */
+/* znaczniki czasu pól (_t) pozwalają scalić równoległe zmiany różnych pól tego samego rekordu, np. odpowiedzi ekspertów obu spółek */
 function put(id, patch) { const o = ent(id) || {}, x = Object.assign({}, o, patch), t = now(); x.ts = t; x.by = S.who || ''; x._t = Object.assign({}, o._t); Object.keys(patch).forEach(f => { x._t[f] = t; }); S.e[id] = x; save(); return x; }
 function drop(id) { if (S.e[id] && S.e[id].del) return; S.e[id] = {del: true, ts: now()}; save(); }
+/* SGID z wersji 1.0: usuwamy z zapisanych osób – nowszy wpis bez numeru zastępuje też wpis we wspólnej bazie */
+function purgeSgid() {
+  let n = 0;
+  Object.keys(S.e).forEach(id => { const v = S.e[id]; if (!v || v.del || id.slice(0, 3) !== 'os|' || !('sgid' in v)) return;
+    const x = Object.assign({}, v), t = now(); delete x.sgid;
+    x.ts = t > String(v.ts || '') ? t : new Date((Date.parse(v.ts) || 0) + 1).toISOString(); x._t = Object.assign({}, v._t, {sgid: x.ts}); S.e[id] = x; n++; });
+  if (n) { REV++; saveLocal(); if (SH.on && SH.ok) pushSoon(); }
+  return n;
+}
 
 let IX = null, IXR = -1;
 function idx() {
@@ -85,7 +99,7 @@ function idx() {
 function analyses() {
   const X = idx(), out = [];
   Object.keys(X.an).forEach(k => { const e = X.an[k]; if (!e || e.del) return;
-    out.push(Object.assign({}, DEF, e, {k, n: norm(e.n) || 'Analiza bez nazwy', srcCo: norm(e.srcCo) || DEF.srcCo, srcSys: norm(e.srcSys) || DEF.srcSys, tgtCo: norm(e.tgtCo) || DEF.tgtCo, tgtSys: norm(e.tgtSys) || DEF.tgtSys})); });
+    out.push(Object.assign({}, DEF, e, {k, n: (norm(e.n) === NAME_OLD ? DEF.n : norm(e.n)) || 'Analiza bez nazwy', srcCo: norm(coRaw(e.srcCo)) || DEF.srcCo, srcSys: norm(e.srcSys) || DEF.srcSys, tgtCo: norm(coRaw(e.tgtCo)) || DEF.tgtCo, tgtSys: norm(e.tgtSys) || DEF.tgtSys})); });
   return out.sort((a, b) => String(a.cr || '').localeCompare(String(b.cr || '')));
 }
 const analysis = cid => analyses().find(c => c.k === cid) || null;
@@ -99,13 +113,13 @@ function build(cid) {
   const X = idx(), co = analysis(cid) || Object.assign({}, DEF, {k: cid});
   const arE = X.ar[cid] || {}, prE = X.pr[cid] || {}, rqE = X.rq[cid] || {}, osE = X.os[cid] || {}, rkE = X.rk[cid] || {}, bnE = X.bn[cid] || {}, sgE = X.sg[cid] || {};
   const byCr = (a, b) => String(a.cr || '').localeCompare(String(b.cr || ''));
-  /* osoby (zespół i uczestnicy wywiadów) */
+  /* osoby (zespół i uczestnicy) */
   const people = Object.keys(osE).map(k => Object.assign({}, osE[k], {k})).sort(byCr);
-  people.forEach(p => { p.n = norm(p.n); });
+  people.forEach(p => { p.n = norm(p.n); p.co = D.coTypes.includes(coRaw(p.co)) ? coRaw(p.co) : ''; p.role = D.roles.includes(p.role) ? p.role : ''; p.ku = !!KU && p.role === KU; p.ps = arr(p.ps); });
   const OBY = {}; people.forEach(p => { OBY[p.k] = p; });
   /* obszary */
-  const areas = AREAS.map((a, i) => Object.assign({}, a, arE[a.k] || {}, {k: a.k, i: a.i, c: a.c, cd: a.cd, ph: a.ph, std: true, ord: i}));
-  Object.keys(arE).filter(k => !AREA[k] && arE[k].cus).map(k => Object.assign({i: 'briefcase', c: 'c-gray', d: '', ph: 2}, arE[k], {k, std: false})).sort(byCr).forEach((a, i) => { a.ord = 100 + i; a.cd = 'X' + (i + 1); areas.push(a); });
+  const areas = AREAS.map((a, i) => Object.assign({}, a, arE[a.k] || {}, {k: a.k, i: a.i, c: a.c, cd: a.cd, std: true, ord: i}));
+  Object.keys(arE).filter(k => !AREA[k] && arE[k].cus).map(k => Object.assign({i: 'briefcase', c: 'c-gray', d: ''}, arE[k], {k, std: false})).sort(byCr).forEach((a, i) => { a.ord = 100 + i; a.cd = 'X' + (i + 1); areas.push(a); });
   areas.forEach(a => { a.in = a.on === 'Y'; a.later = a.on === 'L'; a.n = norm(a.n) || (AREA[a.k] ? AREA[a.k].n : 'Obszar');
     a.ecc = OBY[a.xcc] || null; a.ecp = OBY[a.xcp] || null; a.us = arr(a.us).filter(k => OBY[k]); });
   const ABY = {}; areas.forEach(a => { ABY[a.k] = a; });
@@ -119,7 +133,11 @@ function build(cid) {
   });
   procs.forEach((p, i) => { p.area = ABY[p.a]; p.act = p.on === 'Y' && !!p.area && p.area.in; p.n = norm(p.n) || 'Proces bez nazwy'; p.no = i + 1; p.cd = (p.area.cd || 'X') + p.ai; });
   const PBY = {}; procs.forEach(p => { PBY[p.k] = p; });
-  /* wymagania (pytania wywiadu) */
+  /* procesy key userów: do wyboru procesy obszarów w zakresie, bez oznaczonych „Nie dotyczy” */
+  const kuProcs = procs.filter(p => p.area && p.area.in && p.on !== 'N');
+  people.forEach(x => { x.kp = x.ku ? kuProcs.filter(p => x.ps.includes(p.k)) : []; });
+  procs.forEach(p => { p.kus = people.filter(x => x.kp.includes(p)); });
+  /* wymagania (pytania) */
   const RBY = {}, reqs = [];
   procs.forEach(p => {
     const list = p.q.map(q => Object.assign({}, rqE[q.k] || {}, {k: q.k, t: q.t, h: q.h, dp: q.p, reg: !!q.reg, cat: true}));
@@ -144,7 +162,7 @@ function build(cid) {
   Object.keys(bnE).filter(k => !BENBY[k] && bnE[k].cus).map(k => Object.assign({cat: 'eff', d: ''}, bnE[k], {k, std: false})).sort(byCr).forEach(b => bens.push(b));
   bens.forEach(b => { b.in = b.on === 'Y'; b.n = norm(b.n) || 'Korzyść bez nazwy'; b.score = b.in ? (+b.v || 0) * (+b.cf || 0) : 0; });
   const dis = {}; Object.keys(sgE).forEach(k => { dis[k] = true; });
-  return {cid, co, people, OBY, areas, ABY, inArea: areas.filter(a => a.in), later: areas.filter(a => a.later), procs, PBY, reqs, RBY, risks, bens, dis};
+  return {cid, co, people, OBY, areas, ABY, inArea: areas.filter(a => a.in), later: areas.filter(a => a.later), procs, PBY, kuProcs, reqs, RBY, risks, bens, dis};
 }
 /* wycinek modelu dla filtra obszaru */
 function slice(m, aid) {
@@ -189,9 +207,9 @@ function required(m, step, aid) {
     if (!norm(c.scope)) add('Cel i zakres analizy', fsel(id, 'scope'), id + '#scope');
     m.people.forEach(p => { const pi = ID.os(m.cid, p.k), nm = p.n || 'Nowa osoba';
       if (!p.n) add('Zespół: imię i nazwisko osoby', fsel(pi, 'n'), pi + '#n');
-      if (!SGID_RE.test(String(p.sgid || ''))) add(nm + (p.sgid ? ': SGID w formacie A1234566' : ': SGID'), fsel(pi, 'sgid'), pi + '#sgid');
-      if (!norm(p.co)) add(nm + ': firma', fsel(pi, 'co'), pi + '#co');
-      if (!norm(p.role)) add(nm + ': rola', fsel(pi, 'role'), pi + '#role'); });
+      if (!D.coTypes.includes(p.co)) add(nm + ': zespół', fsel(pi, 'co'), pi + '#co');
+      if (!D.roles.includes(p.role)) add(nm + ': rola', fsel(pi, 'role'), pi + '#role');
+      else if (p.ku && !p.kp.length) add(nm + ': procesy, za które odpowiada key user', `details[data-o="${p.k}"]>summary`, pi + '#ps'); });
     const und = m.areas.filter(a => a.on !== 'Y' && a.on !== 'L' && a.on !== 'N');
     if (und.length) add('Obszary bez decyzji „W zakresie / Kolejny etap / Poza zakresem”: ' + und.length, `#area-${und[0].k} .seg button`, 'und');
     else if (!m.inArea.length) add('Co najmniej jeden obszar w zakresie analizy', `#area-${m.areas[0].k} .seg button`);
@@ -298,7 +316,7 @@ function issues(m, aid) {
   }
   return out;
 }
-/* podpowiedzi ryzyk: ryzyka systemowe migracji, luki krytyczne, duże zmiany procesów w CC */
+/* podpowiedzi ryzyk: ryzyka systemowe migracji, luki krytyczne, duże zmiany procesów w spółce przenoszonej */
 function suggestions(m, aid) {
   const s = slice(m, aid), out = [], has = src => m.risks.some(r => r.src === src);
   if (!aid) SYSR.forEach(x => { const key = 'sys-' + x.k; if (m.dis[key] || has(key)) return;
@@ -355,6 +373,7 @@ function applyRemote(list) {
     if (mr.local) SH.remerge = true;
     if (!same(mr.rec, cur)) { S.e[id] = mr.rec; n++; } });
   if (n) REV++;
+  purgeSgid();
   return n;
 }
 async function pull() { const r = await api('GET', '?since=' + SH.seq); const n = applyRemote(r.e || []); SH.seq = r.seq || SH.seq; if (n) { saveLocal(); render(); } if (SH.remerge) { SH.remerge = false; pushSoon(); } return n; }
@@ -424,5 +443,5 @@ function importJson(text) {
   Object.keys(o.e).forEach(id => { const b = o.e[id], a = S.e[id]; if (!ID_RE.test(id) || !b || !b.ts) return;
     if (a && a.del && !b.del) return;
     if (!a || (b.del && !a.del) || (b.ts || '') > (a.ts || '')) { S.e[id] = noMail(id, b); n++; } });
-  save(); render(); toast(`Wczytano dane${o.by ? ' – ' + o.by : ''}. Zaktualizowane wpisy: ${n}.`);
+  purgeSgid(); save(); render(); toast(`Wczytano dane${o.by ? ' – ' + o.by : ''}. Zaktualizowane wpisy: ${n}.`);
 }
