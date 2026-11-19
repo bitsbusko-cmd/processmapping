@@ -598,13 +598,19 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 .ptab td{padding:4px 6px;border-top:1px solid var(--line);vertical-align:middle}
 .ptab .inp{height:32px;font-size:.9rem}
 .ptab td.act{width:36px;text-align:right}
-.ptab tr.kprow td{border-top:0;padding:0 6px 10px}
-.kp{display:grid;grid-template-columns:150px minmax(0,560px);gap:6px 12px;align-items:start;margin-left:4px;padding-left:12px;border-left:3px solid var(--acc-line)}
-.kp>.lb{font-size:.8rem;font-weight:600;color:var(--muted);padding-top:7px}
-.kp .msel>summary{height:32px}
-.kp .msel>summary[aria-invalid="true"]{border-color:var(--err)}
-.kp .msel .mlist{max-height:360px}
-.msel .mlist label small{margin-left:auto;color:var(--faint);font-size:.75rem;white-space:nowrap}
+/* zespół: wszystkie pola osoby w jednym wierszu; lista obszarów otwiera się nad treścią poniżej */
+#team{overflow:visible}
+#team>.sech{border-radius:var(--r2) var(--r2) 0 0}
+#team>.secb{container-type:inline-size;position:relative;z-index:2}
+.ptab{table-layout:fixed}
+.ptab col.cc{width:218px}.ptab col.cr{width:236px}.ptab col.cx{width:44px}
+.ptab th small{font-weight:500;color:var(--faint)}
+.ptab .msel{position:relative}
+.ptab .msel>summary{height:32px;font-size:.9rem}
+.ptab .msel>summary .val{flex:1 1 auto;min-width:0}
+.ptab .msel>summary .cnt{flex:none;min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--acc-bg);color:var(--acc);font-size:.75rem;font-weight:700;display:grid;place-items:center}
+.ptab .msel>summary[aria-invalid="true"]{border-color:var(--err)}
+.ptab .msel .mlist{position:absolute;right:0;top:calc(100% + 4px);z-index:20;margin:0;min-width:100%;width:max-content;max-width:min(380px,calc(100vw - 32px));max-height:340px;box-shadow:var(--sh)}
 .acard .parts{border-top:1px dashed var(--line2);padding-top:10px;display:grid;gap:8px}
 .acard .parts .ph2{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:.833rem;font-weight:600;color:var(--ink2)}
 .acard .parts .ph2 small{font-weight:500;color:var(--muted)}
@@ -830,8 +836,20 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
   .hbars .hb{grid-template-columns:110px minmax(0,1fr) 60px}
   .doc{padding:24px 18px}.doc .meta{grid-template-columns:minmax(0,1fr)}.doc .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .sysmig{grid-template-columns:minmax(0,1fr)}.sysarr{transform:rotate(90deg);height:30px}
-  .kp{grid-template-columns:minmax(0,1fr);margin-left:0}.kp>.lb{padding-top:0}
-  .ptab thead{display:none}.ptab tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;padding:8px 0;border-top:1px solid var(--line)}.ptab td{border:0;padding:2px 0}.ptab td.wide{grid-column:1/-1}
+}
+/* zespół na węższym ekranie: obszar key usera w drugiej linii, na telefonie – osoba jako karta */
+@container (max-width:840px){
+  .ptab,.ptab tbody{display:block}.ptab thead,.ptab colgroup{display:none}
+  .ptab tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr) 36px;gap:6px 8px;padding:8px 0;border-top:1px solid var(--line)}
+  .ptab td{border:0;padding:0}.ptab td.ka{grid-column:1/4}.ptab td.ka:empty{display:none}.ptab td.act{grid-column:4;grid-row:1}
+}
+@container (max-width:700px){
+  .ptab tr{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 36px}
+  .ptab td.wide{grid-column:1/3}.ptab td.act{grid-column:3}.ptab td.ka{grid-column:1/-1}
+}
+@container (max-width:440px){
+  .ptab tr{grid-template-columns:minmax(0,1fr) 36px}
+  .ptab td{grid-column:1}.ptab td.wide{grid-column:1}.ptab td.act{grid-column:2}.ptab td.ka{grid-column:1/-1}
 }
 
 /* ---------- druk ---------- */
@@ -887,7 +905,7 @@ const PI = {"book-open-text":"<path d=\"M232,56V200H160a32,32,0,0,0-32,32V88a32,
 
 /* ===================== Fit-Gap ERP – rdzeń: konfiguracja, stan, model, ocena, synchronizacja ===================== */
 const D = JSON.parse(document.getElementById('data').textContent);
-const VER = '19.11.2026 11:33';
+const VER = '19.11.2026 11:53';
 const APP = 'fitgap-erp';
 const LS = 'fitgap:v1', LSK = 'fitgap:key', LSU = 'fitgap:ui';
 const $ = (s, r = document) => r.querySelector(s);
@@ -1666,13 +1684,14 @@ function step1(m) {
       ${fld(rq('Cel i zakres analizy'), txtF(id, 'scope', fval(c, 'scope'), {req: 1, rows: 3, ph: 'np. ocena, czy przeniesienie ' + c.srcCo + ' z systemu ' + c.srcSys + ' do ' + c.tgtSys + ' jest wykonalne i uzasadnione'}), 'wide')}
     </div></section>`;
   const ppl = m.people.map(p => { const pi = ID.os(m.cid, p.k);
-    return `<tr data-key="os-${esc(p.k)}" id="os-${esc(p.k)}"${p.ku ? ' class="haskp"' : ''}><td class="wide">${inpF(pi, 'n', fval(p, 'n'), {ph: 'Imię i nazwisko', label: 'Imię i nazwisko', req: 1, max: 80})}</td>
+    return `<tr data-key="os-${esc(p.k)}" id="os-${esc(p.k)}"><td class="wide">${inpF(pi, 'n', fval(p, 'n'), {ph: 'Imię i nazwisko', label: 'Imię i nazwisko', req: 1, max: 80})}</td>
       <td>${selF(pi, 'co', p.co, D.coTypes.map(x => [x, x]), {empty: '– zespół –', label: 'Zespół', req: 1})}</td>
       <td>${selF(pi, 'role', p.role, D.roles.map(x => [x, x]), {empty: '– rola –', label: 'Rola', req: 1})}</td>
-      <td class="act"><button type="button" class="btn icon sm ghost" data-act="os-del" data-o="${esc(p.k)}" aria-label="Usuń osobę ${esc(p.n)}" title="Usuń osobę">${ic('trash')}</button></td></tr>${p.ku ? kuRow(m, p) : ''}`; }).join('');
+      <td class="ka">${p.ku ? kuSel(m, p) : ''}</td>
+      <td class="act"><button type="button" class="btn icon sm ghost" data-act="os-del" data-o="${esc(p.k)}" aria-label="Usuń osobę ${esc(p.n)}" title="Usuń osobę">${ic('trash')}</button></td></tr>`; }).join('');
   const pplSec = `<section class="sec" id="team"><div class="sech"><h2>${pic('users-three')}Zespół i uczestnicy</h2><div class="acts"><span>${esc(plural(m.people.length, F_PER))}</span></div></div>
     <div class="secb"><p class="blk">Dodaj osoby, które biorą udział w analizie: ekspertów obu spółek (${esc(c.srcCo)} i ${esc(c.tgtCo)}), osoby z FSSC i zespół prowadzący. Key userom przypisz obszary, za które odpowiadają. Narzędzie nie zbiera adresów e-mail.</p>
-    ${m.people.length ? `<div class="tblwrap"><table class="ptab"><thead><tr><th>Imię i nazwisko<span class="rq">*</span></th><th>Zespół<span class="rq">*</span></th><th>Rola<span class="rq">*</span></th><th></th></tr></thead><tbody>${ppl}</tbody></table></div>` : ''}
+    ${m.people.length ? `<table class="ptab"><colgroup><col class="cn"><col class="cc"><col class="cr"><col><col class="cx"></colgroup><thead><tr><th>Imię i nazwisko<span class="rq">*</span></th><th>Zespół<span class="rq">*</span></th><th>Rola<span class="rq">*</span></th><th>Obszar<span class="rq">*</span> <small>(key user)</small></th><th></th></tr></thead><tbody>${ppl}</tbody></table>` : ''}
     <div style="margin-top:10px"><button type="button" class="btn dash" data-act="os-add">${ic('plus')}Dodaj osobę</button></div></div></section>`;
   const und = m.areas.filter(a => !a.on).length;
   const cards = m.areas.map(a => areaCard(m, a)).join('');
@@ -1684,13 +1703,12 @@ function step1(m) {
     ${m.people.length ? '' : `<div class="note warn">${ic('warn')}<p>Najpierw dodaj osoby w sekcji „Zespół i uczestnicy” – ekspertów i uczestników obszarów wybierasz z tej listy.</p></div>`}
     <div class="agrid">${cards}</div><div style="margin-top:12px">${add}</div></div></section>`;
 }
-/* obszar key usera: lista rozwijana obszarów z wyborem wielokrotnym */
-function kuRow(m, p) {
+/* obszar key usera: lista rozwijana obszarów z wyborem wielokrotnym, w tym samym wierszu co pozostałe pola osoby */
+function kuSel(m, p) {
   const pi = ID.os(m.cid, p.k), bad = MISS.has(pi + '#ka'), names = p.kas.map(a => a.n).join(', ');
-  const items = m.areas.map(a => `<label data-key="ma-${esc(a.k)}"><input type="checkbox" data-act="ms-tog" data-o="${esc(p.k)}" data-a="${esc(a.k)}"${p.kas.includes(a) ? ' checked' : ''}><span>${esc(a.n)}</span>${a.later ? '<small>kolejny etap</small>' : a.on === 'N' ? '<small>poza zakresem</small>' : ''}</label>`).join('');
-  return `<tr class="kprow" data-key="osk-${esc(p.k)}"><td colspan="4" class="wide"><div class="kp"><span class="lb">${rq('Obszar')}</span>
-    <details class="msel" data-act="ms" data-o="${esc(p.k)}"${V.ms === p.k ? ' open' : ''}><summary class="inp"${bad ? ' aria-invalid="true"' : ''} aria-label="Obszar key usera – ${esc(p.n || 'bez nazwy')}"${names ? ` title="${esc(names)}"` : ''}>${names ? `<span class="val">${esc(names)}</span>` : '<span class="ph">Wybierz obszar z listy</span>'}</summary>
-      <div class="mlist">${items}</div></details></div></td></tr>`;
+  const items = m.areas.map(a => `<label data-key="ma-${esc(a.k)}"><input type="checkbox" data-act="ms-tog" data-o="${esc(p.k)}" data-a="${esc(a.k)}"${p.kas.includes(a) ? ' checked' : ''}><span>${esc(a.n)}</span></label>`).join('');
+  const sum = names ? `<span class="val">${esc(names)}</span>${p.kas.length > 1 ? `<span class="cnt">${p.kas.length}</span>` : ''}` : '<span class="ph">Wybierz obszar</span>';
+  return `<details class="msel" data-act="ms" data-o="${esc(p.k)}"${V.ms === p.k ? ' open' : ''}><summary class="inp"${bad ? ' aria-invalid="true"' : ''} aria-label="Obszar – ${esc(p.n || 'bez nazwy')}"${names ? ` title="${esc(names)}"` : ''}>${sum}</summary><div class="mlist">${items}</div></details>`;
 }
 function areaCard(m, a) {
   const id = ID.ar(m.cid, a.k), c = m.co, n = m.procs.filter(p => p.a === a.k).length, st = a.in ? 'in' : a.later ? 'later' : a.on === 'N' ? 'out' : 'und';

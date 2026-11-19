@@ -59,13 +59,14 @@ function step1(m) {
       ${fld(rq('Cel i zakres analizy'), txtF(id, 'scope', fval(c, 'scope'), {req: 1, rows: 3, ph: 'np. ocena, czy przeniesienie ' + c.srcCo + ' z systemu ' + c.srcSys + ' do ' + c.tgtSys + ' jest wykonalne i uzasadnione'}), 'wide')}
     </div></section>`;
   const ppl = m.people.map(p => { const pi = ID.os(m.cid, p.k);
-    return `<tr data-key="os-${esc(p.k)}" id="os-${esc(p.k)}"${p.ku ? ' class="haskp"' : ''}><td class="wide">${inpF(pi, 'n', fval(p, 'n'), {ph: 'Imię i nazwisko', label: 'Imię i nazwisko', req: 1, max: 80})}</td>
+    return `<tr data-key="os-${esc(p.k)}" id="os-${esc(p.k)}"><td class="wide">${inpF(pi, 'n', fval(p, 'n'), {ph: 'Imię i nazwisko', label: 'Imię i nazwisko', req: 1, max: 80})}</td>
       <td>${selF(pi, 'co', p.co, D.coTypes.map(x => [x, x]), {empty: '– zespół –', label: 'Zespół', req: 1})}</td>
       <td>${selF(pi, 'role', p.role, D.roles.map(x => [x, x]), {empty: '– rola –', label: 'Rola', req: 1})}</td>
-      <td class="act"><button type="button" class="btn icon sm ghost" data-act="os-del" data-o="${esc(p.k)}" aria-label="Usuń osobę ${esc(p.n)}" title="Usuń osobę">${ic('trash')}</button></td></tr>${p.ku ? kuRow(m, p) : ''}`; }).join('');
+      <td class="ka">${p.ku ? kuSel(m, p) : ''}</td>
+      <td class="act"><button type="button" class="btn icon sm ghost" data-act="os-del" data-o="${esc(p.k)}" aria-label="Usuń osobę ${esc(p.n)}" title="Usuń osobę">${ic('trash')}</button></td></tr>`; }).join('');
   const pplSec = `<section class="sec" id="team"><div class="sech"><h2>${pic('users-three')}Zespół i uczestnicy</h2><div class="acts"><span>${esc(plural(m.people.length, F_PER))}</span></div></div>
     <div class="secb"><p class="blk">Dodaj osoby, które biorą udział w analizie: ekspertów obu spółek (${esc(c.srcCo)} i ${esc(c.tgtCo)}), osoby z FSSC i zespół prowadzący. Key userom przypisz obszary, za które odpowiadają. Narzędzie nie zbiera adresów e-mail.</p>
-    ${m.people.length ? `<div class="tblwrap"><table class="ptab"><thead><tr><th>Imię i nazwisko<span class="rq">*</span></th><th>Zespół<span class="rq">*</span></th><th>Rola<span class="rq">*</span></th><th></th></tr></thead><tbody>${ppl}</tbody></table></div>` : ''}
+    ${m.people.length ? `<table class="ptab"><colgroup><col class="cn"><col class="cc"><col class="cr"><col><col class="cx"></colgroup><thead><tr><th>Imię i nazwisko<span class="rq">*</span></th><th>Zespół<span class="rq">*</span></th><th>Rola<span class="rq">*</span></th><th>Obszar<span class="rq">*</span> <small>(key user)</small></th><th></th></tr></thead><tbody>${ppl}</tbody></table>` : ''}
     <div style="margin-top:10px"><button type="button" class="btn dash" data-act="os-add">${ic('plus')}Dodaj osobę</button></div></div></section>`;
   const und = m.areas.filter(a => !a.on).length;
   const cards = m.areas.map(a => areaCard(m, a)).join('');
@@ -77,13 +78,12 @@ function step1(m) {
     ${m.people.length ? '' : `<div class="note warn">${ic('warn')}<p>Najpierw dodaj osoby w sekcji „Zespół i uczestnicy” – ekspertów i uczestników obszarów wybierasz z tej listy.</p></div>`}
     <div class="agrid">${cards}</div><div style="margin-top:12px">${add}</div></div></section>`;
 }
-/* obszar key usera: lista rozwijana obszarów z wyborem wielokrotnym */
-function kuRow(m, p) {
+/* obszar key usera: lista rozwijana obszarów z wyborem wielokrotnym, w tym samym wierszu co pozostałe pola osoby */
+function kuSel(m, p) {
   const pi = ID.os(m.cid, p.k), bad = MISS.has(pi + '#ka'), names = p.kas.map(a => a.n).join(', ');
-  const items = m.areas.map(a => `<label data-key="ma-${esc(a.k)}"><input type="checkbox" data-act="ms-tog" data-o="${esc(p.k)}" data-a="${esc(a.k)}"${p.kas.includes(a) ? ' checked' : ''}><span>${esc(a.n)}</span>${a.later ? '<small>kolejny etap</small>' : a.on === 'N' ? '<small>poza zakresem</small>' : ''}</label>`).join('');
-  return `<tr class="kprow" data-key="osk-${esc(p.k)}"><td colspan="4" class="wide"><div class="kp"><span class="lb">${rq('Obszar')}</span>
-    <details class="msel" data-act="ms" data-o="${esc(p.k)}"${V.ms === p.k ? ' open' : ''}><summary class="inp"${bad ? ' aria-invalid="true"' : ''} aria-label="Obszar key usera – ${esc(p.n || 'bez nazwy')}"${names ? ` title="${esc(names)}"` : ''}>${names ? `<span class="val">${esc(names)}</span>` : '<span class="ph">Wybierz obszar z listy</span>'}</summary>
-      <div class="mlist">${items}</div></details></div></td></tr>`;
+  const items = m.areas.map(a => `<label data-key="ma-${esc(a.k)}"><input type="checkbox" data-act="ms-tog" data-o="${esc(p.k)}" data-a="${esc(a.k)}"${p.kas.includes(a) ? ' checked' : ''}><span>${esc(a.n)}</span></label>`).join('');
+  const sum = names ? `<span class="val">${esc(names)}</span>${p.kas.length > 1 ? `<span class="cnt">${p.kas.length}</span>` : ''}` : '<span class="ph">Wybierz obszar</span>';
+  return `<details class="msel" data-act="ms" data-o="${esc(p.k)}"${V.ms === p.k ? ' open' : ''}><summary class="inp"${bad ? ' aria-invalid="true"' : ''} aria-label="Obszar – ${esc(p.n || 'bez nazwy')}"${names ? ` title="${esc(names)}"` : ''}>${sum}</summary><div class="mlist">${items}</div></details>`;
 }
 function areaCard(m, a) {
   const id = ID.ar(m.cid, a.k), c = m.co, n = m.procs.filter(p => p.a === a.k).length, st = a.in ? 'in' : a.later ? 'later' : a.on === 'N' ? 'out' : 'und';

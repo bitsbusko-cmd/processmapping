@@ -588,13 +588,19 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
 .ptab td{padding:4px 6px;border-top:1px solid var(--line);vertical-align:middle}
 .ptab .inp{height:32px;font-size:.9rem}
 .ptab td.act{width:36px;text-align:right}
-.ptab tr.kprow td{border-top:0;padding:0 6px 10px}
-.kp{display:grid;grid-template-columns:150px minmax(0,560px);gap:6px 12px;align-items:start;margin-left:4px;padding-left:12px;border-left:3px solid var(--acc-line)}
-.kp>.lb{font-size:.8rem;font-weight:600;color:var(--muted);padding-top:7px}
-.kp .msel>summary{height:32px}
-.kp .msel>summary[aria-invalid="true"]{border-color:var(--err)}
-.kp .msel .mlist{max-height:360px}
-.msel .mlist label small{margin-left:auto;color:var(--faint);font-size:.75rem;white-space:nowrap}
+/* zespół: wszystkie pola osoby w jednym wierszu; lista obszarów otwiera się nad treścią poniżej */
+#team{overflow:visible}
+#team>.sech{border-radius:var(--r2) var(--r2) 0 0}
+#team>.secb{container-type:inline-size;position:relative;z-index:2}
+.ptab{table-layout:fixed}
+.ptab col.cc{width:218px}.ptab col.cr{width:236px}.ptab col.cx{width:44px}
+.ptab th small{font-weight:500;color:var(--faint)}
+.ptab .msel{position:relative}
+.ptab .msel>summary{height:32px;font-size:.9rem}
+.ptab .msel>summary .val{flex:1 1 auto;min-width:0}
+.ptab .msel>summary .cnt{flex:none;min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--acc-bg);color:var(--acc);font-size:.75rem;font-weight:700;display:grid;place-items:center}
+.ptab .msel>summary[aria-invalid="true"]{border-color:var(--err)}
+.ptab .msel .mlist{position:absolute;right:0;top:calc(100% + 4px);z-index:20;margin:0;min-width:100%;width:max-content;max-width:min(380px,calc(100vw - 32px));max-height:340px;box-shadow:var(--sh)}
 .acard .parts{border-top:1px dashed var(--line2);padding-top:10px;display:grid;gap:8px}
 .acard .parts .ph2{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:.833rem;font-weight:600;color:var(--ink2)}
 .acard .parts .ph2 small{font-weight:500;color:var(--muted)}
@@ -820,8 +826,20 @@ table.ov .sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400}
   .hbars .hb{grid-template-columns:110px minmax(0,1fr) 60px}
   .doc{padding:24px 18px}.doc .meta{grid-template-columns:minmax(0,1fr)}.doc .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .sysmig{grid-template-columns:minmax(0,1fr)}.sysarr{transform:rotate(90deg);height:30px}
-  .kp{grid-template-columns:minmax(0,1fr);margin-left:0}.kp>.lb{padding-top:0}
-  .ptab thead{display:none}.ptab tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;padding:8px 0;border-top:1px solid var(--line)}.ptab td{border:0;padding:2px 0}.ptab td.wide{grid-column:1/-1}
+}
+/* zespół na węższym ekranie: obszar key usera w drugiej linii, na telefonie – osoba jako karta */
+@container (max-width:840px){
+  .ptab,.ptab tbody{display:block}.ptab thead,.ptab colgroup{display:none}
+  .ptab tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr) 36px;gap:6px 8px;padding:8px 0;border-top:1px solid var(--line)}
+  .ptab td{border:0;padding:0}.ptab td.ka{grid-column:1/4}.ptab td.ka:empty{display:none}.ptab td.act{grid-column:4;grid-row:1}
+}
+@container (max-width:700px){
+  .ptab tr{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 36px}
+  .ptab td.wide{grid-column:1/3}.ptab td.act{grid-column:3}.ptab td.ka{grid-column:1/-1}
+}
+@container (max-width:440px){
+  .ptab tr{grid-template-columns:minmax(0,1fr) 36px}
+  .ptab td{grid-column:1}.ptab td.wide{grid-column:1}.ptab td.act{grid-column:2}.ptab td.ka{grid-column:1/-1}
 }
 
 /* ---------- druk ---------- */
